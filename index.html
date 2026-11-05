@@ -238,8 +238,51 @@ dialog::backdrop{background:rgba(22,32,26,.42);}
   .download .wrap{grid-template-columns:1.15fr .85fr;gap:56px;align-items:start;}
   footer{padding:44px 0 56px;}
 }
+
+/* ---------- 动效 ---------- */
+#progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--moss);opacity:.9;}
+@keyframes rise{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@keyframes wipe{from{clip-path:inset(0 100% 0 0);}to{clip-path:inset(0 0 0 0);}}
+@keyframes dashflow{to{stroke-dashoffset:-22px;}}
+@keyframes breathe{0%,100%{opacity:.42}50%{opacity:.95}}
+@keyframes dotpulse{0%,100%{opacity:.28;transform:scale(.85)}50%{opacity:.8;transform:scale(1.2)}}
+
+.hero h1 span{display:inline-block;opacity:0;animation:rise .82s cubic-bezier(.22,.7,.2,1) forwards;}
+.hero h1 span:nth-of-type(1){animation-delay:.04s;}
+.hero h1 span:nth-of-type(2){animation-delay:.17s;}
+.hero p{opacity:0;animation:rise .8s .28s cubic-bezier(.22,.7,.2,1) forwards;}
+.hero-actions{opacity:0;animation:rise .8s .42s cubic-bezier(.22,.7,.2,1) forwards;}
+.hero-figure svg{clip-path:inset(0 100% 0 0);animation:wipe 1.2s cubic-bezier(.45,.05,.2,1) .32s forwards;}
+.hero-figure .link-path{animation:dashflow 3.6s linear infinite;}
+.hero-figure .wave-soft{animation:breathe 4.2s ease-in-out infinite;}
+.hero-figure .wave-soft.late{animation-delay:1.4s;}
+.hero-figure .dot-pulse{animation:dotpulse 3.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center;}
+
+.sec-head h2::after{content:"";display:block;width:min(120px,100%);height:1px;background:var(--moss);
+  margin-top:15px;transform:scaleX(0);transform-origin:left center;
+  transition:transform .75s cubic-bezier(.4,0,.2,1);}
+.sec-head h2.in::after{transform:scaleX(1);}
+
+.nav-links a{position:relative;}
+.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1px;background:var(--moss);
+  transform:scaleX(0);transform-origin:left center;transition:transform .26s ease;}
+.nav-links a:hover::after{transform:scaleX(1);}
+
+.btn-main,.nav-cta,.dl-btn{transition:background .16s ease,transform .16s ease;}
+.btn-main:active,.nav-cta:active,.dl-btn:active{transform:translateY(1px);}
+.compare .row{transition:background .2s ease;}
+.compare .row:hover{background:rgba(22,32,26,.035);}
+.compare .row.mine:hover{background:var(--mist);}
+.boost-item{transition:box-shadow .25s ease,transform .25s ease;}
+.boost-item:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(22,32,26,.07);}
+summary::after{transition:transform .22s ease;}
+
 @media (prefers-reduced-motion:reduce){
-  *{transition:none !important;}
+  *{transition:none !important;animation:none !important;}
+  .hero h1 span,.hero p,.hero-actions{opacity:1;}
+  .hero-figure svg{clip-path:none;}
+  .sec-head h2::after{transform:scaleX(1);}
+  #progress{display:none;}
 }
 </style>
 </head>
@@ -261,6 +304,7 @@ dialog::backdrop{background:rgba(22,32,26,.42);}
     </nav>
     <a class="nav-cta" href="#download">下载安卓版</a>
   </div>
+  <div id="progress" aria-hidden="true"></div>
 </header>
 
 <main id="top">
@@ -269,11 +313,11 @@ dialog::backdrop{background:rgba(22,32,26,.42);}
   <div class="hero wrap">
     <div class="hero-grid">
       <div>
-        <h1>画面留在平板，<br>眼睛落在手机。</h1>
+        <h1><span>画面留在平板，</span><br><span>眼睛落在手机。</span></h1>
         <p>相识投屏把一台安卓设备的画面和声音，经同一个 Wi-Fi 直接送到另一台设备。不注册、不中转、不留副本，点开就能看。</p>
         <div class="hero-actions">
           <a class="btn-main" href="#download">下载安卓版</a>
-          <div class="meta">v1.9.5 · 10.0 MB<br>Android 10 及以上</div>
+          <div class="meta">v1.9.7 · 10.1 MB<br>Android 10 及以上</div>
         </div>
       </div>
 
@@ -283,21 +327,21 @@ dialog::backdrop{background:rgba(22,32,26,.42);}
           <rect x="238" y="96" width="286" height="196" rx="16" fill="#FFFFFF" stroke="#3B5646" stroke-width="1.4"/>
           <rect x="252" y="110" width="258" height="168" rx="9" fill="#E7EBE2"/>
           <path d="M272 194c22-26 42-26 64 0s42 26 64 0" stroke="#3B5646" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <path d="M272 226c22-26 42-26 64 0s42 26 64 0" stroke="#7A9A76" stroke-width="2" fill="none" stroke-linecap="round" opacity=".85"/>
+          <path class="wave-soft" d="M272 226c22-26 42-26 64 0s42 26 64 0" stroke="#7A9A76" stroke-width="2" fill="none" stroke-linecap="round" opacity=".85"/>
           <circle cx="496" cy="206" r="3" fill="#3B5646" opacity=".35"/>
 
           <!-- 手机 -->
           <rect x="58" y="132" width="118" height="224" rx="14" fill="#FFFFFF" stroke="#3B5646" stroke-width="1.4"/>
           <rect x="68" y="146" width="98" height="182" rx="8" fill="#E7EBE2"/>
           <path d="M84 226c12-15 24-15 36 0s24 15 36 0" stroke="#3B5646" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-          <path d="M84 250c12-15 24-15 36 0s24 15 36 0" stroke="#7A9A76" stroke-width="1.7" fill="none" stroke-linecap="round" opacity=".85"/>
+          <path class="wave-soft late" d="M84 250c12-15 24-15 36 0s24 15 36 0" stroke="#7A9A76" stroke-width="1.7" fill="none" stroke-linecap="round" opacity=".85"/>
           <rect x="104" y="334" width="26" height="3" rx="1.5" fill="#3B5646" opacity=".3"/>
 
           <!-- 连接路径 -->
-          <path d="M176 206c30 0 34-38 62-38" stroke="#7A9A76" stroke-width="1.4" stroke-dasharray="5 6" fill="none"/>
+          <path class="link-path" d="M176 206c30 0 34-38 62-38" stroke="#7A9A76" stroke-width="1.4" stroke-dasharray="5 6" fill="none"/>
           <path d="M238 168l-9-5v10z" fill="#7A9A76"/>
-          <circle cx="206" cy="186" r="2.4" fill="#3B5646" opacity=".45"/>
-          <circle cx="220" cy="176" r="1.8" fill="#3B5646" opacity=".3"/>
+          <circle class="dot-pulse" cx="206" cy="186" r="2.4" fill="#3B5646" opacity=".45"/>
+          <circle class="dot-pulse" cx="220" cy="176" r="1.8" fill="#3B5646" opacity=".3"/>
         </svg>
       </figure>
     </div>
@@ -308,7 +352,7 @@ dialog::backdrop{background:rgba(22,32,26,.42);}
     <div class="wrap">
       <ul>
         <li><b>局域网直连</b><span>没路由器也能连</span></li>
-        <li><b>最高 120 帧</b><span>30 / 60 / 90 / 120 可选</span></li>
+        <li><b>最高 <span id="fpsNum" data-to="120">120</span> 帧</b><span>30 / 60 / 90 / 120 可选</span></li>
         <li><b>声音同步</b><span>AAC 立体声</span></li>
         <li><b>无需账号</b><span>也没有广告</span></li>
       </ul>
@@ -318,7 +362,7 @@ dialog::backdrop{background:rgba(22,32,26,.42);}
   <!-- ===== 功能 ===== -->
   <section class="wrap" id="features">
     <div class="sec-head">
-      <h2>它做的事，就是把这一台，搬到那一台上。</h2>
+      <h2 class="sec-h">它做的事，就是把这一台，搬到那一台上。</h2>
       <p>没有云、没有登录、没有会员。发送端开始投屏，接收端在列表里选中这台设备，画面就过来了。要不要声音、画质拉到多少，都在发送端一处决定。</p>
     </div>
 
@@ -390,7 +434,7 @@ dialog::backdrop{background:rgba(22,32,26,.42);}
   <!-- ===== 和别的投屏比 ===== -->
   <section class="wrap" id="compare" style="padding-top:0;">
     <div class="sec-head">
-      <h2>和常见的几种投屏比</h2>
+      <h2 class="sec-h">和常见的几种投屏比</h2>
       <p>云投屏、ADB 工具、系统投屏，各有各的门槛。我们只要求一件事：两台设备都装上这个应用，在同一个网里。</p>
     </div>
     <div class="compare">
@@ -416,7 +460,7 @@ dialog::backdrop{background:rgba(22,32,26,.42);}
   <!-- ===== 三步 ===== -->
   <section class="wrap" id="how" style="padding-top:0;">
     <div class="sec-head">
-      <h2>第一次用，就这三步。</h2>
+      <h2 class="sec-h">第一次用，就这三步。</h2>
     </div>
     <div class="steps">
       <div class="step">
@@ -465,14 +509,14 @@ dialog::backdrop{background:rgba(22,32,26,.42);}
   <!-- ===== 参数 ===== -->
   <section class="wrap specs" id="specs">
     <div class="sec-head">
-      <h2>规格</h2>
+      <h2 class="sec-h">规格</h2>
       <p>默认是 1080p、60 帧、12 Mbps。设备编码器不支持所选帧率时会自动降到 60 或 30 帧，以投屏中统计条显示的值为准。</p>
     </div>
     <table>
       <colgroup><col><col></colgroup>
       <tbody>
         <tr><th>系统要求</th><td>Android 10 及以上（API 29）</td></tr>
-        <tr><th>安装包</th><td>10 MB · versionCode 63</td></tr>
+        <tr><th>安装包</th><td>10.1 MB · versionCode 65</td></tr>
         <tr><th>画面</th><td>HEVC（默认）/ H.264；720p、1080p、1440p、2160p；30、60、90、120 帧</td></tr>
         <tr><th>码率</th><td>8 / 12 / 16 / 24 / 48 Mbps 五档，默认 12 Mbps；游戏模式不低于 16 Mbps</td></tr>
         <tr><th>声音</th><td>AAC 96 / 128 / 192 kbps，默认 128 kbps 立体声</td></tr>
@@ -489,15 +533,15 @@ dialog::backdrop{background:rgba(22,32,26,.42);}
       <div>
         <h2>下载安卓版</h2>
         <p>目前只发布 Android 端，安装包直接下载安装。覆盖安装不会丢设置，包名与签名保持不变。</p>
-        <a class="dl-btn" href="https://aka.doubaocdn.com/s/UgbBITGUcd">下载 APK · v1.9.5</a>
+        <a class="dl-btn" href="https://aka.doubaocdn.com/s/GrVhGiUEUo">下载 APK · v1.9.7</a>
       </div>
       <div class="dl-side">
         <b>版本信息</b>
-        v1.9.5（versionCode 63）<br>
-        10.0 MB · 更新于 2026 年 11 月<br>
+        v1.9.7（versionCode 65）<br>
+        10.1 MB · 更新于 2026 年 11 月<br>
         适用 Android 10 及以上
         <div class="hash-row">
-          <span class="hash" id="hashText">SHA-256 b8df994c05d7d5197c188409a4d2a45884a4f041d8321d0e81b7270f03531805</span>
+          <span class="hash" id="hashText">SHA-256 6a6e1e4c27496dabc46d7c9c892e91bfb93385ab4c866589a513d0666fc86534</span>
           <button class="copy-btn" id="copyHash" type="button">复制校验值</button>
         </div>
       </div>
@@ -507,7 +551,7 @@ dialog::backdrop{background:rgba(22,32,26,.42);}
   <!-- ===== FAQ ===== -->
   <section class="wrap" id="faq">
     <div class="sec-head">
-      <h2>常问的几件事</h2>
+      <h2 class="sec-h">常问的几件事</h2>
     </div>
     <div class="faq">
       <details>
@@ -715,6 +759,58 @@ dialog::backdrop{background:rgba(22,32,26,.42);}
       window.scrollTo({ top: top, behavior: 'smooth' });
     });
   });
+
+  // 阅读进度
+  var progressEl = document.getElementById('progress');
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var scrollQueued = false;
+  function paintProgress(){
+    scrollQueued = false;
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var ratio = max > 0 ? Math.min(1, Math.max(0, window.pageYOffset / max)) : 0;
+    if (progressEl) progressEl.style.width = (ratio * 100) + '%';
+  }
+  window.addEventListener('scroll', function(){
+    if (scrollQueued) return;
+    scrollQueued = true;
+    window.requestAnimationFrame(paintProgress);
+  }, { passive: true });
+  paintProgress();
+
+  // 数字走一遍
+  function countUp(el){
+    var to = parseInt(el.getAttribute('data-to'), 10) || 0;
+    if (reduceMotion || !window.requestAnimationFrame) { el.textContent = to; return; }
+    var t0 = null, dur = 1200;
+    el.textContent = '0';
+    function step(ts){
+      if (!t0) t0 = ts;
+      var p = Math.min(1, (ts - t0) / dur);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) window.requestAnimationFrame(step);
+    }
+    window.requestAnimationFrame(step);
+  }
+
+  // 进入视口才响一次
+  var motionTargets = Array.prototype.slice.call(document.querySelectorAll('.sec-h, #fpsNum'));
+  function fire(el){
+    if (el.id === 'fpsNum') countUp(el);
+    else el.classList.add('in');
+  }
+  if ('IntersectionObserver' in window && motionTargets.length) {
+    var motionObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        fire(en.target);
+        motionObserver.unobserve(en.target);
+      });
+    }, { threshold: 0.4 });
+    motionTargets.forEach(function(el){ motionObserver.observe(el); });
+  } else {
+    motionTargets.forEach(fire);
+  }
 })();
 </script>
 </body>
