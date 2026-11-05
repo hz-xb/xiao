@@ -4,5 +4,6 @@
   "apkUrl": "https://aka.doubaocdn.com/s/5nSpfi667Y",
   "sizeBytes": 10559326,
   "sha256": "9778a96c49558b472bbf78247e901aa33d6e1f0f264c6cfc5f3cce81f5a81589",
+  "publishedAt": "2026-11-06",
   "notes": "启动即校验版本：低于官方版本必须更新，高于官方版本判为非官方包。"
 }
