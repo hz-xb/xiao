@@ -1,8 +1,8 @@
 {
-  "versionCode": 65,
-  "versionName": "1.9.7",
-  "apkUrl": "https://aka.doubaocdn.com/s/GrVhGiUEUo",
-  "sizeBytes": 10554298,
-  "sha256": "6a6e1e4c27496dabc46d7c9c892e91bfb93385ab4c866589a513d0666fc86534",
-  "notes": "新增应用内云更新：启动时自动比对版本，发现新版可直接下载安装。"
+  "versionCode": 66,
+  "versionName": "1.9.8",
+  "apkUrl": "https://aka.doubaocdn.com/s/5nSpfi667Y",
+  "sizeBytes": 10559326,
+  "sha256": "9778a96c49558b472bbf78247e901aa33d6e1f0f264c6cfc5f3cce81f5a81589",
+  "notes": "启动即校验版本：低于官方版本必须更新，高于官方版本判为非官方包。"
 }
