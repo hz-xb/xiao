@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>相识投屏 — 把画面投给身边的人</title>
+<meta name="description" content="相识投屏是安卓设备之间的局域网投屏工具：同一 Wi-Fi 下直连，没有路由器就用 Wi-Fi Direct，最高 2160p、120 帧，支持反控、录制与远程唤醒。不注册、不中转、免费。">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600&amp;family=Noto+Sans+SC:wght@400;500&amp;display=swap">
+<link rel="icon" type="image/png" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/BfVrbkA5AohVemxh9ozcsQEGn8g">
+<style>
+:root{
+  --paper:#F5F6F1;
+  --ink:#16201A;
+  --ink-soft:rgba(22,32,26,.66);
+  --ink-faint:rgba(22,32,26,.44);
+  --moss:#3B5646;
+  --moss-deep:#22362B;
+  --leaf:#7A9A76;
+  --mist:#E7EBE2;
+  --line:rgba(22,32,26,.13);
+  --white:#FFFFFF;
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Noto Sans SC","PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",sans-serif;
+  line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-weight:600;letter-spacing:-0.005em;}
+a{color:inherit;}
+img{max-width:100%;}
+::selection{background:var(--leaf);color:#fff;}
+
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px;}
+
+/* ---------- 顶栏 ---------- */
+header{
+  position:sticky;top:0;z-index:20;background:var(--paper);
+  border-bottom:1px solid var(--line);
+}
+.nav{display:flex;align-items:center;gap:14px;height:64px;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:1;min-width:0;}
+.brand img{width:28px;height:28px;border-radius:7px;flex:none;display:block;}
+.brand span{font-size:15px;font-weight:500;letter-spacing:.02em;white-space:nowrap;}
+.nav-links{display:none;gap:26px;font-size:14px;color:var(--ink-soft);}
+.nav-links a{text-decoration:none;}
+.nav-links a:hover{color:var(--ink);}
+.nav-cta{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:38px;padding:0 16px;border-radius:8px;
+  background:var(--moss);color:#fff;text-decoration:none;font-size:13.5px;white-space:nowrap;
+}
+.nav-cta:hover{background:var(--moss-deep);}
+
+/* ---------- Hero ---------- */
+.hero{padding:52px 0 44px;}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:34px;align-items:center;}
+.hero h1{
+  margin:0;font-size:clamp(30px,7.6vw,58px);line-height:1.2;
+}
+.hero p{
+  margin:20px 0 0;max-width:34em;font-size:15.5px;line-height:1.85;color:var(--ink-soft);
+}
+.hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:28px;}
+.btn-main{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  height:50px;padding:0 24px;border-radius:9px;
+  background:var(--moss);color:#fff;text-decoration:none;font-size:15px;
+  transition:background .15s ease;
+}
+.btn-main:hover{background:var(--moss-deep);}
+.meta{font-size:13px;color:var(--ink-faint);line-height:1.7;}
+.hero-figure{margin:0;}
+.hero-figure svg{width:100%;height:auto;display:block;}
+
+/* ---------- 事实条 ---------- */
+.facts{border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.facts ul{list-style:none;margin:0;padding:22px 0;display:grid;grid-template-columns:repeat(2,1fr);gap:20px 18px;}
+.facts li{min-width:0;}
+.facts b{display:block;font-size:16px;font-weight:500;letter-spacing:.01em;line-height:1.4;}
+.facts span{display:block;margin-top:4px;font-size:12.5px;color:var(--ink-faint);}
+
+/* ---------- 通用节 ---------- */
+section{padding:62px 0;}
+.sec-head{max-width:34em;}
+.sec-head h2{margin:0;font-size:clamp(22px,4.6vw,32px);line-height:1.3;}
+.sec-head p{margin:12px 0 0;font-size:14.5px;line-height:1.8;color:var(--ink-soft);}
+
+/* ---------- 功能 ---------- */
+.features{margin-top:36px;border-top:1px solid var(--line);}
+.feature{
+  display:grid;grid-template-columns:34px 1fr;gap:16px;
+  padding:24px 0;border-bottom:1px solid var(--line);
+}
+.feature svg{width:24px;height:24px;margin-top:3px;stroke:var(--moss);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.feature h3{margin:0;font-family:"Noto Sans SC","PingFang SC",sans-serif;font-size:16.5px;font-weight:500;line-height:1.5;}
+.feature p{margin:6px 0 0;font-size:14px;line-height:1.8;color:var(--ink-soft);}
+
+.also{margin:26px 0 0;font-size:13px;line-height:1.9;color:var(--ink-faint);max-width:40em;}
+
+/* ---------- 对比 ---------- */
+.compare{margin-top:32px;border-top:1px solid var(--line);}
+.compare .row{display:grid;grid-template-columns:88px 1fr;gap:14px;padding:18px 0;
+  border-bottom:1px solid var(--line);font-size:13.5px;line-height:1.85;color:var(--ink-soft);}
+.compare .row .tag{color:var(--ink);font-weight:500;font-size:13.5px;line-height:1.85;}
+.compare .row.mine{background:var(--mist);margin:0 -14px;padding:18px 14px;}
+.compare .row.mine .tag{color:var(--moss);}
+
+/* ---------- 三步 ---------- */
+.steps{margin-top:36px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr;}
+.step{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:20px 0;border-bottom:1px solid var(--line);}
+.step .num{
+  font-family:"Noto Serif SC","Songti SC",serif;font-size:12px;line-height:1;color:var(--moss);
+  width:26px;height:26px;border:1px solid var(--line);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;
+}
+.step h3{margin:0;font-family:"Noto Sans SC","PingFang SC",sans-serif;font-size:15.5px;font-weight:500;line-height:1.5;}
+.step p{margin:5px 0 0;font-size:13.5px;line-height:1.8;color:var(--ink-soft);}
+
+/* ---------- Root 增强 ---------- */
+.boost{margin-top:10px;background:var(--mist);border-radius:14px;padding:30px 22px 26px;}
+.boost h2{margin:0;font-size:clamp(20px,4vw,26px);line-height:1.35;}
+.boost .lede{margin:10px 0 0;font-size:14px;line-height:1.8;color:var(--ink-soft);}
+.boost-grid{display:grid;grid-template-columns:1fr;gap:22px;margin-top:24px;}
+.boost-item{background:var(--paper);border-radius:10px;padding:20px 18px;}
+.boost-item h3{margin:0;font-family:"Noto Sans SC","PingFang SC",sans-serif;font-size:15.5px;font-weight:500;}
+.boost-item p{margin:7px 0 0;font-size:13.5px;line-height:1.8;color:var(--ink-soft);}
+.boost .note{margin:22px 0 0;font-size:12.5px;line-height:1.8;color:var(--ink-faint);}
+
+/* ---------- 参数表 ---------- */
+.specs{padding-top:0;}
+table{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:8px;}
+colgroup col:nth-child(1){width:31%;}
+colgroup col:nth-child(2){width:69%;}
+tr{border-bottom:1px solid var(--line);}
+th,td{text-align:left;vertical-align:top;padding:16px 0;font-size:14px;line-height:1.75;}
+th{font-weight:400;color:var(--ink-faint);font-size:13px;padding-right:14px;}
+td{color:var(--ink-soft);}
+
+/* ---------- 下载 ---------- */
+.download{background:var(--moss-deep);color:#F2F5EC;padding:56px 0;}
+.download .wrap{display:grid;grid-template-columns:1fr;gap:30px;}
+.download h2{margin:0;font-size:clamp(24px,5vw,34px);line-height:1.3;color:#fff;}
+.download p{margin:12px 0 0;font-size:14.5px;line-height:1.8;color:rgba(242,245,236,.72);max-width:30em;}
+.dl-btn{
+  display:inline-flex;align-items:center;height:52px;padding:0 26px;margin-top:26px;
+  border-radius:9px;background:#F2F5EC;color:var(--moss-deep);text-decoration:none;
+  font-size:15.5px;font-weight:500;transition:background .15s ease;
+}
+.dl-btn:hover{background:#fff;}
+.dl-side{font-size:13px;line-height:2;color:rgba(242,245,236,.62);}
+.dl-side b{display:block;color:#F2F5EC;font-weight:500;font-size:14px;margin-bottom:2px;}
+.hash-row{
+  display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;
+}
+.hash{
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-size:11px;line-height:1.6;word-break:break-all;
+  color:rgba(242,245,236,.55);max-width:24em;
+}
+.copy-btn{
+  appearance:none;border:1px solid rgba(242,245,236,.3);background:transparent;
+  color:rgba(242,245,236,.8);font-size:12px;height:30px;padding:0 12px;border-radius:6px;
+  cursor:pointer;font-family:inherit;
+}
+.copy-btn:hover{background:rgba(242,245,236,.08);}
+
+/* ---------- FAQ ---------- */
+.faq{margin-top:36px;border-top:1px solid var(--line);}
+details{border-bottom:1px solid var(--line);}
+summary{
+  list-style:none;cursor:pointer;padding:20px 0;
+  display:flex;align-items:flex-start;gap:14px;font-size:15.5px;line-height:1.6;
+}
+summary::-webkit-details-marker{display:none;}
+summary::after{content:"";width:9px;height:9px;margin-left:auto;margin-top:8px;flex:none;
+  border-right:1.5px solid var(--ink-faint);border-bottom:1.5px solid var(--ink-faint);
+  transform:rotate(45deg);}
+details[open] summary::after{transform:rotate(-135deg);margin-top:12px;}
+details p{margin:0 0 22px;font-size:14px;line-height:1.85;color:var(--ink-soft);max-width:40em;}
+
+/* ---------- 页脚 ---------- */
+footer{border-top:1px solid var(--line);padding:36px 0 44px;}
+.foot{display:flex;flex-wrap:wrap;gap:18px 26px;align-items:center;font-size:12.5px;color:var(--ink-faint);}
+.foot .brand-mini{display:flex;align-items:center;gap:8px;color:var(--ink-soft);font-size:13px;}
+.foot .brand-mini img{width:20px;height:20px;border-radius:5px;}
+.foot a{text-decoration:none;color:var(--ink-faint);}
+.foot a:hover{color:var(--ink);}
+.foot-links{display:flex;gap:20px;flex-wrap:wrap;margin-left:auto;}
+
+/* ---------- 文档弹层 ---------- */
+dialog{
+  border:none;padding:0;background:var(--white);color:var(--ink);
+  width:min(720px,calc(100% - 28px));max-height:86vh;border-radius:14px;
+  box-shadow:0 24px 60px rgba(22,32,26,.24);
+}
+dialog::backdrop{background:rgba(22,32,26,.42);}
+.doc-head{position:sticky;top:0;background:var(--white);display:flex;align-items:center;
+  gap:16px;padding:20px 24px;border-bottom:1px solid var(--line);}
+.doc-head h3{margin:0;font-size:18px;flex:1;}
+.doc-close{border:none;background:transparent;font-size:14px;color:var(--ink-faint);
+  cursor:pointer;height:32px;padding:0 6px;}
+.doc-body{padding:22px 24px 34px;overflow:auto;}
+.doc-body h4{margin:24px 0 8px;font-size:14.5px;font-weight:500;font-family:"Noto Sans SC",sans-serif;}
+.doc-body p,.doc-body li{font-size:13.5px;line-height:1.9;color:var(--ink-soft);margin:0 0 10px;}
+.doc-body ul{padding-left:20px;}
+.doc-body .stamp{font-size:12px;color:var(--ink-faint);}
+
+/* toast */
+#toast{
+  position:fixed;left:50%;bottom:28px;transform:translate(-50%,14px);
+  background:var(--moss-deep);color:#fff;font-size:13px;padding:10px 16px;
+  border-radius:8px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:60;
+}
+#toast.show{opacity:1;transform:translate(-50%,0);}
+
+@media (min-width:768px){
+  .wrap{padding:0 32px;}
+  .nav{height:72px;}
+  .nav-links{display:flex;}
+  .hero{padding:78px 0 62px;}
+  .hero-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:52px;}
+  .facts ul{grid-template-columns:repeat(4,1fr);padding:26px 0;}
+  section{padding:84px 0;}
+  .feature{grid-template-columns:40px 1fr;gap:20px;padding:26px 0;}
+  .steps{grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line);}
+  .step{grid-template-columns:1fr;gap:10px;border-bottom:none;border-right:1px solid var(--line);
+    padding:24px 24px 26px 0;}
+  .step + .step{padding-left:24px;}
+  .step:last-child{border-right:none;padding-right:0;}
+  .compare .row{grid-template-columns:112px 1fr;gap:22px;font-size:14px;padding:20px 0;}
+  .compare .row.mine{margin:0 -20px;padding:20px;}
+  .boost{padding:40px 34px 34px;}
+  .boost-grid{grid-template-columns:1fr 1fr;gap:24px;}
+  .download{padding:72px 0;}
+  .download .wrap{grid-template-columns:1.15fr .85fr;gap:56px;align-items:start;}
+  footer{padding:44px 0 56px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/BfVrbkA5AohVemxh9ozcsQEGn8g" alt="相识投屏">
+      <span>相识投屏</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#features">功能</a>
+      <a href="#compare">对比</a>
+      <a href="#how">怎么用</a>
+      <a href="#boost">Root 增强</a>
+      <a href="#specs">参数</a>
+      <a href="#faq">问答</a>
+    </nav>
+    <a class="nav-cta" href="#download">下载安卓版</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===== Hero ===== -->
+  <div class="hero wrap">
+    <div class="hero-grid">
+      <div>
+        <h1>画面留在平板，<br>眼睛落在手机。</h1>
+        <p>相识投屏把一台安卓设备的画面和声音，经同一个 Wi-Fi 直接送到另一台设备。不注册、不中转、不留副本，点开就能看。</p>
+        <div class="hero-actions">
+          <a class="btn-main" href="#download">下载安卓版</a>
+          <div class="meta">v1.9.5 · 10.0 MB<br>Android 10 及以上</div>
+        </div>
+      </div>
+
+      <figure class="hero-figure" aria-label="两台设备之间的投送示意">
+        <svg viewBox="0 0 560 400" role="img">
+          <!-- 平板 -->
+          <rect x="238" y="96" width="286" height="196" rx="16" fill="#FFFFFF" stroke="#3B5646" stroke-width="1.4"/>
+          <rect x="252" y="110" width="258" height="168" rx="9" fill="#E7EBE2"/>
+          <path d="M272 194c22-26 42-26 64 0s42 26 64 0" stroke="#3B5646" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M272 226c22-26 42-26 64 0s42 26 64 0" stroke="#7A9A76" stroke-width="2" fill="none" stroke-linecap="round" opacity=".85"/>
+          <circle cx="496" cy="206" r="3" fill="#3B5646" opacity=".35"/>
+
+          <!-- 手机 -->
+          <rect x="58" y="132" width="118" height="224" rx="14" fill="#FFFFFF" stroke="#3B5646" stroke-width="1.4"/>
+          <rect x="68" y="146" width="98" height="182" rx="8" fill="#E7EBE2"/>
+          <path d="M84 226c12-15 24-15 36 0s24 15 36 0" stroke="#3B5646" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+          <path d="M84 250c12-15 24-15 36 0s24 15 36 0" stroke="#7A9A76" stroke-width="1.7" fill="none" stroke-linecap="round" opacity=".85"/>
+          <rect x="104" y="334" width="26" height="3" rx="1.5" fill="#3B5646" opacity=".3"/>
+
+          <!-- 连接路径 -->
+          <path d="M176 206c30 0 34-38 62-38" stroke="#7A9A76" stroke-width="1.4" stroke-dasharray="5 6" fill="none"/>
+          <path d="M238 168l-9-5v10z" fill="#7A9A76"/>
+          <circle cx="206" cy="186" r="2.4" fill="#3B5646" opacity=".45"/>
+          <circle cx="220" cy="176" r="1.8" fill="#3B5646" opacity=".3"/>
+        </svg>
+      </figure>
+    </div>
+  </div>
+
+  <!-- ===== 事实条 ===== -->
+  <div class="facts">
+    <div class="wrap">
+      <ul>
+        <li><b>局域网直连</b><span>没路由器也能连</span></li>
+        <li><b>最高 120 帧</b><span>30 / 60 / 90 / 120 可选</span></li>
+        <li><b>声音同步</b><span>AAC 立体声</span></li>
+        <li><b>无需账号</b><span>也没有广告</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== 功能 ===== -->
+  <section class="wrap" id="features">
+    <div class="sec-head">
+      <h2>它做的事，就是把这一台，搬到那一台上。</h2>
+      <p>没有云、没有登录、没有会员。发送端开始投屏，接收端在列表里选中这台设备，画面就过来了。要不要声音、画质拉到多少，都在发送端一处决定。</p>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="5" cy="12" r="2.4"/><circle cx="19" cy="12" r="2.4"/><path d="M7.6 12h8.8"/>
+        </svg>
+        <div>
+          <h3>局域网点对点，没路由器也能连</h3>
+          <p>画面经 TCP 从发送端直达接收端，中间没有任何服务器。没有路由器的时候，发送端会建一个 Wi-Fi Direct 直连组，接收端加入后照常投屏——露营、出差、断网，都还是两台设备对两台设备。</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 12h3l2-6 3 12 2-9 3 6h5"/>
+        </svg>
+        <div>
+          <h3>声音跟着画面走</h3>
+          <p>采集本机正在播放的声音，以 96 / 128 / 192 kbps 的 AAC 传输，默认立体声；弱网可以切单声道。</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="13" height="10" rx="1.6"/><path d="M19 9v10H8"/><path d="M7 20l3-6"/>
+        </svg>
+        <div>
+          <h3>画质和手感，你自己定</h3>
+          <p>分辨率四档到 2160p，帧率四档到 120 帧，码率五档从 8 到 48 Mbps。自适应会盯着带宽和拥塞换档；开游戏模式则锁在 60 帧以内、码率不低于 16 Mbps，先把延迟压下去。</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3v9"/><circle cx="12" cy="16.5" r="4"/>
+        </svg>
+        <div>
+          <h3>手机上直接操作平板</h3>
+          <p>接收端的触摸能回传到发送端。需要在平板上手动开启无障碍服务，不开只影响操作，不影响看画面。</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="7.2"/><circle cx="12" cy="12" r="2.6"/>
+        </svg>
+        <div>
+          <h3>接收端能把画面录下来</h3>
+          <p>投屏中在接收端点一次录制，画面和声音一起存成 MP4，落在本机文件里。要留一份回放，不用再装第二个工具。</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="4.5" y="10" width="15" height="10" rx="2"/><path d="M8 10V7.4a4 4 0 0 1 8 0V10"/>
+        </svg>
+        <div>
+          <h3>设了密码，才连得上</h3>
+          <p>发送端可以设访问密码，接收端填对才能连。附近列表只显示同一网段里主动广播的设备，不会把画面敞给整层楼。</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="also">另外，快捷设置磁贴一键开投、通知栏常驻状态、统计条可拖到任意角落、断线会写清原因、覆盖安装保留全部设置。</p>
+  </section>
+
+  <!-- ===== 和别的投屏比 ===== -->
+  <section class="wrap" id="compare" style="padding-top:0;">
+    <div class="sec-head">
+      <h2>和常见的几种投屏比</h2>
+      <p>云投屏、ADB 工具、系统投屏，各有各的门槛。我们只要求一件事：两台设备都装上这个应用，在同一个网里。</p>
+    </div>
+    <div class="compare">
+      <div class="row">
+        <span class="tag">云投屏 App</span>
+        <span>要账号，画质、时长、远程常被卡在会员后面；画面先上云再下来，路绕远了，也谈不上稳。</span>
+      </div>
+      <div class="row">
+        <span class="tag">ADB 工具</span>
+        <span>得先开无线调试，第一回通常还要连一次电脑，换台设备就重来一遍；系统版本也挑。</span>
+      </div>
+      <div class="row">
+        <span class="tag">系统投屏</span>
+        <span>投到电视或盒子的接收端，手机之间一般接不了；投不投得成，看对方硬件支不支持。</span>
+      </div>
+      <div class="row mine">
+        <span class="tag">相识投屏</span>
+        <span>两端都是应用，不要账号、不要电脑、不要开发者选项；有路由器走 Wi-Fi，没路由器走 Wi-Fi Direct，一样连得上。</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 三步 ===== -->
+  <section class="wrap" id="how" style="padding-top:0;">
+    <div class="sec-head">
+      <h2>第一次用，就这三步。</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="num">1</span>
+        <div>
+          <h3>平板上点开始投屏</h3>
+          <p>打开「发送端」，选好分辨率与帧率，点开始，系统弹一次录屏授权，确认即可。</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <div>
+          <h3>手机上选中这台平板</h3>
+          <p>打开「接收端」，同一 Wi-Fi 下的发送端会出现在附近列表；自动发现不到时，手输 IP、端口和密码。</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <div>
+          <h3>画面就过来了</h3>
+          <p>投屏中会显示实时码率、解码帧率与延迟；要反向操作平板，再到无障碍设置里打开开关。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Root 增强 ===== -->
+  <section class="wrap" id="boost" style="padding-top:0;">
+    <div class="boost">
+      <h2>装了 root，还能再省两步</h2>
+      <p class="lede">这两件事都要 KernelSU 或 Magisk。没有 root 也能完整使用，只是每次开始投屏要在平板上点一次系统授权。</p>
+      <div class="boost-grid">
+        <div class="boost-item">
+          <h3>跳过录屏授权页</h3>
+          <p>开始投屏前给应用预授权录屏权限，系统的授权页会自动通过。点「开始投屏」直接进画面。</p>
+        </div>
+        <div class="boost-item">
+          <h3>息屏也能被叫醒</h3>
+          <p>手机在列表里点「唤醒」，平板亮屏、解锁并自动开始投屏，随后自动连上，不用走到平板跟前。</p>
+        </div>
+      </div>
+      <p class="note">锁屏设了密码或指纹时，唤醒只能点亮屏幕，还需要手动解一次；解锁后才会自动开始投屏。</p>
+    </div>
+  </section>
+
+  <!-- ===== 参数 ===== -->
+  <section class="wrap specs" id="specs">
+    <div class="sec-head">
+      <h2>规格</h2>
+      <p>默认是 1080p、60 帧、12 Mbps。设备编码器不支持所选帧率时会自动降到 60 或 30 帧，以投屏中统计条显示的值为准。</p>
+    </div>
+    <table>
+      <colgroup><col><col></colgroup>
+      <tbody>
+        <tr><th>系统要求</th><td>Android 10 及以上（API 29）</td></tr>
+        <tr><th>安装包</th><td>10 MB · versionCode 63</td></tr>
+        <tr><th>画面</th><td>HEVC（默认）/ H.264；720p、1080p、1440p、2160p；30、60、90、120 帧</td></tr>
+        <tr><th>码率</th><td>8 / 12 / 16 / 24 / 48 Mbps 五档，默认 12 Mbps；游戏模式不低于 16 Mbps</td></tr>
+        <tr><th>声音</th><td>AAC 96 / 128 / 192 kbps，默认 128 kbps 立体声</td></tr>
+        <tr><th>网络</th><td>同一局域网直连，投屏端口 8765，设备发现 8766</td></tr>
+        <tr><th>远程唤醒</th><td>唤醒端口 8767，探测应答 8768；需要 root 与强制的访问密码</td></tr>
+        <tr><th>账号与数据</th><td>不需要注册；屏幕与声音只在你两台设备之间传输</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===== 下载 ===== -->
+  <section class="download" id="download">
+    <div class="wrap">
+      <div>
+        <h2>下载安卓版</h2>
+        <p>目前只发布 Android 端，安装包直接下载安装。覆盖安装不会丢设置，包名与签名保持不变。</p>
+        <a class="dl-btn" href="https://aka.doubaocdn.com/s/UgbBITGUcd">下载 APK · v1.9.5</a>
+      </div>
+      <div class="dl-side">
+        <b>版本信息</b>
+        v1.9.5（versionCode 63）<br>
+        10.0 MB · 更新于 2026 年 11 月<br>
+        适用 Android 10 及以上
+        <div class="hash-row">
+          <span class="hash" id="hashText">SHA-256 b8df994c05d7d5197c188409a4d2a45884a4f041d8321d0e81b7270f03531805</span>
+          <button class="copy-btn" id="copyHash" type="button">复制校验值</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="wrap" id="faq">
+    <div class="sec-head">
+      <h2>常问的几件事</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>和 scrcpy、AirDroid Cast 这类工具有什么不一样？</summary>
+        <p>scrcpy 那类走 ADB 无线调试，要先开开发者选项、第一次多半还要连电脑。AirDroid Cast 局域网内免费，但远程和云相关功能要账号与会员。相识投屏两端都是应用，不碰 ADB、不要电脑，没有路由器时用 Wi-Fi Direct 也能连，反控、录制、远程唤醒都在里面。</p>
+      </details>
+      <details>
+        <summary>需要 root 吗？</summary>
+        <p>不需要。普通设备装好就能投屏。root 只是让「跳过系统录屏授权页」和「远程唤醒」这两件事可用，没有也不影响画面、声音和触摸回传。</p>
+      </details>
+      <details>
+        <summary>我选了 120 帧，为什么跑不到 120？</summary>
+        <p>帧率最终由设备编码器决定。编码器不支持 90 或 120 帧时会自动降到 60（或 30），免得起不来。投屏中统计条上的解码帧率就是实际值。</p>
+      </details>
+      <details>
+        <summary>为什么每次开始投屏都要点一次系统授权？</summary>
+        <p>这是 Android 对录屏的安全要求，系统会弹窗让你确认。装了 root 的设备可以在设置里打开「Root 免弹窗共享」，由应用事先拿到预授权，授权页会自动通过。</p>
+      </details>
+      <details>
+        <summary>支持 iPhone、Windows 或 Mac 吗？</summary>
+        <p>目前只有 Android 端。Windows 接收端在计划里，但还没有可交付的版本；iOS 系统不允许普通应用采集全屏，暂时没有计划。</p>
+      </details>
+      <details>
+        <summary>会把我屏幕的内容传到网上吗？</summary>
+        <p>不会。应用不连服务器、不需要账号，画面和声音只在同一局域网内的两台设备之间传输。设置和记录都存在本机，卸载即删除。</p>
+      </details>
+      <details>
+        <summary>列表里找不到另一台设备怎么办？</summary>
+        <p>先确认两台设备连的是同一个 Wi-Fi，且路由器没有开启「AP 隔离」或访客网络。仍然看不到时，在接收端展开「手动输入地址」，填发送端显示的 IP 和端口即可。</p>
+      </details>
+      <details>
+        <summary>收费吗？</summary>
+        <p>当前版本免费，没有广告、没有内购，也不收集使用数据。</p>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="brand-mini">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/BfVrbkA5AohVemxh9ozcsQEGn8g" alt="">
+      相识投屏
+    </div>
+    <div>© 2026 相识投屏</div>
+    <div class="foot-links">
+      <a href="#privacy" data-doc="privacy">隐私政策</a>
+      <a href="#terms" data-doc="terms">用户协议</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== 文档弹层 ===== -->
+<dialog id="docPrivacy">
+  <div class="doc-head">
+    <h3>隐私政策</h3>
+    <button class="doc-close" type="button" data-close>关闭</button>
+  </div>
+  <div class="doc-body">
+    <p class="stamp">更新日期 2026 年 11 月 5 日 · 生效日期 2026 年 11 月 5 日</p>
+    <p>相识投屏（以下简称「本应用」）是一款在同一局域网内把一台设备的屏幕与声音投送到另一台设备的工具。本政策说明本应用处理哪些信息、为什么处理，以及你可以如何控制。</p>
+    <h4>我们不做什么</h4>
+    <ul>
+      <li>不需要注册账号，不收集手机号、身份证、通讯录、短信、相册、位置轨迹。</li>
+      <li>不把屏幕画面、音频或设备信息上传到任何服务器，投屏内容只在你的两台设备之间通过局域网直连传输。</li>
+      <li>不接入广告 SDK，不做用户画像，不向第三方出售或共享个人信息。</li>
+    </ul>
+    <h4>我们处理哪些信息</h4>
+    <ul>
+      <li>屏幕画面与音频：在你每次主动开始投屏并授权系统录屏后采集，编码后发送给你已连接的接收设备；停止投屏即停止采集，不做本地留存。</li>
+      <li>网络信息：读取本机局域网 IP、Wi-Fi 连接状态与附近可发现的设备，用于建立直连与设备列表展示，仅在本机内存中使用。</li>
+      <li>连接凭据：你设置的访问密码，仅保存在本机应用私有目录，用于校验接入的接收设备。</li>
+      <li>运行状态：投屏状态、上次结束原因、界面偏好等保存在本机，用于下次打开时恢复设置。</li>
+      <li>触摸事件：开启远程触摸并授权无障碍服务后，本应用把接收端传来的触摸坐标转成本机触摸事件，不记录内容，不上传。</li>
+    </ul>
+    <h4>权限与用途</h4>
+    <ul>
+      <li>屏幕录制：每次开始投屏由系统弹窗单独授权，无法被本应用代为同意。</li>
+      <li>录音：仅用于采集本机正在播放的音频，不录制麦克风环境声音。</li>
+      <li>网络与 Wi-Fi 状态、附近设备：用于同网段设备发现与直连。</li>
+      <li>通知：投屏期间显示常驻通知，方便随时停止。</li>
+      <li>无障碍服务（可选）：仅在你手动开启后用于把触摸转回本机，不开不影响投屏。</li>
+    </ul>
+    <h4>存储与共享</h4>
+    <p>全部设置与运行记录保存在本机应用私有目录，卸载即删除。除完成你发起的投屏所必需的设备间传输外，我们不会向任何第三方提供你的信息。</p>
+    <h4>你的权利</h4>
+    <ul>
+      <li>随时在系统设置中撤销屏幕录制、麦克风、通知、无障碍等授权。</li>
+      <li>在应用内清除投屏密码，或直接卸载应用以删除全部本地数据。</li>
+    </ul>
+    <h4>未成年人保护</h4>
+    <p>本应用不面向 14 周岁以下儿童单独提供服务。若你是未成年人，请在监护人陪同下阅读本政策并使用。</p>
+  </div>
+</dialog>
+
+<dialog id="docTerms">
+  <div class="doc-head">
+    <h3>用户协议</h3>
+    <button class="doc-close" type="button" data-close>关闭</button>
+  </div>
+  <div class="doc-body">
+    <p class="stamp">更新日期 2026 年 11 月 5 日 · 生效日期 2026 年 11 月 5 日</p>
+    <p>欢迎使用相识投屏。本协议是你与本应用开发者之间关于使用本应用的约定。开始使用即表示你已阅读并同意本协议。</p>
+    <h4>服务内容</h4>
+    <p>本应用提供同一局域网内设备之间的屏幕与声音投送，以及可选的远程触摸控制。投屏通过设备直连完成，不依赖我们的服务器，因此不承诺任何在线服务可用性。</p>
+    <h4>使用要求</h4>
+    <ul>
+      <li>你只能投送自己拥有或已获授权操作的设备屏幕。</li>
+      <li>不得使用本应用侵犯他人隐私、窃取他人屏幕内容或进行任何违法活动。</li>
+      <li>不得对本应用进行反向工程、破解、二次分发或用于商业转售，除非获得书面许可。</li>
+      <li>远程触摸仅可用于操作你自己的设备。</li>
+    </ul>
+    <h4>权限与你的选择</h4>
+    <p>投屏需要系统录屏授权，音频同步需要录音权限，远程触摸需要无障碍服务，远程唤醒需要 root 权限。上述授权均由你自行决定，可随时撤销；撤销后对应功能停止，但不影响其他功能。</p>
+    <h4>免责声明</h4>
+    <ul>
+      <li>投屏质量受路由器、Wi-Fi 频段、设备性能与系统后台策略影响，可能出现延迟、卡顿或中断。</li>
+      <li>因系统清理后台、撤销录屏授权导致投屏结束的，本应用会提示原因，但不承担由此产生的损失。</li>
+      <li>请勿在投屏过程中展示你不希望被他人看到的敏感内容。</li>
+    </ul>
+    <h4>知识产权</h4>
+    <p>本应用的界面、图标、代码及相关素材的权利归开发者所有。开源组件按其各自许可证使用。</p>
+    <h4>协议变更与终止</h4>
+    <p>我们可能随版本更新调整本协议，更新后会在应用内提示。若你不同意变更内容，可停止使用并卸载本应用。</p>
+  </div>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 1800);
+  }
+
+  // 复制校验值
+  var copyBtn = document.getElementById('copyHash');
+  copyBtn.addEventListener('click', function(){
+    var text = document.getElementById('hashText').textContent.replace(/^SHA-256\s*/, '');
+    function fallback(){
+      var range = document.createRange();
+      range.selectNodeContents(document.getElementById('hashText'));
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      toast('已选中，请手动复制');
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function(){ toast('校验值已复制'); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  // 协议文档弹层
+  var docs = {
+    privacy: document.getElementById('docPrivacy'),
+    terms: document.getElementById('docTerms')
+  };
+
+  function openDoc(name){
+    var d = docs[name];
+    if (!d) return;
+    if (typeof d.showModal === 'function') {
+      if (!d.open) d.showModal();
+    } else {
+      d.setAttribute('open', '');
+    }
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-doc]'), function(el){
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      openDoc(el.getAttribute('data-doc'));
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-close]'), function(btn){
+    btn.addEventListener('click', function(){
+      var d = btn.closest('dialog');
+      if (d) d.close();
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('dialog'), function(d){
+    d.addEventListener('click', function(e){
+      if (e.target === d) d.close();
+    });
+  });
+
+  // 锚点滚动时避开吸顶导航
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('href').slice(1);
+      if (!id || id === 'privacy' || id === 'terms') return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      var top = target.getBoundingClientRect().top + window.pageYOffset - 70;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+  });
+})();
+</script>
+</body>
+</html>
