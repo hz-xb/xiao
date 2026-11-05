@@ -1,0 +1,8 @@
+{
+  "versionCode": 65,
+  "versionName": "1.9.7",
+  "apkUrl": "https://aka.doubaocdn.com/s/GrVhGiUEUo",
+  "sizeBytes": 10554298,
+  "sha256": "6a6e1e4c27496dabc46d7c9c892e91bfb93385ab4c866589a513d0666fc86534",
+  "notes": "新增应用内云更新：启动时自动比对版本，发现新版可直接下载安装。"
+}
