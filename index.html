@@ -317,7 +317,7 @@ summary::after{transition:transform .22s ease;}
         <p>相识投屏把一台安卓设备的画面和声音，经同一个 Wi-Fi 直接送到另一台设备。不注册、不中转、不留副本，点开就能看。</p>
         <div class="hero-actions">
           <a class="btn-main" href="#download">下载安卓版</a>
-          <div class="meta">v1.9.8 · 10.1 MB<br>Android 10 及以上</div>
+          <div class="meta" id="metaVer">v1.9.8 · 10.1 MB<br>Android 10 及以上</div>
         </div>
       </div>
 
@@ -516,7 +516,7 @@ summary::after{transition:transform .22s ease;}
       <colgroup><col><col></colgroup>
       <tbody>
         <tr><th>系统要求</th><td>Android 10 及以上（API 29）</td></tr>
-        <tr><th>安装包</th><td>10.1 MB · versionCode 66</td></tr>
+        <tr><th>安装包</th><td id="specPkg">10.1 MB · versionCode 66</td></tr>
         <tr><th>画面</th><td>HEVC（默认）/ H.264；720p、1080p、1440p、2160p；30、60、90、120 帧</td></tr>
         <tr><th>码率</th><td>8 / 12 / 16 / 24 / 48 Mbps 五档，默认 12 Mbps；游戏模式不低于 16 Mbps</td></tr>
         <tr><th>声音</th><td>AAC 96 / 128 / 192 kbps，默认 128 kbps 立体声</td></tr>
@@ -533,12 +533,12 @@ summary::after{transition:transform .22s ease;}
       <div>
         <h2>下载安卓版</h2>
         <p>目前只发布 Android 端，安装包直接下载安装。覆盖安装不会丢设置，包名与签名保持不变。</p>
-        <a class="dl-btn" href="https://aka.doubaocdn.com/s/5nSpfi667Y">下载 APK · v1.9.8</a>
+        <a class="dl-btn" id="dlBtn" href="https://aka.doubaocdn.com/s/5nSpfi667Y">下载 APK · v1.9.8</a>
       </div>
       <div class="dl-side">
         <b>版本信息</b>
-        v1.9.8（versionCode 66）<br>
-        10.1 MB · 更新于 2026 年 11 月<br>
+        <span id="dlVer">v1.9.8（versionCode 66）</span><br>
+        <span id="dlSize">10.1 MB · 更新于 2026 年 11 月 6 日</span><br>
         适用 Android 10 及以上
         <div class="hash-row">
           <span class="hash" id="hashText">SHA-256 9778a96c49558b472bbf78247e901aa33d6e1f0f264c6cfc5f3cce81f5a81589</span>
@@ -811,6 +811,46 @@ summary::after{transition:transform .22s ease;}
   } else {
     motionTargets.forEach(fire);
   }
+})();
+</script>
+
+<script>
+/* ===== 版本信息统一读 js/version.json：以后发版只改这个文件 ===== */
+(function () {
+  function fmtDate(iso) {
+    if (!iso) return "";
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    return d.getFullYear() + " 年 " + (d.getMonth() + 1) + " 月 " + d.getDate() + " 日";
+  }
+  function apply(v) {
+    if (!v || !v.versionCode || !v.apkUrl) return;
+    var name = v.versionName || "";
+    var code = v.versionCode;
+    var mb = v.sizeBytes ? (v.sizeBytes / 1048576).toFixed(1) : "";
+    var meta = document.getElementById("metaVer");
+    if (meta) meta.innerHTML = "v" + name + (mb ? " · " + mb + " MB" : "") + "<br>Android 10 及以上";
+    var spec = document.getElementById("specPkg");
+    if (spec) spec.textContent = (mb ? mb + " MB · " : "") + "versionCode " + code;
+    var btn = document.getElementById("dlBtn");
+    if (btn) {
+      btn.setAttribute("href", v.apkUrl);
+      btn.textContent = "下载 APK · v" + name;
+    }
+    var dlVer = document.getElementById("dlVer");
+    if (dlVer) dlVer.textContent = "v" + name + "（versionCode " + code + "）";
+    var dlSize = document.getElementById("dlSize");
+    if (dlSize) {
+      var date = fmtDate(v.publishedAt);
+      dlSize.textContent = (mb ? mb + " MB" : "") + (date ? " · 更新于 " + date : "");
+    }
+    var hash = document.getElementById("hashText");
+    if (hash && v.sha256) hash.textContent = "SHA-256 " + v.sha256;
+  }
+  fetch("js/version.json?t=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (v) { apply(v); })
+    .catch(function () { /* 本地打开或断网时，保留页面里写死的默认值 */ });
 })();
 </script>
 </body>
