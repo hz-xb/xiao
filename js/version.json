@@ -1,9 +1,16 @@
 {
-  "versionCode": 67,
-  "versionName": "1.9.9",
-  "apkUrl": "https://aka.doubaocdn.com/s/KDVdryUVED",
-  "sizeBytes": 10558490,
-  "sha256": "45898b0913032ff550330b1285c554797b6786b28d65d69fd2fcca4250b20f52",
+  "versionCode": 68,
+  "versionName": "2.0.0",
+  "apkUrl": "https://aka.doubaocdn.com/s/l8bsuKVqS9",
+  "sizeBytes": 10563038,
+  "sha256": "a32b3ac682aa16e894699279ec455218896458a7c06b7080c847be4c7bf0401b",
+  "md5": "cc4f096876d7e9306f1850db3010e466",
+  "signatureSha256": "a46589482910357da04512b7e86e7ba1c9116febfb75dff58e52981fa4d1dd0f",
   "publishedAt": "2026-11-06",
-  "notes": "版本校验改为静默进行，只在需要更新或非官方包时才提示。"
+  "notes": "检查更新改为后台静默，新增正版校验与更新公告。",
+  "notice": {
+    "id": "68-2026-11-06",
+    "title": "相识投屏 2.0.0",
+    "body": "这次更新：\n1. 版本检查改到后台做，不再弹「正在检查」挡住首页\n2. 官网和安装包共用同一份版本文件，版本号、下载地址、校验值始终同步\n3. 新增正版校验，签名和安装包哈希对得上才放行\n4. 以后每次更新的内容都写在这里，直接看公告就行"
+  }
 }
