@@ -3,302 +3,240 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>相识投屏 — 把画面投给身边的人</title>
-<meta name="description" content="相识投屏是安卓设备之间的局域网投屏工具：同一 Wi-Fi 下直连，没有路由器就用 Wi-Fi Direct，最高 2160p、120 帧，支持反控、录制与远程唤醒。不注册、不中转、免费。">
+<title>相识投屏 — 把平板上的画面，放到你眼前</title>
+<meta name="description" content="相识投屏是安卓设备之间的局域网投屏工具：同一个网络直连，没有路由器就用 Wi-Fi Direct，最高 2160p、120 帧、48 Mbps，支持声音同步、触摸回传、录制与远程唤醒。不注册，无广告，画面不经过服务器。">
 <link rel="preconnect" href="https://miaoda.feishu.cn">
-<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@600&amp;family=Noto+Sans+SC:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
 <link rel="icon" type="image/png" href="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/BfVrbkA5AohVemxh9ozcsQEGn8g">
 <style>
 :root{
-  --paper:#F5F6F1;
-  --ink:#16201A;
-  --ink-soft:rgba(22,32,26,.66);
-  --ink-faint:rgba(22,32,26,.44);
-  --moss:#3B5646;
-  --moss-deep:#22362B;
-  --leaf:#7A9A76;
-  --mist:#E7EBE2;
-  --line:rgba(22,32,26,.13);
-  --white:#FFFFFF;
+  --ink:#0C0D0F;
+  --ink-2:#15171A;
+  --paper:#F6F6F4;
+  --card:#FFFFFF;
+  --text:#0F1115;
+  --soft:rgba(15,17,21,.60);
+  --faint:rgba(15,17,21,.40);
+  --on:rgba(255,255,255,.94);
+  --on-soft:rgba(255,255,255,.58);
+  --blue:#4B8DF8;
+  --blue-deep:#2F70E1;
+  --line:rgba(15,17,21,.09);
+  --line-d:rgba(255,255,255,.12);
 }
 *{box-sizing:border-box;}
-html{-webkit-text-size-adjust:100%;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
 body{
-  margin:0;background:var(--paper);color:var(--ink);
+  margin:0;background:var(--paper);color:var(--text);
   font-family:"Noto Sans SC","PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",sans-serif;
-  line-height:1.6;-webkit-font-smoothing:antialiased;
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased;
 }
-h1,h2,h3{font-family:"Noto Serif SC","Songti SC","SimSun",serif;font-weight:600;letter-spacing:-0.005em;}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em;line-height:1.18;}
 a{color:inherit;}
 img{max-width:100%;}
-::selection{background:var(--leaf);color:#fff;}
-
+::selection{background:var(--blue);color:#fff;}
+*,html,body{-webkit-tap-highlight-color:transparent;}
+a,button,summary,details,label{-webkit-tap-highlight-color:transparent;outline:none;}
+summary,a,button{-webkit-user-select:none;user-select:none;}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px;}
 
-/* ---------- 顶栏 ---------- */
-header{
-  position:sticky;top:0;z-index:20;background:var(--paper);
-  border-bottom:1px solid var(--line);
-}
-.nav{display:flex;align-items:center;gap:14px;height:64px;}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:1;min-width:0;}
-.brand img{width:28px;height:28px;border-radius:7px;flex:none;display:block;}
-.brand span{font-size:15px;font-weight:500;letter-spacing:.02em;white-space:nowrap;}
-.nav-links{display:none;gap:26px;font-size:14px;color:var(--ink-soft);}
+header{position:fixed;top:0;left:0;right:0;z-index:30;background:rgba(12,13,15,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line-d);}
+.nav{display:flex;align-items:center;gap:12px;height:58px;max-width:1120px;margin:0 auto;padding:0 20px;}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;flex:1;min-width:0;color:var(--on);}
+.brand img{width:26px;height:26px;border-radius:7px;display:block;flex:none;}
+.brand span{font-size:14.5px;font-weight:500;white-space:nowrap;}
+.nav-links{display:none;gap:22px;font-size:13.5px;color:var(--on-soft);}
 .nav-links a{text-decoration:none;}
-.nav-links a:hover{color:var(--ink);}
-.nav-cta{
-  display:inline-flex;align-items:center;justify-content:center;
-  height:38px;padding:0 16px;border-radius:8px;
-  background:var(--moss);color:#fff;text-decoration:none;font-size:13.5px;white-space:nowrap;
-}
-.nav-cta:hover{background:var(--moss-deep);}
+.nav-links a:hover{color:var(--on);}
+.nav-cta{display:inline-flex;align-items:center;height:34px;padding:0 14px;border-radius:7px;background:var(--blue);color:#fff;text-decoration:none;font-size:13px;font-weight:500;white-space:nowrap;transition:background .16s;}
+.nav-cta:hover{background:var(--blue-deep);}
+#progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--blue);transition:width .1s linear;}
 
-/* ---------- Hero ---------- */
-.hero{padding:52px 0 44px;}
-.hero-grid{display:grid;grid-template-columns:1fr;gap:34px;align-items:center;}
-.hero h1{
-  margin:0;font-size:clamp(30px,7.6vw,58px);line-height:1.2;
-}
-.hero p{
-  margin:20px 0 0;max-width:34em;font-size:15.5px;line-height:1.85;color:var(--ink-soft);
-}
-.hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:28px;}
-.btn-main{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  height:50px;padding:0 24px;border-radius:9px;
-  background:var(--moss);color:#fff;text-decoration:none;font-size:15px;
-  transition:background .15s ease;
-}
-.btn-main:hover{background:var(--moss-deep);}
-.meta{font-size:13px;color:var(--ink-faint);line-height:1.7;}
-.hero-figure{margin:0;}
-.hero-figure svg{width:100%;height:auto;display:block;}
+.hero{background:var(--ink);color:var(--on);padding:96px 0 0;position:relative;overflow:hidden;}
+.hero-head{text-align:center;max-width:800px;margin:0 auto;padding:0 20px;}
+.hero h1{font-size:clamp(32px,8.4vw,66px);letter-spacing:-.028em;line-height:1.12;}
+.hero h1 .dim{color:var(--on-soft);}
+.hero .lede{margin:20px auto 0;max-width:38em;font-size:15px;line-height:1.85;color:var(--on-soft);}
+.hero-actions{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px 16px;margin-top:30px;}
+.btn-main{display:inline-flex;align-items:center;gap:9px;height:52px;padding:0 28px;border-radius:9px;background:var(--blue);color:#fff;text-decoration:none;font-size:15.5px;font-weight:500;transition:background .16s,transform .16s;}
+.btn-main:hover{background:var(--blue-deep);transform:translateY(-1px);}
+.btn-main svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:1.7;stroke-linecap:round;}
+.hero-meta{font-size:12.5px;color:var(--on-soft);line-height:1.7;}
+.hero-meta b{font-weight:500;color:rgba(255,255,255,.8);}
 
-/* ---------- 事实条 ---------- */
-.facts{border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
-.facts ul{list-style:none;margin:0;padding:22px 0;display:grid;grid-template-columns:repeat(2,1fr);gap:20px 18px;}
+.devices{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:820px;margin:46px auto 0;padding:0 20px;align-items:end;}
+.devices figure{margin:0;}
+.devices img{display:block;width:100%;border-radius:13px;border:1px solid rgba(255,255,255,.16);}
+.devices .mid{margin-top:-16px;}
+.devices .mid img{border-color:rgba(255,255,255,.26);}
+.fade{height:130px;margin-top:-104px;position:relative;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg,rgba(12,13,15,0) 0%,rgba(246,246,244,.86) 62%,var(--paper) 96%);}
+
+.facts{background:var(--paper);padding:10px 0 46px;}
+.facts ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:30px 16px;}
 .facts li{min-width:0;}
-.facts b{display:block;font-size:16px;font-weight:500;letter-spacing:.01em;line-height:1.4;}
-.facts span{display:block;margin-top:4px;font-size:12.5px;color:var(--ink-faint);}
+.facts b{display:block;font-size:clamp(32px,8vw,54px);font-weight:700;line-height:1;letter-spacing:-.03em;}
+.facts b small{font-size:.4em;font-weight:500;color:var(--soft);margin-left:4px;letter-spacing:0;}
+.facts .desc{display:block;margin-top:9px;font-size:12.5px;line-height:1.6;color:var(--faint);}
+.facts b span{display:inline;font-size:inherit;color:inherit;margin:0;line-height:1.1;font-weight:700;}
+.facts b small{margin-left:6px;}
 
-/* ---------- 通用节 ---------- */
-section{padding:62px 0;}
-.sec-head{max-width:34em;}
-.sec-head h2{margin:0;font-size:clamp(22px,4.6vw,32px);line-height:1.3;}
-.sec-head p{margin:12px 0 0;font-size:14.5px;line-height:1.8;color:var(--ink-soft);}
+section{padding:64px 0;}
+.sec-head{max-width:36em;}
+.sec-head h2{font-size:clamp(26px,5.6vw,40px);}
+.sec-head p{margin:14px 0 0;font-size:14.5px;line-height:1.82;color:var(--soft);}
 
-/* ---------- 功能 ---------- */
-.features{margin-top:36px;border-top:1px solid var(--line);}
-.feature{
-  display:grid;grid-template-columns:34px 1fr;gap:16px;
-  padding:24px 0;border-bottom:1px solid var(--line);
-}
-.feature svg{width:24px;height:24px;margin-top:3px;stroke:var(--moss);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
-.feature h3{margin:0;font-family:"Noto Sans SC","PingFang SC",sans-serif;font-size:16.5px;font-weight:500;line-height:1.5;}
-.feature p{margin:6px 0 0;font-size:14px;line-height:1.8;color:var(--ink-soft);}
+.cards{margin-top:34px;display:grid;grid-template-columns:1fr;gap:14px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 20px;transition:border-color .18s,transform .18s;}
+.card:hover{border-color:rgba(75,141,248,.4);transform:translateY(-2px);}
+.ic{width:42px;height:42px;border-radius:12px;background:rgba(75,141,248,.1);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.ic svg{width:21px;height:21px;stroke:var(--blue);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.card h3{font-size:16.5px;font-weight:500;letter-spacing:-.01em;line-height:1.45;}
+.card p{margin:8px 0 0;font-size:13.5px;line-height:1.78;color:var(--soft);}
 
-.also{margin:26px 0 0;font-size:13px;line-height:1.9;color:var(--ink-faint);max-width:40em;}
+.strip{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(200px,1fr);gap:14px;margin-top:34px;
+  overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px;-webkit-overflow-scrolling:touch;}
+.strip figure{margin:0;scroll-snap-align:start;}
+.shot{border-radius:14px;overflow:hidden;background:var(--ink-2);border:1px solid rgba(15,17,21,.14);
+  box-shadow:0 18px 34px -22px rgba(15,17,21,.55);}
+.shot img{display:block;width:100%;height:auto;}
+.cap{margin:9px 0 0;font-size:12px;line-height:1.6;color:var(--faint);}
 
-/* ---------- 对比 ---------- */
-.compare{margin-top:32px;border-top:1px solid var(--line);}
-.compare .row{display:grid;grid-template-columns:88px 1fr;gap:14px;padding:18px 0;
-  border-bottom:1px solid var(--line);font-size:13.5px;line-height:1.85;color:var(--ink-soft);}
-.compare .row .tag{color:var(--ink);font-weight:500;font-size:13.5px;line-height:1.85;}
-.compare .row.mine{background:var(--mist);margin:0 -14px;padding:18px 14px;}
-.compare .row.mine .tag{color:var(--moss);}
+.versus{margin-top:34px;display:grid;grid-template-columns:1fr;gap:14px;}
+.vcard{border-radius:16px;padding:22px 20px;border:1px solid var(--line);background:var(--card);}
+.vcard.other{background:transparent;}
+.vcard.ours{border-color:rgba(75,141,248,.35);box-shadow:0 18px 40px -30px rgba(75,141,248,.55);}
+.vcard h3{font-size:14px;font-weight:500;color:var(--soft);letter-spacing:0;}
+.vcard.ours h3{color:var(--blue);}
+.vcard ul{list-style:none;margin:12px 0 0;padding:0;}
+.vcard li{font-size:13.5px;line-height:1.8;color:var(--soft);padding:7px 0;border-top:1px solid var(--line);}
+.vcard li:first-child{border-top:none;padding-top:0;}
+.vcard.ours li{color:var(--text);}
 
-/* ---------- 三步 ---------- */
-.steps{margin-top:36px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr;}
-.step{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:20px 0;border-bottom:1px solid var(--line);}
-.step .num{
-  font-family:"Noto Serif SC","Songti SC",serif;font-size:12px;line-height:1;color:var(--moss);
-  width:26px;height:26px;border:1px solid var(--line);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;
-}
-.step h3{margin:0;font-family:"Noto Sans SC","PingFang SC",sans-serif;font-size:15.5px;font-weight:500;line-height:1.5;}
-.step p{margin:5px 0 0;font-size:13.5px;line-height:1.8;color:var(--ink-soft);}
+.steps{margin-top:30px;display:grid;grid-template-columns:1fr;gap:0;}
+.step{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:20px 0;border-top:1px solid var(--line);}
+.step .num{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;font-weight:500;
+  display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px;}
+.step h3{font-size:15.5px;font-weight:500;letter-spacing:0;}
+.step p{margin:5px 0 0;font-size:13.5px;line-height:1.8;color:var(--soft);}
 
-/* ---------- Root 增强 ---------- */
-.boost{margin-top:10px;background:var(--mist);border-radius:14px;padding:30px 22px 26px;}
-.boost h2{margin:0;font-size:clamp(20px,4vw,26px);line-height:1.35;}
-.boost .lede{margin:10px 0 0;font-size:14px;line-height:1.8;color:var(--ink-soft);}
-.boost-grid{display:grid;grid-template-columns:1fr;gap:22px;margin-top:24px;}
-.boost-item{background:var(--paper);border-radius:10px;padding:20px 18px;}
-.boost-item h3{margin:0;font-family:"Noto Sans SC","PingFang SC",sans-serif;font-size:15.5px;font-weight:500;}
-.boost-item p{margin:7px 0 0;font-size:13.5px;line-height:1.8;color:var(--ink-soft);}
-.boost .note{margin:22px 0 0;font-size:12.5px;line-height:1.8;color:var(--ink-faint);}
-
-/* ---------- 参数表 ---------- */
 .specs{padding-top:0;}
-table{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:8px;}
-colgroup col:nth-child(1){width:31%;}
-colgroup col:nth-child(2){width:69%;}
+table{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:14px;}
+colgroup col:nth-child(1){width:30%;}
+colgroup col:nth-child(2){width:70%;}
 tr{border-bottom:1px solid var(--line);}
-th,td{text-align:left;vertical-align:top;padding:16px 0;font-size:14px;line-height:1.75;}
-th{font-weight:400;color:var(--ink-faint);font-size:13px;padding-right:14px;}
-td{color:var(--ink-soft);}
+th,td{text-align:left;vertical-align:top;padding:15px 0;font-size:13.5px;line-height:1.72;}
+th{font-weight:400;color:var(--faint);font-size:12.5px;padding-right:14px;}
+td{color:var(--soft);}
 
-/* ---------- 下载 ---------- */
-.download{background:var(--moss-deep);color:#F2F5EC;padding:56px 0;}
-.download .wrap{display:grid;grid-template-columns:1fr;gap:30px;}
-.download h2{margin:0;font-size:clamp(24px,5vw,34px);line-height:1.3;color:#fff;}
-.download p{margin:12px 0 0;font-size:14.5px;line-height:1.8;color:rgba(242,245,236,.72);max-width:30em;}
-.dl-btn{
-  display:inline-flex;align-items:center;height:52px;padding:0 26px;margin-top:26px;
-  border-radius:9px;background:#F2F5EC;color:var(--moss-deep);text-decoration:none;
-  font-size:15.5px;font-weight:500;transition:background .15s ease;
-}
-.dl-btn:hover{background:#fff;}
-.dl-side{font-size:13px;line-height:2;color:rgba(242,245,236,.62);}
-.dl-side b{display:block;color:#F2F5EC;font-weight:500;font-size:14px;margin-bottom:2px;}
-.hash-row{
-  display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;
-}
-.hash{
-  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
-  font-size:11px;line-height:1.6;word-break:break-all;
-  color:rgba(242,245,236,.55);max-width:24em;
-}
-.copy-btn{
-  appearance:none;border:1px solid rgba(242,245,236,.3);background:transparent;
-  color:rgba(242,245,236,.8);font-size:12px;height:30px;padding:0 12px;border-radius:6px;
-  cursor:pointer;font-family:inherit;
-}
-.copy-btn:hover{background:rgba(242,245,236,.08);}
+.download{background:var(--ink);color:var(--on);padding:66px 0;}
+.download .wrap{display:grid;grid-template-columns:1fr;gap:34px;}
+.download h2{font-size:clamp(28px,6vw,44px);color:#fff;}
+.download p{margin:12px 0 0;font-size:14.5px;line-height:1.8;color:var(--on-soft);max-width:32em;}
+.dl-btn{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 30px;margin-top:26px;border-radius:10px;
+  background:var(--blue);color:#fff;text-decoration:none;font-size:16px;font-weight:500;transition:background .16s,transform .16s;}
+.dl-btn:hover{background:var(--blue-deep);transform:translateY(-1px);}
+.dl-btn svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.7;stroke-linecap:round;}
+.dl-side{font-size:12.5px;line-height:2;color:var(--on-soft);}
+.dl-side b{display:block;color:#fff;font-weight:500;font-size:13.5px;margin-bottom:2px;}
+.hash-row{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.hash{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:11px;line-height:1.6;
+  word-break:break-all;color:var(--on-soft);max-width:26em;}
+.copy-btn{appearance:none;border:1px solid rgba(255,255,255,.24);background:transparent;color:rgba(255,255,255,.8);
+  font-size:12px;height:30px;padding:0 12px;border-radius:6px;cursor:pointer;font-family:inherit;}
+.copy-btn:hover{background:rgba(255,255,255,.08);}
 
-/* ---------- FAQ ---------- */
-.faq{margin-top:36px;border-top:1px solid var(--line);}
+.faq{margin-top:30px;border-top:1px solid var(--line);}
 details{border-bottom:1px solid var(--line);}
-summary{
-  list-style:none;cursor:pointer;padding:20px 0;
-  display:flex;align-items:flex-start;gap:14px;font-size:15.5px;line-height:1.6;
-}
+summary{list-style:none;cursor:pointer;padding:19px 0;display:flex;align-items:flex-start;gap:14px;font-size:15px;line-height:1.6;}
 summary::-webkit-details-marker{display:none;}
-summary::after{content:"";width:9px;height:9px;margin-left:auto;margin-top:8px;flex:none;
-  border-right:1.5px solid var(--ink-faint);border-bottom:1.5px solid var(--ink-faint);
-  transform:rotate(45deg);}
-details[open] summary::after{transform:rotate(-135deg);margin-top:12px;}
-details p{margin:0 0 22px;font-size:14px;line-height:1.85;color:var(--ink-soft);max-width:40em;}
+summary::after{content:"";width:9px;height:9px;margin-left:auto;margin-top:7px;flex:none;
+  border-right:1.5px solid var(--faint);border-bottom:1.5px solid var(--faint);transform:rotate(45deg);}
+details[open] summary::after{transform:rotate(-135deg);margin-top:11px;}
+details p{margin:0 0 20px;font-size:13.5px;line-height:1.85;color:var(--soft);max-width:42em;}
 
-/* ---------- 页脚 ---------- */
-footer{border-top:1px solid var(--line);padding:36px 0 44px;}
-.foot{display:flex;flex-wrap:wrap;gap:18px 26px;align-items:center;font-size:12.5px;color:var(--ink-faint);}
-.foot .brand-mini{display:flex;align-items:center;gap:8px;color:var(--ink-soft);font-size:13px;}
-.foot .brand-mini img{width:20px;height:20px;border-radius:5px;}
-.foot a{text-decoration:none;color:var(--ink-faint);}
-.foot a:hover{color:var(--ink);}
+footer{border-top:1px solid var(--line);padding:32px 0 44px;background:var(--paper);}
+.foot{display:flex;flex-wrap:wrap;gap:16px 26px;align-items:center;font-size:12.5px;color:var(--faint);}
+.brand-mini{display:flex;align-items:center;gap:8px;color:var(--soft);font-size:13px;}
+.brand-mini img{width:20px;height:20px;border-radius:5px;}
+.foot a{text-decoration:none;color:var(--faint);}
+.foot a:hover{color:var(--text);}
 .foot-links{display:flex;gap:20px;flex-wrap:wrap;margin-left:auto;}
 
-/* ---------- 文档弹层 ---------- */
-dialog{
-  border:none;padding:0;background:var(--white);color:var(--ink);
-  width:min(720px,calc(100% - 28px));max-height:86vh;border-radius:14px;
-  box-shadow:0 24px 60px rgba(22,32,26,.24);
-}
-dialog::backdrop{background:rgba(22,32,26,.42);}
-.doc-head{position:sticky;top:0;background:var(--white);display:flex;align-items:center;
-  gap:16px;padding:20px 24px;border-bottom:1px solid var(--line);}
-.doc-head h3{margin:0;font-size:18px;flex:1;}
-.doc-close{border:none;background:transparent;font-size:14px;color:var(--ink-faint);
-  cursor:pointer;height:32px;padding:0 6px;}
-.doc-body{padding:22px 24px 34px;overflow:auto;}
-.doc-body h4{margin:24px 0 8px;font-size:14.5px;font-weight:500;font-family:"Noto Sans SC",sans-serif;}
-.doc-body p,.doc-body li{font-size:13.5px;line-height:1.9;color:var(--ink-soft);margin:0 0 10px;}
+dialog{border:none;padding:0;background:#fff;color:var(--text);width:min(720px,calc(100% - 28px));
+  max-height:86vh;border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.3);}
+dialog::backdrop{background:rgba(12,13,15,.5);}
+.doc-head{position:sticky;top:0;background:#fff;display:flex;align-items:center;gap:16px;
+  padding:18px 22px;border-bottom:1px solid var(--line);}
+.doc-head h3{margin:0;font-size:17px;flex:1;}
+.doc-close{border:none;background:transparent;font-size:14px;color:var(--faint);cursor:pointer;height:32px;padding:0 6px;}
+.doc-body{padding:20px 22px 32px;overflow:auto;}
+.doc-body h4{margin:22px 0 8px;font-size:14px;font-weight:500;}
+.doc-body p,.doc-body li{font-size:13px;line-height:1.9;color:var(--soft);margin:0 0 10px;}
 .doc-body ul{padding-left:20px;}
-.doc-body .stamp{font-size:12px;color:var(--ink-faint);}
+.doc-body .stamp{font-size:12px;color:var(--faint);}
 
-/* toast */
-#toast{
-  position:fixed;left:50%;bottom:28px;transform:translate(-50%,14px);
-  background:var(--moss-deep);color:#fff;font-size:13px;padding:10px 16px;
-  border-radius:8px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:60;
-}
+#toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,14px);background:#1B1D22;color:#fff;
+  font-size:13px;padding:10px 16px;border-radius:8px;opacity:0;pointer-events:none;
+  transition:opacity .18s,transform .18s;z-index:60;}
 #toast.show{opacity:1;transform:translate(-50%,0);}
 
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.hero h1,.hero .lede,.hero-actions,.devices figure{animation:fadeUp .8s cubic-bezier(.22,.7,.2,1) both;}
+.hero h1{animation-delay:.06s;}
+.hero .lede{animation-delay:.16s;}
+.hero-actions{animation-delay:.26s;}
+.devices figure:nth-child(1){animation-delay:.30s;}
+.devices figure:nth-child(2){animation-delay:.38s;}
+.devices figure:nth-child(3){animation-delay:.46s;}
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.22,.7,.2,1),transform .7s cubic-bezier(.22,.7,.2,1);}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+.shot{transition:transform .26s cubic-bezier(.22,.7,.2,1),box-shadow .26s;}
+.strip figure:hover .shot{transform:translateY(-5px);box-shadow:0 30px 50px -26px rgba(15,17,21,.62);}
+.card:hover .ic{background:rgba(75,141,248,.18);}
+.card:hover .ic svg{stroke:var(--blue-deep);}
+details[open] p{animation:fadeUp .34s both;}
+.btn-main svg,.dl-btn svg{transition:transform .2s;}
+.btn-main:hover svg,.dl-btn:hover svg{transform:translateY(2px);}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto;}.reveal{opacity:1;transform:none;transition:none;}.hero h1,.hero .lede,.hero-actions,.devices figure{animation:none;}}
 @media (min-width:768px){
   .wrap{padding:0 32px;}
-  .nav{height:72px;}
+  .nav{padding:0 32px;height:64px;}
   .nav-links{display:flex;}
-  .hero{padding:78px 0 62px;}
-  .hero-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:52px;}
-  .facts ul{grid-template-columns:repeat(4,1fr);padding:26px 0;}
-  section{padding:84px 0;}
-  .feature{grid-template-columns:40px 1fr;gap:20px;padding:26px 0;}
-  .steps{grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line);}
-  .step{grid-template-columns:1fr;gap:10px;border-bottom:none;border-right:1px solid var(--line);
-    padding:24px 24px 26px 0;}
-  .step + .step{padding-left:24px;}
-  .step:last-child{border-right:none;padding-right:0;}
-  .compare .row{grid-template-columns:112px 1fr;gap:22px;font-size:14px;padding:20px 0;}
-  .compare .row.mine{margin:0 -20px;padding:20px;}
-  .boost{padding:40px 34px 34px;}
-  .boost-grid{grid-template-columns:1fr 1fr;gap:24px;}
-  .download{padding:72px 0;}
-  .download .wrap{grid-template-columns:1.15fr .85fr;gap:56px;align-items:start;}
-  footer{padding:44px 0 56px;}
-}
-
-/* ---------- 动效 ---------- */
-#progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--moss);opacity:.9;}
-@keyframes rise{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
-@keyframes wipe{from{clip-path:inset(0 100% 0 0);}to{clip-path:inset(0 0 0 0);}}
-@keyframes dashflow{to{stroke-dashoffset:-22px;}}
-@keyframes breathe{0%,100%{opacity:.42}50%{opacity:.95}}
-@keyframes dotpulse{0%,100%{opacity:.28;transform:scale(.85)}50%{opacity:.8;transform:scale(1.2)}}
-
-.hero h1 span{display:inline-block;opacity:0;animation:rise .82s cubic-bezier(.22,.7,.2,1) forwards;}
-.hero h1 span:nth-of-type(1){animation-delay:.04s;}
-.hero h1 span:nth-of-type(2){animation-delay:.17s;}
-.hero p{opacity:0;animation:rise .8s .28s cubic-bezier(.22,.7,.2,1) forwards;}
-.hero-actions{opacity:0;animation:rise .8s .42s cubic-bezier(.22,.7,.2,1) forwards;}
-.hero-figure svg{clip-path:inset(0 100% 0 0);animation:wipe 1.2s cubic-bezier(.45,.05,.2,1) .32s forwards;}
-.hero-figure .link-path{animation:dashflow 3.6s linear infinite;}
-.hero-figure .wave-soft{animation:breathe 4.2s ease-in-out infinite;}
-.hero-figure .wave-soft.late{animation-delay:1.4s;}
-.hero-figure .dot-pulse{animation:dotpulse 3.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center;}
-
-.sec-head h2::after{content:"";display:block;width:min(120px,100%);height:1px;background:var(--moss);
-  margin-top:15px;transform:scaleX(0);transform-origin:left center;
-  transition:transform .75s cubic-bezier(.4,0,.2,1);}
-.sec-head h2.in::after{transform:scaleX(1);}
-
-.nav-links a{position:relative;}
-.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1px;background:var(--moss);
-  transform:scaleX(0);transform-origin:left center;transition:transform .26s ease;}
-.nav-links a:hover::after{transform:scaleX(1);}
-
-.btn-main,.nav-cta,.dl-btn{transition:background .16s ease,transform .16s ease;}
-.btn-main:active,.nav-cta:active,.dl-btn:active{transform:translateY(1px);}
-.compare .row{transition:background .2s ease;}
-.compare .row:hover{background:rgba(22,32,26,.035);}
-.compare .row.mine:hover{background:var(--mist);}
-.boost-item{transition:box-shadow .25s ease,transform .25s ease;}
-.boost-item:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(22,32,26,.07);}
-summary::after{transition:transform .22s ease;}
-
-@media (prefers-reduced-motion:reduce){
-  *{transition:none !important;animation:none !important;}
-  .hero h1 span,.hero p,.hero-actions{opacity:1;}
-  .hero-figure svg{clip-path:none;}
-  .sec-head h2::after{transform:scaleX(1);}
-  #progress{display:none;}
+  .hero{padding:112px 0 0;}
+  .devices{gap:16px;margin-top:54px;}
+  .devices .mid{margin-top:-26px;}
+  .facts{padding:16px 0 62px;}
+  .facts ul{grid-template-columns:repeat(4,1fr);gap:20px;}
+  .facts b{font-size:clamp(40px,4.4vw,54px);}
+  section{padding:92px 0;}
+  .cards{grid-template-columns:1fr 1fr;gap:16px;}
+  .card{padding:26px 24px;}
+  .strip{grid-auto-columns:1fr;overflow:visible;}
+  .versus{grid-template-columns:1fr 1fr;gap:18px;}
+  .steps{grid-template-columns:repeat(3,1fr);gap:0 28px;}
+  .step{grid-template-columns:1fr;padding:22px 0 0;border-right:1px solid var(--line);}
+  .step:last-child{border-right:none;}
+  .download .wrap{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:44px;align-items:end;}
+  dialog .doc-body{padding:22px 30px 36px;}
 }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="wrap nav">
+  <div class="nav">
     <a class="brand" href="#top">
-      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/BfVrbkA5AohVemxh9ozcsQEGn8g" alt="相识投屏">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/BfVrbkA5AohVemxh9ozcsQEGn8g" alt="相识投屏图标">
       <span>相识投屏</span>
     </a>
     <nav class="nav-links">
-      <a href="#features">功能</a>
-      <a href="#compare">对比</a>
+      <a href="#shots">界面</a>
       <a href="#how">怎么用</a>
-      <a href="#boost">Root 增强</a>
+      <a href="#limits">为什么没有云</a>
       <a href="#specs">参数</a>
       <a href="#faq">问答</a>
     </nav>
@@ -309,231 +247,171 @@ summary::after{transition:transform .22s ease;}
 
 <main id="top">
 
-  <!-- ===== Hero ===== -->
-  <div class="hero wrap">
-    <div class="hero-grid">
-      <div>
-        <h1><span>画面留在平板，</span><br><span>眼睛落在手机。</span></h1>
-        <p>相识投屏把一台安卓设备的画面和声音，经同一个 Wi-Fi 直接送到另一台设备。不注册、不中转、不留副本，点开就能看。</p>
-        <div class="hero-actions">
-          <a class="btn-main" href="#download">下载安卓版</a>
-          <div class="meta" id="metaVer">v2.0.3 · 10.1 MB<br>Android 10 及以上</div>
-        </div>
+  <div class="hero">
+    <div class="hero-head">
+      <h1>画面留在平板，<br><span class="dim">眼睛落在手机。</span></h1>
+      <p class="lede">两台安卓设备，同一个网络，屏幕和声音直接过去。没有服务器，没有账号，也没有会员挡在画质前面。</p>
+      <div class="hero-actions">
+        <a class="btn-main" href="#download">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
+          免费下载
+        </a>
+        <div class="hero-meta"><b>Android 10 及以上</b> · 无广告 · 无需注册<br><span id="metaVer">v2.0.3 · 10.1 MB</span></div>
       </div>
-
-      <figure class="hero-figure" aria-label="两台设备之间的投送示意">
-        <svg viewBox="0 0 560 400" role="img">
-          <!-- 平板 -->
-          <rect x="238" y="96" width="286" height="196" rx="16" fill="#FFFFFF" stroke="#3B5646" stroke-width="1.4"/>
-          <rect x="252" y="110" width="258" height="168" rx="9" fill="#E7EBE2"/>
-          <path d="M272 194c22-26 42-26 64 0s42 26 64 0" stroke="#3B5646" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <path class="wave-soft" d="M272 226c22-26 42-26 64 0s42 26 64 0" stroke="#7A9A76" stroke-width="2" fill="none" stroke-linecap="round" opacity=".85"/>
-          <circle cx="496" cy="206" r="3" fill="#3B5646" opacity=".35"/>
-
-          <!-- 手机 -->
-          <rect x="58" y="132" width="118" height="224" rx="14" fill="#FFFFFF" stroke="#3B5646" stroke-width="1.4"/>
-          <rect x="68" y="146" width="98" height="182" rx="8" fill="#E7EBE2"/>
-          <path d="M84 226c12-15 24-15 36 0s24 15 36 0" stroke="#3B5646" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-          <path class="wave-soft late" d="M84 250c12-15 24-15 36 0s24 15 36 0" stroke="#7A9A76" stroke-width="1.7" fill="none" stroke-linecap="round" opacity=".85"/>
-          <rect x="104" y="334" width="26" height="3" rx="1.5" fill="#3B5646" opacity=".3"/>
-
-          <!-- 连接路径 -->
-          <path class="link-path" d="M176 206c30 0 34-38 62-38" stroke="#7A9A76" stroke-width="1.4" stroke-dasharray="5 6" fill="none"/>
-          <path d="M238 168l-9-5v10z" fill="#7A9A76"/>
-          <circle class="dot-pulse" cx="206" cy="186" r="2.4" fill="#3B5646" opacity=".45"/>
-          <circle class="dot-pulse" cx="220" cy="176" r="1.8" fill="#3B5646" opacity=".3"/>
-        </svg>
-      </figure>
     </div>
+
+    <div class="devices">
+      <figure><img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/ApD4b61HKo8XyEx6AESc5ozqnnd" alt="相识投屏首页，显示本机地址与发送端、接收端入口"></figure>
+      <figure class="mid"><img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/MjCabd3QGo6tSoxdwydcwXHnnbf" alt="发送端页面：投屏状态、无网模式、画面设置"></figure>
+      <figure><img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/SEkebD8wboWeEkxXK2Kc4lJRnjf" alt="接收端手动输入地址页面"></figure>
+    </div>
+    <div class="fade"></div>
   </div>
 
-  <!-- ===== 事实条 ===== -->
-  <div class="facts">
-    <div class="wrap">
-      <ul>
-        <li><b>局域网直连</b><span>没路由器也能连</span></li>
-        <li><b>最高 <span id="fpsNum" data-to="120">120</span> 帧</b><span>30 / 60 / 90 / 120 可选</span></li>
-        <li><b>声音同步</b><span>AAC 立体声</span></li>
-        <li><b>无需账号</b><span>也没有广告</span></li>
-      </ul>
-    </div>
+  <div class="facts wrap">
+    <ul>
+      <li><b><span id="fpsNum" data-to="120">120</span><small>帧</small></b><span class="desc">30 / 60 / 90 / 120 可选，按编码器上限自动降档</span></li>
+      <li><b>2160p<small>画质上限</small></b><span class="desc">720p 起四档，默认 1080p · 60 帧 · 12 Mbps</span></li>
+      <li><b>48<small>Mbps</small></b><span class="desc">8 到 48 Mbps 五档；游戏模式锁 60 帧、不低于 16 Mbps</span></li>
+      <li><b>0<small>台服务器</small></b><span class="desc">画面只在两台设备之间走，不落任何中转节点</span></li>
+    </ul>
   </div>
 
-  <!-- ===== 功能 ===== -->
   <section class="wrap" id="features">
     <div class="sec-head">
-      <h2 class="sec-h">它做的事，就是把这一台，搬到那一台上。</h2>
-      <p>没有云、没有登录、没有会员。发送端开始投屏，接收端在列表里选中这台设备，画面就过来了。要不要声音、画质拉到多少，都在发送端一处决定。</p>
+      <h2>断网、没路由器，也还是两台设备对两台设备。</h2>
+      <p>发送端编码，接收端解码，中间只有你自己家的 Wi-Fi。没有云这一跳，就没有排队、限额和会员。</p>
     </div>
-
-    <div class="features">
-      <div class="feature">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="5" cy="12" r="2.4"/><circle cx="19" cy="12" r="2.4"/><path d="M7.6 12h8.8"/>
-        </svg>
-        <div>
-          <h3>局域网点对点，没路由器也能连</h3>
-          <p>画面经 TCP 从发送端直达接收端，中间没有任何服务器。没有路由器的时候，发送端会建一个 Wi-Fi Direct 直连组，接收端加入后照常投屏——露营、出差、断网，都还是两台设备对两台设备。</p>
-        </div>
+    <div class="cards reveal">
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/><path d="M7.4 12h9.2"/></svg></div>
+        <h3>没有路由器也能连</h3>
+        <p>发送端可开 Wi-Fi Direct 直连组，接收端加进去照样投。露营、出差、断网，都不依赖外部网络。</p>
       </div>
-
-      <div class="feature">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M3 12h3l2-6 3 12 2-9 3 6h5"/>
-        </svg>
-        <div>
-          <h3>声音跟着画面走</h3>
-          <p>采集本机正在播放的声音，以 96 / 128 / 192 kbps 的 AAC 传输，默认立体声；弱网可以切单声道。</p>
-        </div>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h3l2-6 3 12 2-9 3 6h5"/></svg></div>
+        <h3>声音跟着画面走</h3>
+        <p>抓本机正在播放的声音，AAC-LC 三档码率，默认 128 kbps 立体声；弱网可切单声道。</p>
       </div>
-
-      <div class="feature">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="3" y="5" width="13" height="10" rx="1.6"/><path d="M19 9v10H8"/><path d="M7 20l3-6"/>
-        </svg>
-        <div>
-          <h3>画质和手感，你自己定</h3>
-          <p>分辨率四档到 2160p，帧率四档到 120 帧，码率五档从 8 到 48 Mbps。自适应会盯着带宽和拥塞换档；开游戏模式则锁在 60 帧以内、码率不低于 16 Mbps，先把延迟压下去。</p>
-        </div>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9"/><circle cx="12" cy="16.5" r="4"/></svg></div>
+        <h3>在手机上操作平板</h3>
+        <p>触摸回传。root 直写延迟最低、可按住拖动；无障碍抬手后整段回放，适合点菜单。</p>
       </div>
-
-      <div class="feature">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 3v9"/><circle cx="12" cy="16.5" r="4"/>
-        </svg>
-        <div>
-          <h3>手机上直接操作平板</h3>
-          <p>接收端的触摸能回传到发送端。需要在平板上手动开启无障碍服务，不开只影响操作，不影响看画面。</p>
-        </div>
-      </div>
-
-      <div class="feature">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="12" cy="12" r="7.2"/><circle cx="12" cy="12" r="2.6"/>
-        </svg>
-        <div>
-          <h3>接收端能把画面录下来</h3>
-          <p>投屏中在接收端点一次录制，画面和声音一起存成 MP4，落在本机文件里。要留一份回放，不用再装第二个工具。</p>
-        </div>
-      </div>
-
-      <div class="feature">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="4.5" y="10" width="15" height="10" rx="2"/><path d="M8 10V7.4a4 4 0 0 1 8 0V10"/>
-        </svg>
-        <div>
-          <h3>设了密码，才连得上</h3>
-          <p>发送端可以设访问密码，接收端填对才能连。附近列表只显示同一网段里主动广播的设备，不会把画面敞给整层楼。</p>
-        </div>
-      </div>
-    </div>
-
-    <p class="also">另外，快捷设置磁贴一键开投、通知栏常驻状态、统计条可拖到任意角落、断线会写清原因、覆盖安装保留全部设置。</p>
-  </section>
-
-  <!-- ===== 和别的投屏比 ===== -->
-  <section class="wrap" id="compare" style="padding-top:0;">
-    <div class="sec-head">
-      <h2 class="sec-h">和常见的几种投屏比</h2>
-      <p>云投屏、ADB 工具、系统投屏，各有各的门槛。我们只要求一件事：两台设备都装上这个应用，在同一个网里。</p>
-    </div>
-    <div class="compare">
-      <div class="row">
-        <span class="tag">云投屏 App</span>
-        <span>要账号，画质、时长、远程常被卡在会员后面；画面先上云再下来，路绕远了，也谈不上稳。</span>
-      </div>
-      <div class="row">
-        <span class="tag">ADB 工具</span>
-        <span>得先开无线调试，第一回通常还要连一次电脑，换台设备就重来一遍；系统版本也挑。</span>
-      </div>
-      <div class="row">
-        <span class="tag">系统投屏</span>
-        <span>投到电视或盒子的接收端，手机之间一般接不了；投不投得成，看对方硬件支不支持。</span>
-      </div>
-      <div class="row mine">
-        <span class="tag">相识投屏</span>
-        <span>两端都是应用，不要账号、不要电脑、不要开发者选项；有路由器走 Wi-Fi，没路由器走 Wi-Fi Direct，一样连得上。</span>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="10" width="15" height="10" rx="2"/><path d="M8 10V7.4a4 4 0 0 1 8 0V10"/></svg></div>
+        <h3>密码、唤醒、录制</h3>
+        <p>可设接入密码，最多 4 台设备。root 可远程唤醒息屏平板并自动开投；接收端一键录成 MP4。</p>
       </div>
     </div>
   </section>
 
-  <!-- ===== 三步 ===== -->
-  <section class="wrap" id="how" style="padding-top:0;">
+  <section class="wrap" id="shots">
     <div class="sec-head">
-      <h2 class="sec-h">第一次用，就这三步。</h2>
+      <h2>参数不在菜单深处。</h2>
+      <p>分辨率、帧率、码率、声音、触摸，全在发送端一页里。改完立刻生效，不用退出重开。</p>
     </div>
-    <div class="steps">
+    <div class="strip reveal">
+      <figure>
+        <div class="shot"><img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Qa50b7XrDoPoAJxb70NcaVz6nRc" alt="画面设置页：自适应与固定、快捷画质、分辨率、帧率、码率"></div>
+        <figcaption class="cap">画面：四档分辨率、四档帧率、五档码率</figcaption>
+      </figure>
+      <figure>
+        <div class="shot"><img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Rg0cbby5RocAddxa7NCcy2P1nyc" alt="音频与触摸设置页"></div>
+        <figcaption class="cap">声音与触摸：三个注入方式可选</figcaption>
+      </figure>
+      <figure>
+        <div class="shot"><img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/ApD4b61HKo8XyEx6AESc5ozqnnd" alt="首页：选择本机角色"></div>
+        <figcaption class="cap">一台设备选一个角色</figcaption>
+      </figure>
+    </div>
+  </section>
+
+
+  <section class="wrap" id="how">
+    <div class="sec-head">
+      <h2>第一次用，就这三步。</h2>
+    </div>
+    <div class="steps reveal">
       <div class="step">
         <span class="num">1</span>
         <div>
           <h3>平板上点开始投屏</h3>
-          <p>打开「发送端」，选好分辨率与帧率，点开始，系统弹一次录屏授权，确认即可。</p>
+          <p>进「发送端」，选好分辨率与帧率，点开始；系统弹一次录屏授权，确认即可。</p>
         </div>
       </div>
       <div class="step">
         <span class="num">2</span>
         <div>
           <h3>手机上选中这台平板</h3>
-          <p>打开「接收端」，同一 Wi-Fi 下的发送端会出现在附近列表；自动发现不到时，手输 IP、端口和密码。</p>
+          <p>进「接收端」，同一网段的发送端会出现在附近列表；没出现就手输 IP 和端口。</p>
         </div>
       </div>
       <div class="step">
         <span class="num">3</span>
         <div>
           <h3>画面就过来了</h3>
-          <p>投屏中会显示实时码率、解码帧率与延迟；要反向操作平板，再到无障碍设置里打开开关。</p>
+          <p>全屏播放，底部统计条显示码率、解码帧率与延迟，可以拖到任意角落。</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== Root 增强 ===== -->
-  <section class="wrap" id="boost" style="padding-top:0;">
-    <div class="boost">
-      <h2>装了 root，还能再省两步</h2>
-      <p class="lede">这两件事都要 KernelSU 或 Magisk。没有 root 也能完整使用，只是每次开始投屏要在平板上点一次系统授权。</p>
-      <div class="boost-grid">
-        <div class="boost-item">
-          <h3>跳过录屏授权页</h3>
-          <p>开始投屏前给应用预授权录屏权限，系统的授权页会自动通过。点「开始投屏」直接进画面。</p>
-        </div>
-        <div class="boost-item">
-          <h3>息屏也能被叫醒</h3>
-          <p>手机在列表里点「唤醒」，平板亮屏、解锁并自动开始投屏，随后自动连上，不用走到平板跟前。</p>
-        </div>
+  <section class="wrap" id="limits">
+    <div class="sec-head">
+      <h2>为什么不做云投屏。</h2>
+      <p>画面一旦上云，路就绕远了：上传、排队、下发，每一步都在加延迟，也都可能被卡在会员后面。</p>
+    </div>
+    <div class="versus reveal">
+      <div class="vcard other">
+        <h3>常见的几种做法</h3>
+        <ul>
+          <li>云投屏：要账号，画质、时长、远程常被会员卡住。</li>
+          <li>ADB 工具：要开无线调试，第一回多半还得连电脑。</li>
+          <li>系统投屏：主要投电视和盒子，手机之间接不上。</li>
+        </ul>
       </div>
-      <p class="note">锁屏设了密码或指纹时，唤醒只能点亮屏幕，还需要手动解一次；解锁后才会自动开始投屏。</p>
+      <div class="vcard ours">
+        <h3>相识投屏</h3>
+        <ul>
+          <li>不用账号，不用电脑，不碰开发者选项。</li>
+          <li>有路由器走 Wi-Fi，没路由器走 Wi-Fi Direct。</li>
+          <li>画质、声音、触摸都在本机决定，没有额度。</li>
+          <li>画面只在两台设备之间走，不落中转节点。</li>
+        </ul>
+      </div>
     </div>
   </section>
 
-  <!-- ===== 参数 ===== -->
   <section class="wrap specs" id="specs">
     <div class="sec-head">
-      <h2 class="sec-h">规格</h2>
-      <p>默认是 1080p、60 帧、12 Mbps。设备编码器不支持所选帧率时会自动降到 60 或 30 帧，以投屏中统计条显示的值为准。</p>
+      <h2>参数</h2>
+      <p>默认 1080p、60 帧、12 Mbps。设备编码器不支持所选帧率时会自动降到 60 或 30。</p>
     </div>
-    <table>
+    <table class="reveal">
       <colgroup><col><col></colgroup>
       <tbody>
         <tr><th>系统要求</th><td>Android 10 及以上（API 29）</td></tr>
         <tr><th>安装包</th><td id="specPkg">10.1 MB · versionCode 71</td></tr>
         <tr><th>画面</th><td>HEVC（默认）/ H.264；720p、1080p、1440p、2160p；30、60、90、120 帧</td></tr>
-        <tr><th>码率</th><td>8 / 12 / 16 / 24 / 48 Mbps 五档，默认 12 Mbps；游戏模式不低于 16 Mbps</td></tr>
-        <tr><th>声音</th><td>AAC 96 / 128 / 192 kbps，默认 128 kbps 立体声</td></tr>
-        <tr><th>网络</th><td>同一局域网直连，投屏端口 8765，设备发现 8766</td></tr>
-        <tr><th>远程唤醒</th><td>唤醒端口 8767，探测应答 8768；需要 root 与强制的访问密码</td></tr>
-        <tr><th>账号与数据</th><td>不需要注册；屏幕与声音只在你两台设备之间传输</td></tr>
+        <tr><th>码率</th><td>8 / 12 / 16 / 24 / 48 Mbps 五档，默认 12 Mbps</td></tr>
+        <tr><th>声音</th><td>AAC-LC 96 / 128 / 192 kbps，默认 128 kbps 立体声</td></tr>
+        <tr><th>网络</th><td>同一局域网直连；投屏端口 8765，设备发现 8766</td></tr>
+        <tr><th>远程唤醒</th><td>唤醒端口 8767，探测应答 8768；需要 root 与访问密码</td></tr>
+        <tr><th>账号与数据</th><td>不需要注册；屏幕与声音只在两台设备之间传输</td></tr>
       </tbody>
     </table>
   </section>
 
-  <!-- ===== 下载 ===== -->
   <section class="download" id="download">
-    <div class="wrap">
+    <div class="wrap reveal">
       <div>
-        <h2>下载安卓版</h2>
-        <p>目前只发布 Android 端，安装包直接下载安装。覆盖安装不会丢设置，包名与签名保持不变。</p>
-        <a class="dl-btn" id="dlBtn" href="https://aka.doubaocdn.com/s/wkZX5H5K6j">下载 APK · v2.0.3</a>
+        <h2>装上，就能投了。</h2>
+        <p>目前只发 Android。覆盖安装保留全部设置，包名与签名不变。</p>
+        <a class="dl-btn" id="dlBtn" href="https://aka.doubaocdn.com/s/wkZX5H5K6j">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
+          下载 APK · v2.0.3
+        </a>
       </div>
       <div class="dl-side">
         <b>版本信息</b>
@@ -548,62 +426,53 @@ summary::after{transition:transform .22s ease;}
     </div>
   </section>
 
-  <!-- ===== FAQ ===== -->
   <section class="wrap" id="faq">
     <div class="sec-head">
-      <h2 class="sec-h">常问的几件事</h2>
+      <h2>常问的几件事</h2>
     </div>
-    <div class="faq">
+    <div class="faq reveal">
       <details>
-        <summary>和 scrcpy、AirDroid Cast 这类工具有什么不一样？</summary>
-        <p>scrcpy 那类走 ADB 无线调试，要先开开发者选项、第一次多半还要连电脑。AirDroid Cast 局域网内免费，但远程和云相关功能要账号与会员。相识投屏两端都是应用，不碰 ADB、不要电脑，没有路由器时用 Wi-Fi Direct 也能连，反控、录制、远程唤醒都在里面。</p>
+        <summary>和 scrcpy、AirDroid Cast 有什么不一样？</summary>
+        <p>scrcpy 那类走 ADB 无线调试，要先开开发者选项，第一次多半还得连电脑。AirDroid Cast 局域网内免费，远程和云相关的功能要账号和会员。相识投屏两端都是应用，不碰 ADB、不要电脑；没有路由器时用 Wi-Fi Direct 也能连。</p>
       </details>
       <details>
         <summary>需要 root 吗？</summary>
-        <p>不需要。普通设备装好就能投屏。root 只是让「跳过系统录屏授权页」和「远程唤醒」这两件事可用，没有也不影响画面、声音和触摸回传。</p>
+        <p>不需要。普通设备装好就能投。root 只影响两件事：跳过系统录屏授权页、远程唤醒。没有也不影响画面、声音和触摸回传。</p>
       </details>
       <details>
-        <summary>我选了 120 帧，为什么跑不到 120？</summary>
-        <p>帧率最终由设备编码器决定。编码器不支持 90 或 120 帧时会自动降到 60（或 30），免得起不来。投屏中统计条上的解码帧率就是实际值。</p>
+        <summary>选了 120 帧，为什么跑不满？</summary>
+        <p>帧率最终由设备编码器决定。编码器不支持 90 或 120 帧时会自动降到 60 或 30。投屏中统计条上的解码帧率就是实际值。</p>
       </details>
       <details>
         <summary>为什么每次开始投屏都要点一次系统授权？</summary>
-        <p>这是 Android 对录屏的安全要求，系统会弹窗让你确认。装了 root 的设备可以在设置里打开「Root 免弹窗共享」，由应用事先拿到预授权，授权页会自动通过。</p>
+        <p>这是 Android 对录屏的安全要求，弹窗只能由你本人确认。装了 root 可以在设置里打开「Root 免弹窗共享」，授权页会自动通过。</p>
       </details>
       <details>
         <summary>支持 iPhone、Windows 或 Mac 吗？</summary>
-        <p>目前只有 Android 端。Windows 接收端在计划里，但还没有可交付的版本；iOS 系统不允许普通应用采集全屏，暂时没有计划。</p>
-      </details>
-      <details>
-        <summary>会把我屏幕的内容传到网上吗？</summary>
-        <p>不会。应用不连服务器、不需要账号，画面和声音只在同一局域网内的两台设备之间传输。设置和记录都存在本机，卸载即删除。</p>
+        <p>目前只有 Android。Windows 接收端在计划里，还没到可交付的程度；iOS 不允许普通应用采集整屏。</p>
       </details>
       <details>
         <summary>列表里找不到另一台设备怎么办？</summary>
-        <p>先确认两台设备连的是同一个 Wi-Fi，且路由器没有开启「AP 隔离」或访客网络。仍然看不到时，在接收端展开「手动输入地址」，填发送端显示的 IP 和端口即可。</p>
-      </details>
-      <details>
-        <summary>收费吗？</summary>
-        <p>当前版本免费，没有广告、没有内购，也不收集使用数据。</p>
+        <p>先确认两台设备在同一个 Wi-Fi，且路由器没开「AP 隔离」或访客网络。还是看不到，就在接收端展开手动输入，填发送端的 IP 和端口。</p>
       </details>
     </div>
   </section>
-</main>
 
+
+</main>
 <footer>
   <div class="wrap foot">
     <div class="brand-mini">
       <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/BfVrbkA5AohVemxh9ozcsQEGn8g" alt="">
       相识投屏
     </div>
-    <div>© 2026 相识投屏</div>
     <div class="foot-links">
       <a href="#privacy" data-doc="privacy">隐私政策</a>
       <a href="#terms" data-doc="terms">用户协议</a>
+      <span>© 2026 相识投屏</span>
     </div>
   </div>
 </footer>
-
 <!-- ===== 文档弹层 ===== -->
 <dialog id="docPrivacy">
   <div class="doc-head">
@@ -794,7 +663,19 @@ summary::after{transition:transform .22s ease;}
   }
 
   // 进入视口才响一次
-  var motionTargets = Array.prototype.slice.call(document.querySelectorAll('.sec-h, #fpsNum'));
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  function showAll(){ revealEls.forEach(function(el){ el.classList.add('in'); }); }
+  if ('IntersectionObserver' in window && revealEls.length) {
+    var rvObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('in'); rvObserver.unobserve(e.target); }
+      });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:0.12});
+    revealEls.forEach(function(el){ rvObserver.observe(el); });
+    setTimeout(showAll, 1600);
+  } else { showAll(); }
+
+  var motionTargets = Array.prototype.slice.call(document.querySelectorAll('#fpsNum'));
   function fire(el){
     if (el.id === 'fpsNum') countUp(el);
     else el.classList.add('in');
@@ -853,5 +734,6 @@ summary::after{transition:transform .22s ease;}
     .catch(function () { /* 本地打开或断网时，保留页面里写死的默认值 */ });
 })();
 </script>
+
 </body>
 </html>
