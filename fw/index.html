@@ -90,15 +90,22 @@ main{padding:0 0 60px}
 .listhead span{font-size:12px;color:var(--ink3);margin-left:auto;font-variant-numeric:tabular-nums}
 
 .rows{display:block}
-.row{display:grid;grid-template-columns:1fr auto;gap:4px 14px;padding:14px 2px 13px;border-bottom:1px solid var(--line);
-  align-items:center;transition:background .14s}
+.row{display:grid;grid-template-columns:32px 1fr auto;gap:3px 12px;padding:13px 8px 12px;border-bottom:1px solid var(--line);
+  align-items:center;transition:background .14s;border-radius:8px}
+.row .bm{grid-row:1 / span 2;grid-column:1;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;font-size:13px;font-weight:600;letter-spacing:-.02em;align-self:center;
+  background:rgba(19,21,23,.06);color:var(--ink2)}
+.row .bm.b-xiaomi,.row .bm.b-mi{background:#FF6900;color:#fff}
+.row .bm.b-redmi{background:#E0272A;color:#fff}
+.row .bm.b-poco{background:#FFD500;color:#1a1a1a}
+.row .bm.b-other{background:rgba(19,21,23,.08);color:var(--ink3)}
 .row:hover{background:#fff}
 .row .nm{font-size:14.5px;font-weight:500;line-height:1.35;min-width:0}
-.row .co{grid-column:1;display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:3px}
+.row .co{grid-column:2;display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:3px}
 .row code{font-family:var(--mono);font-size:11px;color:var(--ink2);background:rgba(19,21,23,.05);
   padding:1px 5px;border-radius:4px;letter-spacing:.01em}
 .row .cnt{font-size:11.5px;color:var(--ink3)}
-.row .right{grid-row:1 / span 2;grid-column:2;text-align:right;display:flex;flex-direction:column;gap:3px;align-items:flex-end}
+.row .right{grid-row:1 / span 2;grid-column:3;text-align:right;display:flex;flex-direction:column;gap:3px;align-items:flex-end}
 .row .ver{font-family:var(--mono);font-size:11.5px;color:var(--ink2);max-width:42vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .row .dt{font-size:11px;color:var(--ink3);font-variant-numeric:tabular-nums}
 .tags{display:inline-flex;gap:4px}
@@ -168,6 +175,11 @@ footer{border-top:1px solid var(--line-2);padding:26px 0 40px;font-size:12px;col
 
 body.detail-mode .hero,body.detail-mode .toolbar{display:none}
 body.detail-mode main{padding-top:0}
+body.detail-mode main{padding-top:0}
+.romloading{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--ink3);padding:16px 2px 6px}
+.romloading i{width:12px;height:12px;border:2px solid var(--line);border-top-color:var(--act);border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.romloading i{animation:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @media (min-width:760px){
   .wrap{padding:0 28px}
@@ -203,7 +215,7 @@ body.detail-mode main{padding-top:0}
   <div class="wrap hero-inner">
     <span class="kicker"><i></i>全系官方包索引 · 卡刷与线刷分开列</span>
     <h1>小米、红米、平板<br>所有系统固件，<em>一个入口。</em></h1>
-    <p>按设备查，按版本查。卡刷包（Recovery，zip）和线刷包（Fastboot，tgz）各自成列，版本号、Android 版本、包体大小、MD5 校验值和官方直链都在。</p>
+    <p>同一台机器，国内版、海外版、各地区版本合成一条，点进去能翻到这台设备的全部历史包：卡刷 zip 与线刷 tgz 分开列，版本号、Android、包体大小、MD5 和官方直链都在。</p>
     <div class="searchbar">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.4"/><path d="M16 16l4.2 4.2"/></svg>
       <input id="q" type="search" inputmode="search" autocomplete="off" spellcheck="false" placeholder="搜设备名或代号，例如 14 Ultra、aurora、K70">
@@ -257,22 +269,20 @@ body.detail-mode main{padding-top:0}
 
 <div id="toast" role="status" aria-live="polite"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js" crossorigin="anonymous"></script>
 <script>
 (function () {
   'use strict';
 
-  var STATE = {
-    data: null,          // { generated, devices: { code: {n,b,k,r[]} } }
-    list: [],            // 扁平化后的设备数组
-    filtered: [],
-    shown: 0,
-    pageSize: 60,
-    cat: 'all',
-    sort: 'new',
-    q: ''
+  /* ===== 数据源：直接读开源仓库（jsDelivr 镜像，CORS 全开，缓存 12 小时） ===== */
+  var SRC = {
+    yaml: 'https://cdn.jsdelivr.net/gh/XiaomiFirmwareUpdater/miui-updates-tracker@master/data/latest.yml',
+    rss: 'https://cdn.jsdelivr.net/gh/XiaomiFirmwareUpdater/miui-updates-tracker@master/rss/',
+    snapshot: 'data/roms.json'
   };
 
   var PAGE_SIZE = 60;
+  var STATE = { list: [], filtered: [], shown: 0, cat: 'all', sort: 'new', q: '', source: '' };
 
   var el = {
     q: document.getElementById('q'),
@@ -304,7 +314,7 @@ body.detail-mode main{padding-top:0}
     el.toast.textContent = msg;
     el.toast.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { el.toast.classList.remove('show'); }, 1600);
+    toastTimer = setTimeout(function () { el.toast.classList.remove('show'); }, 1700);
   }
 
   function esc(s) {
@@ -313,88 +323,251 @@ body.detail-mode main{padding-top:0}
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
-  function fmtNum(n) {
-    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  function fmtNum(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+  function ymd(d) {
+    return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
   }
 
-  function shortDate(d) {
-    if (!d) return '';
-    return String(d).slice(0, 10);
+  function toDate(v) {
+    if (!v) return '';
+    if (v instanceof Date && !isNaN(v.getTime())) return ymd(v);
+    var s = String(v).trim();
+    if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0, 10);
+    var dt = new Date(s);
+    if (!isNaN(dt.getTime())) return ymd(dt);
+    return s.slice(0, 10);
   }
 
-  /* ---------------- 数据加载 ---------------- */
+  var AREA = {
+    'China': 1, 'Global': 1, 'India': 1, 'EEA': 1, 'Russia': 1, 'Turkey': 1, 'Taiwan': 1,
+    'Indonesia': 1, 'Europe': 1, 'Japan': 1, 'Korea': 1, 'Thailand': 1, 'Vietnam': 1,
+    'Malaysia': 1, 'Singapore': 1, 'Philippines': 1, 'Mexico': 1, 'Brazil': 1,
+    'Latin': 1, 'America': 1, 'TW': 1, 'IN': 1, 'RU': 1, 'ID': 1, 'TR': 1, 'MI': 1
+  };
+
+  function compactName(names) {
+    var norm = (names || []).map(function (n) { return String(n).replace(/\s+/g, ' ').trim(); }).filter(Boolean);
+    if (!norm.length) return '';
+    if (norm.length === 1) {
+      var p0 = norm[0].split(' ');
+      if (p0.length >= 3 && AREA[p0[p0.length - 1]]) return p0.slice(0, -1).join(' ');
+      return norm[0];
+    }
+    var parts = norm.map(function (n) { return n.split(' '); });
+    var min = parts.reduce(function (acc, q) { return Math.min(acc, q.length); }, 99);
+    var out = [];
+    for (var i = 0; i < min; i++) {
+      var w = parts[0][i];
+      var same = true;
+      for (var j = 1; j < parts.length; j++) if (parts[j][i] !== w) { same = false; break; }
+      if (same) out.push(w); else break;
+    }
+    if (out.length >= 2) {
+      while (out.length > 2 && AREA[out[out.length - 1]]) out.pop();
+      return out.join(' ');
+    }
+    var f = norm[0].split(' ');
+    if (f.length >= 3 && AREA[f[f.length - 1]]) return f.slice(0, -1).join(' ');
+    return norm[0];
+  }
+
+  /* agate_global / agate_eea_global / agate_tw_global → agate */
+  function baseCode(c) {
+    return String(c)
+      .replace(/_(eea|id|ru|tr|tw|in|jp|kr|my|sg|ph|th|vn|mx|br|latam|cn)_global$/, '')
+      .replace(/_global$/, '')
+      .replace(/_cn$/, '')
+      .replace(/_(eea|id|ru|tr|tw|in|jp|kr|my|sg|ph|th|vn|mx|br|latam)$/, '');
+  }
+
+  function brandOf(n) {
+    if (n.indexOf('Redmi') === 0) return 'Redmi';
+    if (n.indexOf('POCO') === 0) return 'POCO';
+    if (n.indexOf('Xiaomi') === 0) return 'Xiaomi';
+    if (n.indexOf('Mi ') === 0 || n === 'Mi') return 'Mi';
+    return 'Other';
+  }
+
+  function kindOf(n) { return n.indexOf('Pad') > -1 ? 'tab' : 'phone'; }
 
   var setProgress = (function () {
     var timer = null, fake = 0;
-    return function (p, hard) {
-      if (hard) {
-        clearInterval(timer); timer = null;
+    return function (p, done) {
+      if (done) {
+        if (timer) { clearInterval(timer); timer = null; }
         el.loadBar.style.width = '100%';
         return;
       }
-      if (p != null) {
-        el.loadBar.style.width = Math.round(p * 100) + '%';
-      } else {
-        if (timer) return;
+      if (typeof p === 'number') {
+        el.loadBar.style.width = Math.max(4, Math.round(p * 100)) + '%';
+      } else if (!timer) {
         timer = setInterval(function () {
-          fake = Math.min(0.9, fake + 0.08);
+          fake = Math.min(0.92, fake + 0.07);
           el.loadBar.style.width = Math.round(fake * 100) + '%';
-        }, 260);
+        }, 240);
       }
     };
   })();
 
-  function loadData() {
+  function fetchText(url, timeout) {
     return new Promise(function (resolve, reject) {
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', 'data/roms.json', true);
+      xhr.open('GET', url, true);
+      xhr.timeout = timeout || 45000;
       xhr.onprogress = function (e) {
         if (e.lengthComputable && e.total > 0) setProgress(e.loaded / e.total);
         else setProgress(null);
       };
       xhr.onload = function () {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          try { resolve(JSON.parse(xhr.responseText)); }
-          catch (err) { reject(new Error('数据格式错误')); }
-        } else {
-          reject(new Error('HTTP ' + xhr.status));
-        }
+        if (xhr.status >= 200 && xhr.status < 300) resolve(xhr.responseText);
+        else reject(new Error('HTTP ' + xhr.status));
       };
       xhr.onerror = function () { reject(new Error('网络错误')); };
+      xhr.ontimeout = function () { reject(new Error('超时')); };
       xhr.send();
     });
   }
 
-  function normalize(raw) {
-    var list = [];
-    var devices = raw.devices || {};
-    Object.keys(devices).forEach(function (code) {
-      var d = devices[code] || {};
-      var roms = Array.isArray(d.r) ? d.r : [];
-      var rec = 0, fb = 0, latest = '', latestDate = '', latestVer = '';
-      for (var i = 0; i < roms.length; i++) {
-        var r = roms[i];
-        if (r.m === 'Recovery') rec++; else if (r.m === 'Fastboot') fb++;
-        if (r.dt > latestDate) { latestDate = r.dt; latestVer = r.v; }
-      }
-      if (roms.length && !latest) { latest = latestVer; }
-      list.push({
-        code: code,
-        name: d.n || code,
-        brand: d.b || 'Other',
-        kind: d.k || 'phone',
-        roms: roms,
-        count: roms.length,
-        rec: rec,
-        fb: fb,
-        date: latestDate,
-        ver: latestVer
-      });
+  function romFromYaml(x) {
+    return {
+      v: String(x.version || ''),
+      a: String(x.android || ''),
+      dt: toDate(x.date),
+      m: (x.method === 'Fastboot' ? 'Fastboot' : 'Recovery'),
+      s: String(x.size || ''),
+      md5: String(x.md5 || ''),
+      l: String(x.link || ''),
+      br: String(x.branch || '')
+    };
+  }
+
+  function finalizeDevice(code, name, roms, codes) {
+    var rec = 0, fb = 0, latest = '';
+    roms.forEach(function (r) {
+      if (r.m === 'Fastboot') fb++; else rec++;
+      if (r.dt > latest) latest = r.dt;
+    });
+    roms.sort(function (a, b) { return a.dt < b.dt ? 1 : (a.dt > b.dt ? -1 : 0); });
+    return {
+      code: code, name: name, brand: brandOf(name), kind: kindOf(name),
+      roms: roms, count: roms.length, rec: rec, fb: fb, date: latest,
+      codes: codes || [code], regions: (codes || [code]).length,
+      ver: roms.length ? roms[0].v : ''
+    };
+  }
+
+  function buildFromRows(rows) {
+    var groups = {}, order = [];
+    rows.forEach(function (x) {
+      if (!x || !x.codename) return;
+      var code = String(x.codename);
+      var base = baseCode(code);
+      if (!groups[base]) { groups[base] = { codes: [], names: [], roms: [], seen: {} }; order.push(base); }
+      var g = groups[base];
+      if (!g.seen[code]) { g.seen[code] = 1; g.codes.push(code); }
+      if (x.name) g.names.push(String(x.name));
+      g.roms.push(romFromYaml(x));
+    });
+    var list = order.map(function (k) {
+      var g = groups[k];
+      return finalizeDevice(k, compactName(g.names) || k, g.roms, g.codes);
+    });
+    var seenName = {}, clash = {};
+    list.forEach(function (d) { if (seenName[d.name]) clash[d.name] = 1; seenName[d.name] = 1; });
+    list.forEach(function (d) {
+      if (clash[d.name]) d.name = d.name + ' · ' + d.codes[0];
     });
     return list;
   }
 
-  /* ---------------- 分类与排序 ---------------- */
+  function buildFromSnapshot(obj) {
+    var groups = {}, order = [];
+    var devs = obj.devices || {};
+    Object.keys(devs).forEach(function (code) {
+      var d = devs[code] || {};
+      var base = baseCode(code);
+      if (!groups[base]) { groups[base] = { codes: [], names: [], roms: [] }; order.push(base); }
+      var g = groups[base];
+      g.codes.push(code);
+      g.names.push(d.n || code);
+      (d.r || []).forEach(function (r) {
+        g.roms.push({
+          v: String(r.v || ''), a: String(r.a || ''), dt: toDate(r.dt),
+          m: r.m === 'Fastboot' ? 'Fastboot' : 'Recovery',
+          s: String(r.s || ''), md5: String(r.md5 || ''), l: String(r.l || ''), br: String(r.br || '')
+        });
+      });
+    });
+    return order.map(function (k) {
+      var g = groups[k];
+      return finalizeDevice(k, compactName(g.names) || k, g.roms, g.codes);
+    });
+  }
+
+  function pick(body, re) {
+    var m = re.exec(body);
+    if (!m) return '';
+    return (m[1] || '')
+      .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+      .replace(/&#39;/g, "'").replace(/&quot;/g, '"').trim();
+  }
+
+  function unescapeHtml(s) {
+    return String(s)
+      .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+      .replace(/&amp;/g, '&');
+  }
+
+  function m1(s, re) {
+    var m = re.exec(s);
+    return m ? (m[1] || '').trim() : '';
+  }
+
+  function parseRss(txt) {
+    var items = txt.split('<item>').slice(1);
+    var out = [];
+    items.forEach(function (chunk) {
+      var body = chunk.split('</item>')[0];
+      var title = unescapeHtml(m1(body, /<title>([\s\S]*?)<\/title>/));
+      var link = m1(body, /<link>([\s\S]*?)<\/link>/);
+      if (!link) return;
+      var desc = unescapeHtml(m1(body, /<description>([\s\S]*?)<\/description>/));
+      var verRaw = m1(desc, /<b>Version:<\/b>\s*([\s\S]*?)<\/p>/);
+      var ver = verRaw, android = '';
+      var bar = verRaw.indexOf('|');
+      if (bar > -1) {
+        ver = verRaw.slice(0, bar).trim();
+        android = verRaw.slice(bar + 1).trim();
+      }
+      var size = m1(desc, /<b>Size:<\/b>\s*([\s\S]*?)<\/p>/);
+      var md5 = m1(desc, /<b>MD5:<\/b>\s*([\s\S]*?)<\/p>/);
+      var pub = m1(body, /<pubDate>([\s\S]*?)<\/pubDate>/);
+      var method;
+      if (/Fastboot/i.test(title)) method = 'Fastboot';
+      else if (/Recovery/i.test(title)) method = 'Recovery';
+      else method = /\.tgz$/.test(link) ? 'Fastboot' : 'Recovery';
+      var branch = 'Stable';
+      if (/Stable Beta/i.test(title)) branch = 'Stable Beta';
+      else if (/Public Beta/i.test(title)) branch = 'Public Beta';
+      else if (/Weekly/i.test(title)) branch = 'Weekly';
+      out.push({ v: ver, a: android, dt: toDate(pub), m: method, s: size, md5: md5, l: link, br: branch });
+    });
+    return out;
+  }
+
+  function mergeRoms(base, extra) {
+    var seen = {}, merged = [];
+    base.concat(extra).forEach(function (r) {
+      var key = r.l || (r.v + '|' + r.m);
+      if (seen[key]) return;
+      seen[key] = 1;
+      merged.push(r);
+    });
+    merged.sort(function (a, b) { return a.dt < b.dt ? 1 : (a.dt > b.dt ? -1 : 0); });
+    return merged;
+  }
 
   var CATS = [
     { id: 'all', label: '全部' },
@@ -413,11 +586,6 @@ body.detail-mode main{padding-top:0}
     return d.brand === cat;
   }
 
-  function matchQuery(d, q) {
-    if (!q) return true;
-    return d.name.toLowerCase().indexOf(q) > -1 || d.code.toLowerCase().indexOf(q) > -1;
-  }
-
   function sortList(arr) {
     if (STATE.sort === 'new') {
       arr.sort(function (a, b) {
@@ -426,13 +594,11 @@ body.detail-mode main{padding-top:0}
       });
     } else if (STATE.sort === 'name') {
       arr.sort(function (a, b) { return a.name.localeCompare(b.name, 'en'); });
-    } else if (STATE.sort === 'count') {
+    } else {
       arr.sort(function (a, b) { return b.count - a.count; });
     }
     return arr;
   }
-
-  /* ---------------- 列表渲染 ---------------- */
 
   function renderChips() {
     var html = '';
@@ -449,29 +615,14 @@ body.detail-mode main{padding-top:0}
     var tags = '';
     if (d.rec) tags += '<span class="tag rec">卡刷 ' + d.rec + '</span>';
     if (d.fb) tags += '<span class="tag fb">线刷 ' + d.fb + '</span>';
+    var mark = d.brand === 'Xiaomi' ? 'X' : (d.brand === 'Redmi' ? 'R' : (d.brand === 'POCO' ? 'P' : (d.brand === 'Mi' ? 'M' : '·')));
     return '<a class="row" href="#/d/' + encodeURIComponent(d.code) + '">'
+      + '<span class="bm b-' + esc(d.brand.toLowerCase()) + '">' + mark + '</span>'
       + '<div class="nm">' + esc(d.name) + '</div>'
-      + '<div class="co"><code>' + esc(d.code) + '</code><span class="cnt">' + d.count + ' 个包</span>' + tags + '</div>'
-      + '<div class="right"><span class="ver">' + esc(d.ver || '—') + '</span><span class="dt">' + esc(shortDate(d.date)) + '</span></div>'
+      + '<div class="co"><code>' + esc(d.code) + '</code>'
+      + (d.regions > 1 ? '<span class="cnt">' + d.regions + ' 区</span>' : '') + tags + '</div>'
+      + '<div class="right"><span class="ver">' + esc(d.ver || '—') + '</span><span class="dt">' + esc(d.date || '') + '</span></div>'
       + '</a>';
-  }
-
-  function applyFilter() {
-    var q = STATE.q.trim().toLowerCase();
-    STATE.filtered = STATE.list.filter(function (d) {
-      return inCat(d, STATE.cat) && matchQuery(d, q);
-    });
-    sortList(STATE.filtered);
-    STATE.shown = 0;
-    el.rows.innerHTML = '';
-    el.listCount.textContent = fmtNum(STATE.filtered.length) + ' 台';
-    el.listTitle.textContent = catTitle();
-    if (!STATE.filtered.length) {
-      el.rows.innerHTML = '<div class="empty"><b>没有匹配的设备</b>换个关键词试试——设备名（如 14 Ultra）或代号（如 aurora）都行。</div>';
-      el.moreWrap.hidden = true;
-      return;
-    }
-    renderMore();
   }
 
   function catTitle() {
@@ -480,6 +631,25 @@ body.detail-mode main{padding-top:0}
       return CATS[i].id === 'all' ? '全部设备' : CATS[i].label + ' · 设备';
     }
     return '全部设备';
+  }
+
+  function applyFilter() {
+    var q = STATE.q.trim().toLowerCase();
+    STATE.filtered = STATE.list.filter(function (d) {
+      return inCat(d, STATE.cat) && (!q || d.name.toLowerCase().indexOf(q) > -1 || d.code.toLowerCase().indexOf(q) > -1);
+    });
+    sortList(STATE.filtered);
+    STATE.shown = 0;
+    el.rows.innerHTML = '';
+    el.listCount.textContent = fmtNum(STATE.filtered.length) + ' 台';
+    el.listTitle.textContent = catTitle();
+    if (!STATE.filtered.length) {
+      el.rows.innerHTML = '<div class="empty"><b>没有匹配的设备</b>换个关键词——设备名（如 14 Ultra）或代号（如 aurora）都能搜。</div>';
+      el.moreWrap.hidden = true;
+      el.countLine.textContent = '0 台';
+      return;
+    }
+    renderMore();
   }
 
   function renderMore() {
@@ -493,10 +663,8 @@ body.detail-mode main{padding-top:0}
     STATE.shown = to;
     el.moreWrap.hidden = to >= STATE.filtered.length;
     el.moreBtn.textContent = '加载更多（还有 ' + fmtNum(STATE.filtered.length - to) + ' 台）';
-    el.countLine.textContent = '显示 ' + fmtNum(to) + ' / ' + fmtNum(STATE.filtered.length) + ' 台';
+    el.countLine.textContent = '已显示 ' + fmtNum(to) + ' / ' + fmtNum(STATE.filtered.length) + ' 台 · 点任意一台看全部版本';
   }
-
-  /* ---------------- 详情 ---------------- */
 
   function mirrorUrl(link) {
     return String(link).replace('://bigota.d.miui.com/', '://cdnorg.d.miui.com/');
@@ -506,14 +674,47 @@ body.detail-mode main{padding-top:0}
     var mirror = mirrorUrl(r.l);
     var hasMirror = mirror !== r.l;
     return '<div class="rom">'
-      + '<div><div class="v">' + esc(r.v) + '</div>'
-      + '<div class="m"><span>Android ' + esc(r.a) + '</span><span>' + esc(r.s) + '</span><span>' + esc(shortDate(r.dt)) + '</span><span>' + esc(r.br) + '</span></div></div>'
+      + '<div><div class="v">' + esc(r.v || '—') + '</div>'
+      + '<div class="m"><span>Android ' + esc(r.a || '—') + '</span><span>' + esc(r.s || '—') + '</span>'
+      + '<span>' + esc(r.dt || '') + '</span><span>' + esc(r.br || '') + '</span></div></div>'
       + '<a class="dl" href="' + esc(r.l) + '" target="_blank" rel="noopener noreferrer">'
       + '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>下载</a>'
-      + '<div class="md5row"><span class="h">MD5 ' + esc(r.md5 || '—') + '</span>'
+      + '<div class="md5row"><span class="h">MD5 ' + esc(r.md5 || '未提供') + '</span>'
       + (r.md5 ? '<button class="cp" type="button" data-cp="' + esc(r.md5) + '">复制</button>' : '')
       + (hasMirror ? '<button class="mirror" type="button" data-mirror="' + esc(mirror) + '">镜像备用</button>' : '')
       + '</div></div>';
+  }
+
+  function groupHtml(list, tagCls, title, hint) {
+    if (!list.length) return '';
+    var tail = tagCls === 'rec' ? 'Recovery · zip' : 'Fastboot · tgz';
+    return '<div class="group"><h2><span class="tag ' + tagCls + '">' + title + '</span>' + tail + '</h2>'
+      + '<p class="hint">' + hint + '</p>'
+      + '<div class="roms">' + list.map(romHtml).join('') + '</div></div>';
+  }
+
+  function fillRoms(d, extra, pending) {
+    var host = document.getElementById('romHost');
+    if (!host) return;
+    var merged = extra ? mergeRoms(d.roms, extra) : d.roms;
+    var rec = merged.filter(function (r) { return r.m === 'Recovery'; });
+    var fb = merged.filter(function (r) { return r.m === 'Fastboot'; });
+
+    var html = '';
+    if (pending) html += '<div class="romloading"><i></i>正在读取这台设备的完整版本记录…</div>';
+    html += groupHtml(rec, 'rec', '卡刷包', '直接拷进手机，系统更新里选「选择安装包」，或进 Recovery 刷。日常升级降级优先用这个。');
+    html += groupHtml(fb, 'fb', '线刷包', '解压后用 MiFlash 或 fastboot 刷，整机重写。救砖、硬降级都靠它。');
+    if (!rec.length && !fb.length) {
+      html += '<div class="empty"><b>这台设备暂时没有收录到包</b>可能刚发布还没出包，或者代号已经停更。</div>';
+    }
+    host.innerHTML = html;
+
+    var cnt = document.getElementById('romCount');
+    if (cnt) cnt.textContent = merged.length;
+    var recCnt = document.getElementById('romRec');
+    if (recCnt) recCnt.textContent = rec.length;
+    var fbCnt = document.getElementById('romFb');
+    if (fbCnt) fbCnt.textContent = fb.length;
   }
 
   function renderDetail(code) {
@@ -521,36 +722,18 @@ body.detail-mode main{padding-top:0}
     for (var i = 0; i < STATE.list.length; i++) if (STATE.list[i].code === code) { d = STATE.list[i]; break; }
     if (!d) { location.hash = '#/'; return; }
 
-    var rec = d.roms.filter(function (r) { return r.m === 'Recovery'; });
-    var fb = d.roms.filter(function (r) { return r.m === 'Fastboot'; });
-    rec.sort(function (a, b) { return a.dt < b.dt ? 1 : -1; });
-    fb.sort(function (a, b) { return a.dt < b.dt ? 1 : -1; });
-
     var kindLabel = d.kind === 'tab' ? '平板' : '手机';
     var html = '<div class="detail">'
       + '<button class="back" type="button" id="backBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>返回设备列表</button>'
       + '<div class="d-head"><h1>' + esc(d.name) + '</h1>'
       + '<div class="d-meta"><code>' + esc(d.code) + '</code><span>' + esc(d.brand) + ' · ' + kindLabel + '</span></div>'
-      + '<div class="d-sum"><div>共<b>' + d.count + '</b> 个包</div><div>卡刷<b>' + rec.length + '</b></div><div>线刷<b>' + fb.length + '</b></div><div>最新<b>' + esc(shortDate(d.date)) + '</b></div></div>'
-      + '</div>';
-
-    if (rec.length) {
-      html += '<div class="group"><h2><span class="tag rec">卡刷包</span>Recovery · zip</h2>'
-        + '<p class="hint">放进手机存储，在系统更新里选「选择安装包」或进 Recovery 刷入。适合不想动电脑的日常升级降级。</p>'
-        + '<div class="roms">' + rec.map(romHtml).join('') + '</div></div>';
-    }
-    if (fb.length) {
-      html += '<div class="group"><h2><span class="tag fb">线刷包</span>Fastboot · tgz</h2>'
-        + '<p class="hint">解压后配合 MiFlash / fastboot 刷入，可整机重写，救砖时用这个。跨版本降级通常也走线刷。</p>'
-        + '<div class="roms">' + fb.map(romHtml).join('') + '</div></div>';
-    }
-    if (!rec.length && !fb.length) {
-      html += '<div class="empty"><b>这台设备暂时没有收录到包</b>可能是刚发布还没出包，或代号已停更。</div>';
-    }
-
-    html += '<div class="note"><h3>下载与刷写</h3>'
-      + '<p>链接指向小米官方 CDN，包体未做任何改动。刷之前核对 MD5，和页面上的一致再动手。线刷包解压后是 images 文件夹，卡刷包是可直接刷的 zip。</p>'
-      + '<p>刷机有风险：跨区域、跨版本、绕过校验都可能开不了机。重要数据先备份，电量留够。需要在本机直接刷，可以配合 <a href="https://hz-xb.github.io/xiao/flasher/">刷写器</a>。</p>'
+      + '<div class="d-sum"><div>包<b id="romCount">' + d.count + '</b></div><div>卡刷<b id="romRec">' + d.rec + '</b></div>'
+      + '<div>线刷<b id="romFb">' + d.fb + '</b></div><div>最新<b>' + esc(d.date || '—') + '</b></div></div>'
+      + '</div>'
+      + '<div id="romHost"></div>'
+      + '<div class="note"><h3>下载与刷写</h3>'
+      + '<p>链接指向小米官方 CDN，包体原样未改。刷之前核对 MD5，和页面上一致再动手。</p>'
+      + '<p>刷机有风险：跨区域、跨版本、绕过校验都可能开不了机。数据先备份，电量留够。想在本机直接刷，配合 <a href="https://hz-xb.github.io/xiao/flasher/">刷写器</a>。</p>'
       + '</div></div>';
 
     el.detailView.innerHTML = html;
@@ -559,60 +742,86 @@ body.detail-mode main{padding-top:0}
 
     var back = document.getElementById('backBtn');
     if (back) back.addEventListener('click', function () { location.hash = '#/'; });
-    window.scrollTo({ top: 0, behavior: 'auto' });
+
+    fillRoms(d, null, true);
+
+    var codes = (d.codes && d.codes.length ? d.codes : [code]).slice(0, 8);
+    Promise.all(codes.map(function (c) {
+      return fetchText(SRC.rss + encodeURIComponent(c) + '.xml', 15000).catch(function () { return ''; });
+    })).then(function (texts) {
+      var extra = [];
+      texts.forEach(function (t) { if (t) extra = extra.concat(parseRss(t)); });
+      fillRoms(d, extra, false);
+    }).catch(function () { fillRoms(d, null, false); });
   }
-
-  function showList() {
-    el.detailView.hidden = true;
-    el.listView.hidden = false;
-  }
-
-  /* ---------------- 路由 ---------------- */
-
-  function route() {
-    var h = location.hash || '#/';
-    var m = h.match(/#\/d\/(.+)$/);
-    if (m) {
-      document.body.classList.add('detail-mode');
-      renderDetail(decodeURIComponent(m[1]));
-    } else {
-      document.body.classList.remove('detail-mode');
-      showList();
-    }
-  }
-
-  /* ---------------- 初始化 ---------------- */
 
   function applyStats() {
     var total = 0, rec = 0, fb = 0;
-    for (var i = 0; i < STATE.list.length; i++) {
-      var d = STATE.list[i];
-      total += d.count; rec += d.rec; fb += d.fb;
-    }
+    STATE.list.forEach(function (d) { total += d.count; rec += d.rec; fb += d.fb; });
     el.sDevices.textContent = fmtNum(STATE.list.length);
     el.sRoms.textContent = fmtNum(total);
     el.sRec.textContent = fmtNum(rec);
     el.sFb.textContent = fmtNum(fb);
   }
 
-  function bind() {
+  function route() {
+    var m = (location.hash || '#/').match(/#\/d\/(.+)$/);
+    if (m) {
+      document.body.classList.add('detail-mode');
+      renderDetail(decodeURIComponent(m[1]));
+    } else {
+      document.body.classList.remove('detail-mode');
+      el.detailView.hidden = true;
+      el.listView.hidden = false;
+    }
+  }
+
+  function boot() {
+    setProgress(null);
+
+    var p;
+    if (typeof window.jsyaml === 'undefined') {
+      p = Promise.reject(new Error('YAML 解析器未加载'));
+    } else {
+      p = fetchText(SRC.yaml, 50000).then(function (txt) {
+        var rows = window.jsyaml.load(txt);
+        if (!Array.isArray(rows) || !rows.length) throw new Error('数据为空');
+        STATE.source = 'live';
+        return buildFromRows(rows);
+      });
+    }
+
+    p.catch(function () {
+      STATE.source = 'snapshot';
+      el.loadText.textContent = '实时源暂时连不上，改读本地快照';
+      return fetchText(SRC.snapshot, 40000).then(function (txt) {
+        return buildFromSnapshot(JSON.parse(txt));
+      });
+    }).then(function (list) {
+      setProgress(1, true);
+      STATE.list = list;
+      applyStats();
+      renderChips();
+      applyFilter();
+      el.loading.style.display = 'none';
+      el.genLine.textContent = STATE.source === 'live'
+        ? '数据实时取自 XiaomiFirmwareUpdater · 12 小时刷新'
+        : '数据来自本地快照 · 实时源未连通';
+      route();
+    }).catch(function (err) {
+      el.loadText.textContent = '数据加载失败：' + err.message;
+      var bar = el.loading.querySelector('.bar');
+      if (bar) bar.style.borderColor = 'transparent';
+      el.rows.innerHTML = '<div class="empty"><b>没读到固件索引</b>页面需要用 HTTP 打开；两个源都被挡住时刷新再试。</div>';
+    });
+
     el.q.addEventListener('input', function () {
       clearTimeout(el.q._t);
-      el.q._t = setTimeout(function () {
-        STATE.q = el.q.value;
-        applyFilter();
-      }, 160);
+      el.q._t = setTimeout(function () { STATE.q = el.q.value; applyFilter(); }, 160);
     });
-
     el.q.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        STATE.q = el.q.value;
-        applyFilter();
-        var first = el.rows.querySelector('.row');
-        if (first) first.focus();
-      }
+      if (e.key === 'Enter') { STATE.q = el.q.value; applyFilter(); }
     });
-
     el.chips.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-cat]');
       if (!btn) return;
@@ -621,39 +830,28 @@ body.detail-mode main{padding-top:0}
       applyFilter();
       if (document.body.classList.contains('detail-mode')) location.hash = '#/';
     });
-
     el.moreBtn.addEventListener('click', renderMore);
-
     el.sortBtn.addEventListener('click', function () {
       STATE.sort = STATE.sort === 'new' ? 'name' : (STATE.sort === 'name' ? 'count' : 'new');
       el.sortLabel.textContent = STATE.sort === 'new' ? '最新优先' : (STATE.sort === 'name' ? '名称排序' : '包最多的');
       applyFilter();
     });
-
     el.detailView.addEventListener('click', function (e) {
       var cp = e.target.closest('[data-cp]');
       if (cp) {
         var v = cp.getAttribute('data-cp');
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(v).then(function () { toast('MD5 已复制'); }, function () { toast('复制失败，请手动选取'); });
-        } else { toast('当前环境不支持一键复制'); }
+          navigator.clipboard.writeText(v).then(function () { toast('MD5 已复制'); }, function () { toast('复制失败'); });
+        } else toast('当前环境不支持一键复制');
         return;
       }
       var mir = e.target.closest('[data-mirror]');
-      if (mir) {
-        var u = mir.getAttribute('data-mirror');
-        window.open(u, '_blank', 'noopener');
-      }
+      if (mir) window.open(mir.getAttribute('data-mirror'), '_blank', 'noopener');
     });
-
     window.addEventListener('hashchange', route);
-
     document.addEventListener('keydown', function (e) {
-      if (e.key === '/' && document.activeElement !== el.q) {
-        e.preventDefault(); el.q.focus();
-      }
+      if (e.key === '/' && document.activeElement !== el.q) { e.preventDefault(); el.q.focus(); }
     });
-
     el.brandLink.addEventListener('click', function (e) {
       e.preventDefault();
       location.hash = '#/';
@@ -661,34 +859,8 @@ body.detail-mode main{padding-top:0}
     });
   }
 
-  function boot() {
-    setProgress(null);
-    loadData().then(function (raw) {
-      setProgress(1, true);
-      STATE.data = raw;
-      STATE.list = normalize(raw);
-      applyStats();
-      renderChips();
-      applyFilter();
-      el.loading.style.display = 'none';
-      if (raw.generated) {
-        el.genLine.textContent = '数据来源 XiaomiFirmwareUpdater · 更新 ' + raw.generated;
-      }
-      route();
-    }).catch(function (err) {
-      el.loadText.textContent = '数据加载失败：' + err.message;
-      el.loading.querySelector('.bar').style.display = 'none';
-      el.rows.innerHTML = '<div class="empty"><b>没读到固件索引</b>'
-        + '页面需要通过 HTTP 打开（本地双击文件不行），或者刚才网络抖了一下——刷新再试。</div>';
-    });
-    bind();
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot);
-  } else {
-    boot();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
 </script>
 </body>
