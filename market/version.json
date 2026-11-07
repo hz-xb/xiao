@@ -1,15 +1,15 @@
 {
-  "versionCode": 104,
-  "versionName": "1.0.4",
-  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.0.4.apk",
-  "notes": "加了云端公告和版本更新；修正了 Android 15 上顶部标题被状态栏压住的问题。",
-  "sha256": "0ca24a224ef5b70c792f181c6c449e6ade3fbfb9c7ff3cfc35b0f5d0ce871679",
-  "sizeBytes": 4435192,
+  "versionCode": 105,
+  "versionName": "1.0.5",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.0.5.apk",
+  "notes": "公告改成每次打开都弹；启动就校验安装包并显示结果；LSPosed 全部换成作者真实头像；详情页去掉重复的来源、补上大小和版本。",
+  "sha256": "4a8d466cb04a423cbb1a3e50c82baeea612a89bb0e14b395fbec53bbd76fe05e",
+  "sizeBytes": 4477240,
   "forceUpdate": false,
   "notice": {
-    "id": "20261107-v104",
-    "title": "相识市场 1.0.4",
-    "body": "LSPosed 的模块名和简介换成了作者写的真名字，Magisk 也一样；应用从 15 个加到 39 个。现在打开就在本地读，没网也能翻。顶部标题显示不全的问题也修好了。",
+    "id": "20261107-v105",
+    "title": "相识市场 1.0.5",
+    "body": "这次三件事：一，公告改成每次打开都弹，你没看到就等于没发；二，打开就校验安装包，结果显示在标题下面；三，LSPosed 的图标换成模块作者本人的头像了，之前全是同一个组织图标。详情页重复的来源、缺的大小和版本也一并修了。",
     "level": "info"
   }
 }
