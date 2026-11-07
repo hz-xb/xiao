@@ -1,15 +1,15 @@
 {
-  "versionCode": 110,
-  "versionName": "1.0.10",
-  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.0.10.apk",
-  "notes": "推荐区收成一行横滑；列表去掉卡片框改成无框行；标题区收紧。",
-  "sha256": "118176adf37a7f1d9f4149dc2d19dd27024617ba4485b84e3513d7ae7bb14d40",
-  "sizeBytes": 4490022,
+  "versionCode": 111,
+  "versionName": "1.1.0",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.0.apk",
+  "notes": "加了自定义源：排序行右边「源 +」可以填自己的仓库地址，支持 F-Droid 索引和简单清单。",
+  "sha256": "8e9a5a4a70e06851b8acd3fbe59b1279ceb5cd2885d758e7850ff790aeefc79f",
+  "sizeBytes": 4495022,
   "forceUpdate": false,
   "notice": {
-    "id": "20261107-v110",
-    "title": "相识市场 1.0.10",
-    "body": "第一屏终于不挤了。原来推荐区是上下两块叠着，占了四百多的位置，现在收成一行——左边一张宽卡，右边接着几张竖卡，横着一划就能看全。\n列表这边把白卡和描边全去掉了，改成无框的行，中间一条极细的分隔线，和上面的推荐卡形成对比：上面是卡片，下面是干净的行。\n顶部标题小了一号，校验那行从一整句缩成“官方版 · 已核验”，省出来的位置全给内容。",
+    "id": "20261107-v111",
+    "title": "相识市场 1.1.0",
+    "body": "现在能加自己的源了。排序那一行最右边有个「源 +」，点进去填一个仓库索引地址就行——F-Droid 那种 index-v1.json 能直接认，也可以写个简单清单。加进来的东西会出现在「应用」页，卡片上标着它是从哪个源来的。也可以随时删掉。",
     "level": "info"
   }
 }
