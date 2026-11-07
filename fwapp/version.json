@@ -1,12 +1,12 @@
 {
   "name": "固件库",
-  "versionCode": 1,
-  "versionName": "1.0.0",
-  "size": 63396,
-  "sha256": "0ff40abaa19802f7740faed3060df57e013068465794f1a36e5a30b0b787f65b",
-  "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.0.apk",
+  "versionCode": 2,
+  "versionName": "1.0.1",
+  "size": 67492,
+  "sha256": "006f6cc36e0e3e55b0131b6f215ead51bd1cb7dbb4557aacb5b694f923db575b",
+  "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.1.apk",
   "notice": {
     "level": "info",
-    "text": "首个版本：347 台设备、3685 个固件包，卡刷线刷都能直接下。bigota 打不开时自动换镜像节点。"
+    "text": "1.0.1 修好了两条：索引改走自己的域名镜像，国内不再被重置；正版判断改成比对官网发布的包哈希，原包直接放行。"
   }
 }
