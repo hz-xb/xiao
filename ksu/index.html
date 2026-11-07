@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KSU 商店｜把 root 模块装进一个应用里</title>
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%237C929A'/%3E%3Cpath d='M32 12 L50 22 L50 42 L32 52 L14 42 L14 22 Z' fill='none' stroke='white' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23D6ECFA'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#F5F5F1; --surface:#FFFFFF; --ink:#15181A; --ink2:#5E6469; --ink3:#9AA0A5;
+  --accent:#22564A; --soft:#E4EFEA; --line:#E2E2DC;
+  --r:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:16px; line-height:1.65; letter-spacing:.002em;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+/* ---------- hero ---------- */
+.hero{padding:44px 0 8px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand svg{width:34px;height:34px;flex:none;border-radius:9px}
+.brand .name{font-size:15px;font-weight:500;letter-spacing:.01em}
+.brand .ver{margin-left:auto;font-size:12px;color:var(--ink3);letter-spacing:.02em}
+
+h1{
+  margin-top:30px;
+  font-size:clamp(30px,8.4vw,46px);
+  line-height:1.22; font-weight:700; letter-spacing:-.03em;
+}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{
+  margin-top:16px; max-width:31em;
+  color:var(--ink2); font-size:15px; line-height:1.8;
+}
+.cta{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  height:48px;padding:0 22px;border-radius:14px;
+  font-size:14.5px;font-weight:500;text-decoration:none;
+  transition:transform .12s ease, background .12s ease;
+}
+.btn:active{transform:scale(.974)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#1B473D}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{background:#EDEDE7}
+.meta-line{margin-top:14px;font-size:12px;color:var(--ink3)}
+.meta-line b{font-weight:500;color:var(--ink2)}
+
+/* ---------- 索引表 ---------- */
+.block{margin-top:52px}
+.block-head{display:flex;align-items:baseline;gap:10px}
+.block-head h2{font-size:17px;font-weight:500;letter-spacing:-.01em}
+.block-head p{font-size:12.5px;color:var(--ink3)}
+.rows{margin-top:14px;border-top:1px solid var(--line)}
+.row{
+  display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:14px;
+  padding:16px 2px;border-bottom:1px solid var(--line);
+  cursor:pointer;transition:background .14s ease;
+}
+.row:hover{background:#EFEFE9}
+.row svg{width:22px;height:22px;opacity:.72}
+.row .t{font-size:15px;font-weight:500}
+.row .s{font-size:11.5px;color:var(--ink3);margin-top:2px;line-height:1.5}
+.row .n{
+  font-size:22px;font-weight:500;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;min-width:64px;text-align:right;
+}
+.row .detail{
+  grid-column:2 / -1;overflow:hidden;max-height:0;
+  transition:max-height .26s ease;
+}
+.row.on .detail{max-height:120px}
+.row .detail p{font-size:12.5px;color:var(--ink2);padding-top:8px;line-height:1.7}
+
+/* ---------- 手机预览 ---------- */
+.preview{margin-top:56px}
+.stage{
+  margin-top:18px;background:linear-gradient(160deg,#E9EDE8 0%,#F1F2EC 60%,#E7EBE7 100%);
+  border-radius:26px;padding:26px 0 0;display:flex;justify-content:center;
+  overflow:hidden;
+}
+.phone{
+  width:300px;background:var(--bg);border-radius:26px 26px 0 0;
+  border:1px solid #E1E2DC;border-bottom:none;
+  box-shadow:0 -2px 40px rgba(21,24,26,.08);
+  padding:0 0 0;overflow:hidden;
+}
+.status{display:flex;justify-content:space-between;align-items:center;padding:11px 18px 4px;font-size:11px;color:var(--ink)}
+.status .dots{display:flex;gap:3px;align-items:center}
+.status .dots i{width:3px;height:3px;border-radius:50%;background:var(--ink);opacity:.7;display:block}
+.p-head{padding:8px 18px 0}
+.p-title{font-size:21px;font-weight:700;letter-spacing:-.03em}
+.p-sub{font-size:11px;color:var(--ink3);margin-top:3px}
+.p-search{
+  margin:12px 18px 0;height:36px;border-radius:11px;background:#fff;
+  border:1px solid #E8E8E1;display:flex;align-items:center;gap:8px;padding:0 11px;
+  font-size:11px;color:#B4B8B4;
+}
+.p-chips{display:flex;gap:6px;padding:10px 18px 0;align-items:center}
+.p-chip{font-size:10.5px;padding:5px 11px;border-radius:20px;background:#fff;border:1px solid #E8E8E1;color:var(--ink2)}
+.p-chip.on{background:var(--soft);border-color:transparent;color:var(--accent);font-weight:500}
+.p-chip.src{margin-left:auto;background:none;border:none;color:var(--accent);padding:5px 0}
+.p-list{padding:12px 16px 0}
+.p-item{display:flex;gap:11px;padding:11px 2px;border-bottom:1px solid #EDEDE7}
+.p-ico{width:38px;height:38px;border-radius:10px;flex:none}
+.p-item .tx{flex:1;min-width:0}
+.p-item .tt{font-size:12.5px;font-weight:500;line-height:1.35}
+.p-item .dd{font-size:10px;color:var(--ink3);margin-top:3px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-item .mm{font-size:9.5px;color:#B4B8B4;margin-top:4px}
+.p-tabs{display:flex;margin-top:14px;background:#fff;border-top:1px solid #EDEDE7;padding:8px 0 10px}
+.p-tab{flex:1;text-align:center;font-size:9px;color:var(--ink3)}
+.p-tab b{display:block;margin:0 auto 3px;width:15px;height:15px;border-radius:4px;background:#D7DAD5}
+.p-tab.on{color:var(--accent);font-weight:500}
+.p-tab.on b{background:var(--accent)}
+
+/* ---------- 特性 ---------- */
+.feats{display:grid;gap:12px;margin-top:56px}
+.feat{
+  background:var(--surface);border-radius:var(--r);padding:20px 20px 18px;
+}
+.feat h3{font-size:15px;font-weight:500;display:flex;align-items:center;gap:9px}
+.feat h3 svg{width:18px;height:18px;flex:none;opacity:.7}
+.feat p{margin-top:8px;font-size:13px;color:var(--ink2);line-height:1.75}
+.feat code{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:11.5px;background:#F3F4F0;padding:1px 5px;border-radius:4px;color:var(--ink2)}
+
+/* ---------- 下载 ---------- */
+.dl{
+  margin-top:56px;background:var(--accent);border-radius:22px;
+  padding:26px 24px 24px;color:#fff;
+}
+.dl h2{font-size:19px;font-weight:500;letter-spacing:-.01em}
+.dl p{margin-top:8px;font-size:13px;color:#CFE0DA;line-height:1.75}
+.dl .btn-primary{background:#fff;color:var(--accent);margin-top:18px}
+.dl .btn-primary:hover{background:#EDF5F1}
+.dl .spec{margin-top:18px;display:flex;flex-wrap:wrap;gap:6px 20px;font-size:11.5px;color:#A9C6BD}
+.dl .spec span{white-space:nowrap}
+.dl .spec b{color:#fff;font-weight:500}
+
+footer{margin-top:40px;padding:22px 0 40px;border-top:1px solid var(--line);font-size:12px;color:var(--ink3);line-height:1.9}
+footer a{color:var(--ink2);text-decoration:none;border-bottom:1px solid var(--line)}
+footer a:hover{color:var(--accent);border-color:var(--accent)}
+
+@media (min-width:640px){
+  .feats{grid-template-columns:1fr 1fr}
+  .dl{padding:32px 32px 28px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="brand">
+      <svg viewBox="0 0 64 64" aria-label="KSU 商店">
+        <rect width="64" height="64" rx="14" fill="#7C929A"/>
+        <path d="M32 12 L50 22 L50 42 L32 52 L14 42 L14 22 Z" fill="none" stroke="#fff" stroke-width="3.2"/>
+        <circle cx="32" cy="32" r="9" fill="#D6ECFA"/>
+      </svg>
+      <span class="name">KSU 商店</span>
+      <span class="ver">v1.1.6</span>
+    </div>
+
+    <h1>把 root 模块<br>装进一个<em>应用</em>里。</h1>
+    <p class="lede">
+      KernelSU、Magisk、LSPosed 三个官方模块索引，加上一批开源应用，收在同一个界面里。
+      文件全部取自原作者发布的位置，我们只做索引与转交。
+    </p>
+
+    <div class="cta">
+      <a class="btn btn-primary" href="https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.6.apk" download>
+        下载 APK
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round">
+          <path d="M12 3v12M7 11l5 5 5-5M4 20h16"/>
+        </svg>
+      </a>
+      <a class="btn btn-ghost" href="#what">它到底是什么</a>
+    </div>
+    <p class="meta-line">Android 8 以上 · <b>4.5 MB</b> · sha256 <b>b6ae5c57…</b> · 2026-11-07 更新</p>
+  </header>
+
+  <!-- 索引 -->
+  <section class="block" id="index">
+    <div class="block-head">
+      <h2>里面有什么</h2>
+      <p>四个来源，一个界面</p>
+    </div>
+    <div class="rows">
+      <div class="row" data-row>
+        <svg viewBox="0 0 24 24" stroke="#22564A" fill="none" stroke-width="1.5" stroke-linecap="round">
+          <path d="M12 3 20 7.5v9L12 21 4 16.5v-9L12 3Z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/>
+        </svg>
+        <div>
+          <div class="t">KernelSU 模块</div>
+          <div class="s">modules.kernelsu.org</div>
+        </div>
+        <div class="n">43</div>
+        <div class="detail"><p>走官方索引，图标、版本、下载直链都是原样搬过来的，不做二次打包。刷入前它会先把 ZIP 交给你装好的 KernelSU。</p></div>
+      </div>
+
+      <div class="row" data-row>
+        <svg viewBox="0 0 24 24" stroke="#22564A" fill="none" stroke-width="1.5" stroke-linecap="round">
+          <path d="M12 4c-4 0-6 2-6 5v3c0 3 2 5 6 5s6-2 6-5v-3c0-3-2-5-6-5Z"/><circle cx="9.4" cy="10" r="1.2" fill="#22564A"/><circle cx="14.6" cy="10" r="1.2" fill="#22564A"/>
+        </svg>
+        <div>
+          <div class="t">Magisk 模块</div>
+          <div class="s">Magisk-Modules-Alt-Repo</div>
+        </div>
+        <div class="n">135</div>
+        <div class="detail"><p>社区仓库，每条都指回它自己的 GitHub 仓库。点开能看到简介、版本、星数，下载走 release 里的 zip。</p></div>
+      </div>
+
+      <div class="row" data-row>
+        <svg viewBox="0 0 24 24" stroke="#22564A" fill="none" stroke-width="1.5" stroke-linecap="round">
+          <path d="M4 16 9 11l4 3 5-6"/><path d="M4 20h16"/>
+        </svg>
+        <div>
+          <div class="t">LSPosed 模块</div>
+          <div class="s">modules.lsposed.org</div>
+        </div>
+        <div class="n">1321</div>
+        <div class="detail"><p>这个库最大，按星数排下来前面的都是常用模块。作者头像、模块名、简介、最近更新都从索引里取，不做猜测。</p></div>
+      </div>
+
+      <div class="row" data-row>
+        <svg viewBox="0 0 24 24" stroke="#22564A" fill="none" stroke-width="1.5" stroke-linecap="round">
+          <rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/>
+          <rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>
+        </svg>
+        <div>
+          <div class="t">开源应用</div>
+          <div class="s">GitHub 仓库</div>
+        </div>
+        <div class="n">62</div>
+        <div class="detail"><p>挑的是能在这台手机上装、而且有明显用途的那些：Shizuku、Termux、Material Files、NewPipe 之类。版本取自 release。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 手机预览 -->
+  <section class="preview">
+    <div class="block-head">
+      <h2>长这样</h2>
+      <p>大卡、无框列表、细分隔线</p>
+    </div>
+    <div class="stage">
+      <div class="phone">
+        <div class="status">
+          <span>19:12</span>
+          <span class="dots"><i></i><i></i><i></i><i></i></span>
+        </div>
+        <div class="p-head">
+          <div class="p-title">KSU 商店</div>
+          <div class="p-sub">KernelSU · 43 个</div>
+        </div>
+        <div class="p-search">
+          <svg width="12" height="12" viewBox="0 0 24 24" stroke="#9AA0A5" fill="none" stroke-width="2">
+            <circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/>
+          </svg>
+          搜名字、包名、关键词
+        </div>
+        <div class="p-chips">
+          <span class="p-chip on">用得最多</span>
+          <span class="p-chip">最近更新</span>
+          <span class="p-chip">按名字</span>
+          <span class="p-chip src">源 +</span>
+        </div>
+        <div class="p-list">
+          <div class="p-item">
+            <div class="p-ico" style="background:linear-gradient(140deg,#1D3A2E,#4F6B57)"></div>
+            <div class="tx">
+              <div class="tt">Play Integrity Fix</div>
+              <div class="dd">Universal modular fix for Play Integrity</div>
+              <div class="mm">KernelSU · v4.9 · 4174 · 22 天前</div>
+            </div>
+          </div>
+          <div class="p-item">
+            <div class="p-ico" style="background:linear-gradient(140deg,#2B6BD6,#8FB6F2)"></div>
+            <div class="tx">
+              <div class="tt">Hybrid Mount</div>
+              <div class="dd">Mix OverlayFS, Magic Mount and VFS</div>
+              <div class="mm">KernelSU · v6.2.5 · 1803 · 17 天前</div>
+            </div>
+          </div>
+          <div class="p-item" style="border-bottom:none">
+            <div class="p-ico" style="background:linear-gradient(140deg,#F3F1EE,#DDD8D0)"></div>
+            <div class="tx">
+              <div class="tt">NetProxy</div>
+              <div class="dd">sing-box 透明代理模块，支持 eBPF</div>
+              <div class="mm">KernelSU · v8.6.2 · 1387</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-tabs">
+          <div class="p-tab on"><b></b>模块</div>
+          <div class="p-tab"><b></b>面具</div>
+          <div class="p-tab"><b></b>LSPosed</div>
+          <div class="p-tab"><b></b>应用</div>
+          <div class="p-tab"><b></b>我的</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特性 -->
+  <section id="what">
+    <div class="block-head" style="margin-top:56px">
+      <h2>它不只是个列表</h2>
+    </div>
+    <div class="feats">
+      <div class="feat">
+        <h3>
+          <svg viewBox="0 0 24 24" stroke="#22564A" fill="none" stroke-width="1.5" stroke-linecap="round">
+            <path d="M12 3v11M7.5 10 12 14.5 16.5 10M4 20h16"/>
+          </svg>
+          下载和安装都在应用内
+        </svg>
+        <p>下载走系统下载服务，进度就在应用里看。APK 下完直接拉起安装器，ZIP 下完交给 KernelSU 或 Magisk。不会跳浏览器，不用你选文件夹。</p>
+      </div>
+
+      <div class="feat">
+        <h3>
+          <svg viewBox="0 0 24 24" stroke="#22564A" fill="none" stroke-width="1.5" stroke-linecap="round">
+            <circle cx="12" cy="12" r="8"/><path d="M12 8v8M8 12h8"/>
+          </svg>
+          源可以自己加
+        </svg>
+        <p>排序行右边那个「源 +」，填一个仓库索引地址就能并进来。F-Droid 的 <code>index-v1.json</code> 直接认，也可以写一份简单的清单。加进来的条目，卡片上会标它从哪来。</p>
+      </div>
+
+      <div class="feat">
+        <h3>
+          <svg viewBox="0 0 24 24" stroke="#22564A" fill="none" stroke-width="1.5" stroke-linecap="round">
+            <path d="M12 3 20 6v6c0 5-3.4 8.6-8 11-4.6-2.4-8-6-8-11V6L12 3Z"/>
+            <path d="M8.6 12.4 11 14.8 15.6 10.2"/>
+          </svg>
+          每次启动都核一遍
+        </svg>
+        <p>启动时比对自己这个安装包的 SHA-256，对不上就当场提示「非官方版本」。标题下面那行「官方版 · 已核验」不是摆设，是真的算过。</p>
+      </div>
+
+      <div class="feat">
+        <h3>
+          <svg viewBox="0 0 24 24" stroke="#22564A" fill="none" stroke-width="1.5" stroke-linecap="round">
+            <rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 12h6M12 9v6"/>
+          </svg>
+          装过的会有记号
+        </svg>
+        <p>启动时扫一遍本机已装的包，列表上直接标「已安装」，详情按钮从「下载并安装」变成「打开」。不用再翻一遍设置里到底装没装。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 下载 -->
+  <section class="dl">
+    <h2>KSU 商店 1.1.6</h2>
+    <p>一个 APK，4.5 MB。装第一次会看到一页权限说明，把网络、安装、通知、Root 这四件事各要干什么写清楚，同意之后才进市场。</p>
+    <a class="btn btn-primary" href="https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.6.apk" download>下载 APK</a>
+    <div class="spec">
+      <span>版本 <b>1.1.6 / 117</b></span>
+      <span>大小 <b>4.5 MB</b></span>
+      <span>系统 <b>Android 8+</b></span>
+      <span>sha256 <b>b6ae5c57ce79afc6…</b></span>
+    </div>
+  </section>
+
+  <footer>
+    <p>所有模块与应用版权归各自的作者所有。本应用只提供索引与下载转交，不对第三方代码负责。</p>
+    <p>KSU 商店 · 相识 出品 · <a href="https://hz-xb.github.io/xiao/market/version.json">版本清单</a></p>
+  </footer>
+</div>
+
+<script>
+// 索引行：点开看细节，一次只展开一行
+document.querySelectorAll('[data-row]').forEach(function (row) {
+  row.addEventListener('click', function () {
+    var open = row.classList.contains('on');
+    document.querySelectorAll('[data-row]').forEach(function (r) { r.classList.remove('on'); });
+    if (!open) row.classList.add('on');
+  });
+});
+</script>
+</body>
+</html>
