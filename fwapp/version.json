@@ -1,12 +1,12 @@
 {
-  "name": "固件库",
-  "versionCode": 5,
-  "versionName": "1.0.4",
-  "size": 71942,
-  "sha256": "3ca9ecf156c833aaba88587f79f63fca69f9fad32e088592e157b0aed51e5970",
-  "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.4.apk",
+  "name": "MI 固件库",
+  "versionCode": 6,
+  "versionName": "1.0.5",
+  "size": 112819,
+  "sha256": "1fbe66f7c7720a1479b7c112a556c3cb18221ff27af04c919850de56dbf5abbf",
+  "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.5.apk",
   "notice": {
     "level": "info",
-    "text": "1.0.4：列表去掉彩色块，改细线排版；详情页可按地区筛选，顶部直接给出推荐包，选错版本的机会小了。"
+    "text": "1.0.5：换图标、改名 MI 固件库。详情页可按地区筛选并直接给出推荐包。"
   }
 }
