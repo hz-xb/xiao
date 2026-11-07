@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>相识 — 一个人，三个 App</title>
-<meta name="description" content="相识，独立开发者。三个 Android 应用：相识投屏、KSU 商店、Dopamine。都不收钱、不要账号、不往云上传东西。">
+<title>相识 — 一个人，四个 App</title>
+<meta name="description" content="相识，独立开发者。四个 Android 应用：相识投屏、KSU 商店、Dopamine、GhostKey。都不收钱、不要账号、不往云上传东西。">
 <link rel="preconnect" href="https://miaoda.feishu.cn">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2312332A'/%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='30' font-weight='700' fill='white' text-anchor='middle'%3E相%3C/text%3E%3C/svg%3E">
@@ -315,9 +315,9 @@ a,button,summary{outline:none}
         <div class="chips"><span>自己做 · 自己发</span><span>不收钱</span><span>不要账号</span></div>
       </div>
     </div>
-    <p class="bio">一个人写点 Android 上的工具，<b>装在自己手机上顺手</b>才做出来的那种。三个 App，从界面到打包到官网都是自己弄的，中间没有团队也没有甲方。</p>
+    <p class="bio">一个人写点 Android 上的工具，<b>装在自己手机上顺手</b>才做出来的那种。四个 App，从界面到打包到官网都是自己弄的，中间没有团队也没有甲方。</p>
     <div class="nums">
-      <div class="cell"><div class="v" data-count="3">0</div><div class="k">在做的应用</div></div>
+      <div class="cell"><div class="v" data-count="4">0</div><div class="k">在做的应用</div></div>
       <div class="cell"><div class="v" data-count="1561">0</div><div class="k">收录资源</div></div>
       <div class="cell"><div class="v" data-count="4">0</div><div class="k">个公开来源</div></div>
       <div class="cell"><div class="v" data-count="6">0</div><div class="k">年迭代</div></div>
@@ -325,7 +325,7 @@ a,button,summary{outline:none}
   </section>
 
   <!-- ================== 三个应用 ================== -->
-  <div class="h"><h2>手上这三个</h2><span class="n">点开就是官网</span></div>
+  <div class="h"><h2>手上这四个</h2><span class="n">点开就是官网</span></div>
 
   <div class="w rev">
     <a class="w-top" href="https://hz-xb.github.io/xiao/">
@@ -402,10 +402,39 @@ a,button,summary{outline:none}
     </div>
   </div>
 
+  <div class="w rev">
+    <a class="w-top" href="https://hz-xb.github.io/xiao/ghostkey/">
+      <img class="logo" src="../assets/ic-ghostkey.png" alt="GhostKey">
+      <div class="txt">
+        <div class="tt">GhostKey<span class="ver">v1.2.0</span></div>
+        <div class="ss">高版本临时 root · 接 Shizuku，成功率 99%</div>
+      </div>
+      <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a>
+    <div class="rail">
+      <img src="../assets/shot-ghostkey-home.png" alt="首页" loading="lazy">
+      <img src="../assets/shot-ghostkey-run.png" alt="执行中" loading="lazy">
+      <img src="../assets/shot-ghostkey-set.png" alt="设置" loading="lazy">
+    </div>
+    <div class="tags"><span>CVE-2026-98260</span><span>Shizuku 授权</span><span>五段流水线</span><span>内核 Profile 导入</span></div>
+    <div class="acts">
+      <a class="act" href="https://hz-xb.github.io/xiao/ghostkey/">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+        去官网下载
+      </a>
+      <span class="cp-tip">6.6 MB · Android 12+</span>
+    </div>
+  </div>
+
   <!-- ================== 更新记录 ================== -->
   <div class="h"><h2>最近动过什么</h2><span class="n">都是这一周</span></div>
   <div class="tl rev">
     <div class="it now">
+      <div class="d">2026 · 11 · 08</div>
+      <div class="t">GhostKey v1.2.0 第一次公开</div>
+      <div class="p">高版本系统的临时 root。接 Shizuku、五段流水线走完就拿权限，重启自动恢复；调试过的内核上成功率 99%。</div>
+    </div>
+    <div class="it">
       <div class="d">2026 · 11 · 07</div>
       <div class="t">Dopamine v1.2 第一次公开</div>
       <div class="p">临时 root 那个。首页、执行页、设置页三屏定稿，官网和安装包同一时间上线，点开就能下。</div>
@@ -500,7 +529,7 @@ a,button,summary{outline:none}
     </details>
     <details>
       <summary>装不上或者被系统拦了怎么办</summary>
-      <div class="a">先在系统设置里允许这一个来源安装未知应用。如果提示「签名不一致」，说明手机上还留着别的版本，先卸载再装——这样会清掉本机数据。三个应用都要装，就去各自的官网下最新的包。</div>
+      <div class="a">先在系统设置里允许这一个来源安装未知应用。如果提示「签名不一致」，说明手机上还留着别的版本，先卸载再装——这样会清掉本机数据。四个应用都要装，就去各自的官网下最新的包。</div>
     </details>
   </div>
 
@@ -510,6 +539,7 @@ a,button,summary{outline:none}
       <a href="https://hz-xb.github.io/xiao/ksu/">KSU 商店官网</a>
       <a href="https://hz-xb.github.io/xiao/">相识投屏官网</a>
       <a href="https://hz-xb.github.io/xiao/dopamine/">Dopamine 官网</a>
+      <a href="https://hz-xb.github.io/xiao/ghostkey/">GhostKey 官网</a>
       <span>© 2026 相识</span>
     </div>
 <button class="shr" id="share" type="button">
