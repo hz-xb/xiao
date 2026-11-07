@@ -1,0 +1,16 @@
+{
+  "versionCode": 1,
+  "versionName": "1.2",
+  "apkUrl": "https://hz-xb.github.io/xiao/dopamine/dopamine-1.2.apk",
+  "sha256": "8fee01f562eb74e45841c43a3460321a6121cf34060ea21b6ea25d73478691ca",
+  "sizeBytes": 7176035,
+  "publishedAt": "2026-11-07T19:40:00+08:00",
+  "notes": "第一次公开。临时 root，执行完重启就恢复原样。",
+  "forceUpdate": false,
+  "notice": {
+    "id": "dopamine-1.2",
+    "title": "第一次公开",
+    "body": "只支持 arm64 设备，系统 Android 12 及以上。\n内核版本要在 Linux 5.10.236 ~ 6.6.127 之间。",
+    "level": "info"
+  }
+}
