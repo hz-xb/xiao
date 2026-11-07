@@ -1,12 +1,12 @@
 {
   "name": "MI 固件库",
-  "versionCode": 6,
-  "versionName": "1.0.5",
-  "size": 112819,
-  "sha256": "1fbe66f7c7720a1479b7c112a556c3cb18221ff27af04c919850de56dbf5abbf",
-  "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.5.apk",
+  "versionCode": 7,
+  "versionName": "1.0.6",
+  "size": 129726,
+  "sha256": "55a414ca1e8412f44e2399ac0882225f7d19e56784d50134743509e7439110a1",
+  "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.6.apk",
   "notice": {
     "level": "info",
-    "text": "1.0.5：换图标、改名 MI 固件库。详情页可按地区筛选并直接给出推荐包。"
+    "text": "1.0.6：加了首启同意页，权限逐条写清楚；设备列表统一按名称排序，详情页可按地区筛选并给出推荐包。"
   }
 }
