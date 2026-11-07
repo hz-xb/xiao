@@ -63,9 +63,11 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;background:rgba(13,14,32,.
 .hero-meta{font-size:12.5px;color:var(--on-soft);line-height:1.7;text-align:left}
 .hero-meta b{font-weight:500;color:rgba(255,255,255,.82)}
 
-.devices{display:grid;grid-template-columns:1.25fr .9fr .9fr;gap:10px;max-width:880px;margin:46px auto 0;padding:0 20px;align-items:end;position:relative;z-index:2}
+.devices{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:880px;margin:46px auto 0;padding:0 20px;align-items:end;position:relative;z-index:2}
 .devices figure{margin:0}
 .devices img{display:block;width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.14)}
+.devices .mid{margin-top:-14px}
+.devices .mid img{border-color:rgba(255,255,255,.22)}
 .fade{height:130px;margin-top:-108px;position:relative;z-index:3;pointer-events:none;
   background:linear-gradient(180deg,rgba(18,19,43,0) 0%,rgba(245,245,241,.84) 62%,var(--paper) 96%)}
 
@@ -203,6 +205,7 @@ dialog::backdrop{background:rgba(13,14,32,.6)}
   .nav-links{display:flex}
   .hero{padding:108px 0 0}
   .devices{gap:16px;margin-top:54px}
+  .devices .mid{margin-top:-22px}
   .facts{padding:14px 0 60px}
   .facts ul{grid-template-columns:repeat(4,1fr);gap:20px}
   section{padding:90px 0}
@@ -255,7 +258,7 @@ dialog::backdrop{background:rgba(13,14,32,.6)}
 
     <div class="devices">
       <figure><img src="../assets/shot-shizuku-home.png" alt="首页：正在运行、已授权应用、root 启动、无线调试启动"></figure>
-      <figure><img src="../assets/shot-shizuku-apps.png" alt="应用管理：按应用单独开关授权"></figure>
+      <figure class="mid"><img src="../assets/shot-shizuku-apps.png" alt="应用管理：按应用单独开关授权"></figure>
       <figure><img src="../assets/shot-shizuku-start.png" alt="启动程序：shizuku_server 起来、starter exit 0"></figure>
     </div>
     <div class="fade"></div>
