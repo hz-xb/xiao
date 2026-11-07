@@ -1,0 +1,15 @@
+{
+  "versionCode": 103,
+  "versionName": "1.0.3",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.0.3.apk",
+  "notes": "LSPosed 换成了官方真名和简介，Magisk 补上作者写的名字，应用清单扩到 39 个；列表可以直接搜索，翻页不卡。",
+  "sha256": "ff224d30a68bbc954bdd34681032a96393cc7e1aebfa8f62680f217e65cbc2ab",
+  "sizeBytes": 4435248,
+  "forceUpdate": false,
+  "notice": {
+    "id": "20261107-v103",
+    "title": "相识市场 1.0.3",
+    "body": "这次把 LSPosed 的模块名和简介都换成了作者写的真名字，Magisk 也一样；应用从 15 个加到 39 个。列表能直接搜名字和包名，翻起来也不卡了。",
+    "level": "info"
+  }
+}
