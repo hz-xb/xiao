@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shizuku — GhostKey 的授权入口</title>
+<meta name="description" content="Shizuku 是开源的权限中继：应用不必自己拿 root，通过 Shizuku 的服务进程就能执行特权操作。这里是可以直接装的中文版，含与 GhostKey 搭配的完整步骤。">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235665E8'/%3E%3Cpath d='M16 30 32 18l16 12v16a4 4 0 0 1-4 4H20a4 4 0 0 1-4-4Z' fill='%23fff'/%3E%3Ccircle cx='27' cy='37' r='2.4' fill='%235665E8'/%3E%3Ccircle cx='37' cy='43' r='2.4' fill='%235665E8'/%3E%3C/svg%3E">
+<style>
+:root{
+  --deep:#12132B;
+  --deep2:#0D0E20;
+  --paper:#F5F5F1;
+  --card:#FFFFFF;
+  --text:#15181A;
+  --soft:rgba(21,24,26,.62);
+  --faint:rgba(21,24,26,.42);
+  --line:rgba(21,24,26,.085);
+  --accent:#4F5FD6;
+  --accent2:#6E7BF2;
+  --mint:#E5E8FB;
+  --on:rgba(255,255,255,.95);
+  --on-soft:rgba(255,255,255,.56);
+  --line-d:rgba(255,255,255,.11);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--text);
+  font-family:"Noto Sans SC","PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",sans-serif;
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em;line-height:1.18}
+a{color:inherit}
+img{max-width:100%}
+::selection{background:var(--accent);color:#fff}
+*,html,body{-webkit-tap-highlight-color:transparent}
+a,button,summary,label{outline:none;-webkit-user-select:none;user-select:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+header{position:fixed;top:0;left:0;right:0;z-index:30;background:rgba(13,14,32,.78);backdrop-filter:blur(14px);border-bottom:1px solid var(--line-d)}
+.nav{display:flex;align-items:center;gap:12px;height:58px;max-width:1120px;margin:0 auto;padding:0 20px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;flex:1;min-width:0;color:var(--on)}
+.brand img{width:26px;height:26px;flex:none;border-radius:7px}
+.brand span{font-size:14.5px;font-weight:500;white-space:nowrap}
+.nav-links{display:none;gap:22px;font-size:13.5px;color:var(--on-soft)}
+.nav-links a{text-decoration:none;white-space:nowrap}
+.nav-links a:hover{color:var(--on)}
+.nav-cta{display:inline-flex;align-items:center;height:34px;padding:0 14px;border-radius:8px;background:var(--mint);color:var(--deep);text-decoration:none;font-size:13px;font-weight:500;white-space:nowrap;transition:background .16s}
+.nav-cta:hover{background:#fff}
+#progress{position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--accent2);transition:width .1s linear}
+
+.hero{background:var(--deep);color:var(--on);padding:92px 0 0;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 46% at 50% 0%,rgba(110,123,242,.24),transparent 62%)}
+.hero-head{text-align:center;max-width:820px;margin:0 auto;padding:0 20px;position:relative;z-index:2}
+.hero h1{font-size:clamp(31px,8.2vw,64px);letter-spacing:-.03em;line-height:1.12}
+.hero h1 .dim{color:var(--on-soft)}
+.hero .lede{margin:20px auto 0;max-width:38em;font-size:15px;line-height:1.85;color:var(--on-soft)}
+.hero-actions{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px 18px;margin-top:30px}
+.btn-main{display:inline-flex;align-items:center;gap:9px;height:52px;padding:0 28px;border-radius:11px;background:var(--mint);color:var(--deep);text-decoration:none;font-size:15.5px;font-weight:500;transition:background .16s,transform .16s}
+.btn-main:hover{background:#fff;transform:translateY(-1px)}
+.btn-main svg{width:17px;height:17px;stroke:var(--deep);fill:none;stroke-width:1.7;stroke-linecap:round}
+.hero-meta{font-size:12.5px;color:var(--on-soft);line-height:1.7;text-align:left}
+.hero-meta b{font-weight:500;color:rgba(255,255,255,.82)}
+
+.devices{display:grid;grid-template-columns:1.25fr .9fr .9fr;gap:10px;max-width:880px;margin:46px auto 0;padding:0 20px;align-items:end;position:relative;z-index:2}
+.devices figure{margin:0}
+.devices img{display:block;width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.14)}
+.fade{height:130px;margin-top:-108px;position:relative;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg,rgba(18,19,43,0) 0%,rgba(245,245,241,.84) 62%,var(--paper) 96%)}
+
+.facts{background:var(--paper);padding:8px 0 44px}
+.facts ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:30px 16px}
+.facts li{min-width:0}
+.facts b{display:block;font-size:clamp(28px,7.2vw,48px);font-weight:700;line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.facts b small{font-size:.4em;font-weight:500;color:var(--soft);margin-left:5px;letter-spacing:0}
+.facts .desc{display:block;margin-top:9px;font-size:12.5px;line-height:1.62;color:var(--faint)}
+
+section{padding:62px 0}
+.sec-head{max-width:36em}
+.sec-head h2{font-size:clamp(25px,5.4vw,38px)}
+.sec-head p{margin:14px 0 0;font-size:14.5px;line-height:1.82;color:var(--soft)}
+
+.cards{margin-top:32px;display:grid;grid-template-columns:1fr;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 20px;transition:border-color .18s,transform .18s}
+.card:hover{border-color:rgba(79,95,214,.32);transform:translateY(-2px)}
+.ic{width:42px;height:42px;border-radius:12px;background:var(--mint);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.ic svg{width:21px;height:21px;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-size:16.5px;font-weight:500;letter-spacing:-.01em;line-height:1.45}
+.card p{margin:8px 0 0;font-size:13.5px;line-height:1.78;color:var(--soft)}
+
+.strip{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(170px,1fr);gap:14px;margin-top:32px;
+  overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px;-webkit-overflow-scrolling:touch}
+.strip figure{margin:0;scroll-snap-align:start;transition:transform .26s cubic-bezier(.22,.7,.2,1)}
+.strip figure:hover{transform:translateY(-5px)}
+.shot{border-radius:14px;overflow:hidden;background:var(--deep2);border:1px solid rgba(21,24,26,.12);
+  box-shadow:0 18px 34px -22px rgba(12,18,20,.5)}
+.shot img{display:block;width:100%;height:auto}
+.cap{margin:9px 0 0;font-size:12px;line-height:1.6;color:var(--faint)}
+
+.steps{margin-top:30px;display:grid;grid-template-columns:1fr;gap:0}
+.step{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:20px 0;border-top:1px solid var(--line)}
+.step .num{width:28px;height:28px;border-radius:50%;background:var(--deep);color:#fff;font-size:12px;font-weight:500;
+  display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px}
+.step h3{font-size:15.5px;font-weight:500;letter-spacing:0}
+.step p{margin:5px 0 0;font-size:13.5px;line-height:1.8;color:var(--soft)}
+
+.versus{margin-top:32px;display:grid;grid-template-columns:1fr;gap:14px}
+.vcard{border-radius:16px;padding:22px 20px;border:1px solid var(--line);background:var(--card)}
+.vcard.other{background:transparent}
+.vcard.ours{border-color:rgba(79,95,214,.3);box-shadow:0 18px 40px -32px rgba(79,95,214,.6)}
+.vcard h3{font-size:14px;font-weight:500;color:var(--soft);letter-spacing:0}
+.vcard.ours h3{color:var(--accent)}
+.vcard ul{list-style:none;margin:12px 0 0;padding:0}
+.vcard li{font-size:13.5px;line-height:1.8;color:var(--soft);padding:7px 0;border-top:1px solid var(--line)}
+.vcard li:first-child{border-top:none;padding-top:0}
+.vcard.ours li{color:var(--text)}
+
+table{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:16px}
+colgroup col:nth-child(1){width:30%}
+colgroup col:nth-child(2){width:70%}
+tr{border-bottom:1px solid var(--line)}
+th,td{text-align:left;vertical-align:top;padding:15px 0;font-size:13.5px;line-height:1.72}
+th{font-weight:400;color:var(--faint);font-size:12.5px;padding-right:14px}
+td{color:var(--soft);word-break:break-word}
+
+.download{background:var(--deep);color:var(--on);padding:64px 0}
+.download .wrap{display:grid;grid-template-columns:1fr;gap:34px}
+.download h2{font-size:clamp(27px,5.8vw,42px);color:#fff}
+.download p{margin:12px 0 0;font-size:14.5px;line-height:1.8;color:var(--on-soft);max-width:32em}
+.dl-btn{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 30px;margin-top:26px;border-radius:12px;
+  background:var(--mint);color:var(--deep);text-decoration:none;font-size:16px;font-weight:500;transition:background .16s,transform .16s}
+.dl-btn:hover{background:#fff;transform:translateY(-1px)}
+.dl-btn svg{width:18px;height:18px;stroke:var(--deep);fill:none;stroke-width:1.7;stroke-linecap:round}
+.dl-side{font-size:12.5px;line-height:2;color:var(--on-soft)}
+.dl-side b{display:block;color:#fff;font-weight:500;font-size:13.5px;margin-bottom:2px}
+.hash-row{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.hash{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:11px;line-height:1.6;
+  word-break:break-all;color:var(--on-soft);max-width:26em}
+.copy-btn{appearance:none;border:1px solid rgba(255,255,255,.24);background:transparent;color:rgba(255,255,255,.8);
+  font-size:12px;height:30px;padding:0 12px;border-radius:6px;cursor:pointer;font-family:inherit}
+.copy-btn:hover{background:rgba(255,255,255,.09)}
+.notice{margin-top:22px;border-left:2px solid rgba(229,232,251,.35);padding-left:14px;font-size:13px;line-height:1.8;color:var(--on-soft)}
+.notice b{display:block;color:#fff;font-weight:500;font-size:13.5px;margin-bottom:3px}
+.notice .body{white-space:pre-line}
+
+.faq{margin-top:28px;border-top:1px solid var(--line)}
+details{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;padding:19px 0;display:flex;align-items:flex-start;gap:14px;font-size:15px;line-height:1.6}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";width:9px;height:9px;margin-left:auto;margin-top:7px;flex:none;
+  border-right:1.5px solid var(--faint);border-bottom:1.5px solid var(--faint);transform:rotate(45deg)}
+details[open] summary::after{transform:rotate(-135deg);margin-top:11px}
+details p{margin:0 0 20px;font-size:13.5px;line-height:1.85;color:var(--soft);max-width:42em}
+
+footer{border-top:1px solid var(--line);padding:32px 0 44px;background:var(--paper)}
+.foot{display:flex;flex-wrap:wrap;gap:16px 26px;align-items:center;font-size:12.5px;color:var(--faint)}
+.brand-mini{display:flex;align-items:center;gap:8px;color:var(--soft);font-size:13px}
+.brand-mini img{width:20px;height:20px;border-radius:5px}
+.foot a{text-decoration:none;color:var(--faint);cursor:pointer}
+.foot a:hover{color:var(--text)}
+.foot-links{display:flex;gap:20px;flex-wrap:wrap;margin-left:auto}
+
+dialog{border:none;padding:0;background:#fff;color:var(--text);width:min(720px,calc(100% - 28px));
+  max-height:86vh;border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(13,14,32,.6)}
+.doc-head{position:sticky;top:0;background:#fff;display:flex;align-items:center;gap:16px;
+  padding:18px 22px;border-bottom:1px solid var(--line)}
+.doc-head h3{margin:0;font-size:17px;flex:1}
+.doc-close{border:none;background:transparent;font-size:14px;color:var(--faint);cursor:pointer;height:32px;padding:0 6px}
+.doc-body{padding:20px 22px 32px;overflow:auto}
+.doc-body h4{margin:22px 0 8px;font-size:14px;font-weight:500}
+.doc-body p,.doc-body li{font-size:13px;line-height:1.9;color:var(--soft);margin:0 0 10px}
+.doc-body ul{padding-left:20px}
+.doc-body .stamp{font-size:12px;color:var(--faint)}
+
+#toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,14px);background:#12132B;color:#fff;
+  font-size:13px;padding:10px 16px;border-radius:8px;opacity:0;pointer-events:none;
+  transition:opacity .18s,transform .18s;z-index:60}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.hero h1,.hero .lede,.hero-actions,.devices figure{animation:fadeUp .8s cubic-bezier(.22,.7,.2,1) both}
+.hero h1{animation-delay:.06s}
+.hero .lede{animation-delay:.16s}
+.hero-actions{animation-delay:.26s}
+.devices figure:nth-child(1){animation-delay:.26s}
+.devices figure:nth-child(2){animation-delay:.34s}
+.devices figure:nth-child(3){animation-delay:.42s}
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.22,.7,.2,1),transform .7s cubic-bezier(.22,.7,.2,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  .hero h1,.hero .lede,.hero-actions,.devices figure{animation:none}
+  *{transition:none!important}
+}
+@media (min-width:768px){
+  .wrap{padding:0 32px}
+  .nav{padding:0 32px;height:64px}
+  .nav-links{display:flex}
+  .hero{padding:108px 0 0}
+  .devices{gap:16px;margin-top:54px}
+  .facts{padding:14px 0 60px}
+  .facts ul{grid-template-columns:repeat(4,1fr);gap:20px}
+  section{padding:90px 0}
+  .cards{grid-template-columns:1fr 1fr;gap:16px}
+  .card{padding:26px 24px}
+  .strip{grid-auto-columns:1fr;overflow:visible}
+  .versus{grid-template-columns:1fr 1fr;gap:18px}
+  .steps{grid-template-columns:repeat(3,1fr);gap:0 28px}
+  .step{grid-template-columns:1fr;padding:22px 0 0;border-right:1px solid var(--line)}
+  .step:last-child{border-right:none}
+  .download .wrap{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:44px;align-items:end}
+  dialog .doc-body{padding:22px 30px 36px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="#top">
+      <img src="../assets/ic-shizuku.png" alt="Shizuku">
+      <span>Shizuku</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#features">它做什么</a>
+      <a href="#shots">界面</a>
+      <a href="#how">怎么用</a>
+      <a href="#specs">参数</a>
+      <a href="#faq">问答</a>
+    </nav>
+    <a class="nav-cta" href="#download">下载安卓版</a>
+  </div>
+  <div id="progress" aria-hidden="true"></div>
+</header>
+
+<main id="top">
+
+  <div class="hero">
+    <div class="hero-head">
+      <h1>把 root 的活，<br><span class="dim">交给它转一手。</span></h1>
+      <p class="lede">Shizuku 是开源的权限中继。应用不用自己拿到 root，通过它的服务进程就能执行特权操作——授权一次，用的时候随取随用，不想给了关掉开关就完事。GhostKey 的执行入口，也是它。</p>
+      <div class="hero-actions">
+        <a class="btn-main" id="heroBtn" href="#download">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
+          下载安装包
+        </a>
+        <div class="hero-meta"><b>Android 7.0 及以上</b> · 开源 · 全架构<br><span id="metaVer">v13.6.0 · 2.5 MB</span></div>
+      </div>
+    </div>
+
+    <div class="devices">
+      <figure><img src="../assets/shot-shizuku-home.png" alt="首页：正在运行、已授权应用、root 启动、无线调试启动"></figure>
+      <figure><img src="../assets/shot-shizuku-apps.png" alt="应用管理：按应用单独开关授权"></figure>
+      <figure><img src="../assets/shot-shizuku-start.png" alt="启动程序：shizuku_server 起来、starter exit 0"></figure>
+    </div>
+    <div class="fade"></div>
+  </div>
+
+  <div class="facts wrap">
+    <ul>
+      <li><b>1<small>次授权</small></b><span class="desc">装一次、授一次，之后不用反复确认</span></li>
+      <li><b>13.6.0<small>版本</small></b><span class="desc">versionCode 1086，安装包 2.5 MB</span></li>
+      <li><b>7.0+<small>系统</small></b><span class="desc">Android 7.0 起，无线调试启动要 11 以上</span></li>
+      <li><b>开源<small>免费</small></b><span class="desc">RikkaApps 出品，源码公开，无广告</span></li>
+    </ul>
+  </div>
+
+  <section class="wrap" id="features">
+    <div class="sec-head">
+      <h2>它不是 root，但它让应用不用 root 也能干 root 的活。</h2>
+      <p>以前想让一个应用执行特权命令，只能整机提权；Shizuku 换了个思路：权限只留在服务进程里，应用拿着 API 去点单，用多少给多少。</p>
+    </div>
+    <div class="cards reveal">
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.4 20 6.4v5.8c0 4.8-3.2 8.4-8 10.4-4.8-2-8-5.6-8-10.4V6.4Z"/><path d="M8.5 12l2.4 2.4 4.6-4.8"/></svg></div>
+        <h3>权限在服务里，不在应用里</h3>
+        <p>服务进程以 shell 或 root 身份跑着，应用只能通过 API 请求执行。它自己没有那把钥匙，也就没法把钥匙藏起来用。</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></div>
+        <h3>按应用单独开关</h3>
+        <p>授权列表里一个应用一行，开着就是允许，关掉立刻失效。想查是谁在用，打开「已授权 N 个应用」就看得到。</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9a8 8 0 0 1 14-3"/><path d="M20 15a8 8 0 0 1-14 3"/><path d="M18 3v4h-4"/><path d="M6 21v-4h4"/></svg></div>
+        <h3>两种启动方式，都行</h3>
+        <p>已 root 的设备直接在应用里点「重新启动」，走 root 拉起服务；没 root 就用无线调试，Android 11 起不用连电脑；老版本还能用 adb 连一次。</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/></svg></div>
+        <h3>不止是给 GhostKey 开门</h3>
+        <p>冻结应用、改系统设置、跑终端命令、给别的调试工具当前置——凡是要 shell 权限的操作，都能借它这一手，不用为每件事都去 root 一遍。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="shots">
+    <div class="sec-head">
+      <h2>四页：看状态、看启动日志、管授权、调偏好。</h2>
+      <p>首页只回答一个问题——服务起没起、谁拿到了授权。启动程序的输出直接摊开，pid、退出码都写着，出了问题不用猜。</p>
+    </div>
+    <div class="strip reveal">
+      <figure>
+        <div class="shot"><img src="../assets/shot-shizuku-home.png" alt="首页"></div>
+        <figcaption class="cap">首页：正在运行、已授权应用数、root 启动、无线调试启动</figcaption>
+      </figure>
+      <figure>
+        <div class="shot"><img src="../assets/shot-shizuku-start.png" alt="启动程序"></div>
+        <figcaption class="cap">启动程序：shizuku_server 的 pid 和 starter 退出码都写在日志里</figcaption>
+      </figure>
+      <figure>
+        <div class="shot"><img src="../assets/shot-shizuku-apps.png" alt="应用管理"></div>
+        <figcaption class="cap">应用管理：一个应用一行开关，GhostKey 就在这一栏</figcaption>
+      </figure>
+      <figure>
+        <div class="shot"><img src="../assets/shot-shizuku-set.png" alt="设置"></div>
+        <figcaption class="cap">设置：开机自启、语言跟随系统、深色与纯黑主题</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="wrap" id="how">
+    <div class="sec-head">
+      <h2>三步，把服务开起来。</h2>
+    </div>
+    <div class="steps reveal">
+      <div class="step">
+        <span class="num">1</span>
+        <div>
+          <h3>装 APK，打开看首页</h3>
+          <p>装完打开，先看第一张卡写的是什么。「Shizuku 正在运行」说明服务已经起来了，下面会标出是以 root 还是 shell 身份在跑。</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <div>
+          <h3>把服务拉起来</h3>
+          <p>已 root 就点「重新启动」；没 root 用「通过无线调试启动」，开发者选项里配对一次，Android 11 起不用连电脑；再不行用 adb 连一次也行。</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <div>
+          <h3>回到 GhostKey 授权</h3>
+          <p>打开 GhostKey，它会弹「服务未运行」或者直接请求授权。允许之后状态变成「已连接 · root(0)」，就能开始提权了。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="limits">
+    <div class="sec-head">
+      <h2>和直接 root 比，差在哪。</h2>
+      <p>Shizuku 换的不是权限总量，是权限的存放位置。代价是有些事它做不了，收益是你能随时收回。</p>
+    </div>
+    <div class="versus reveal">
+      <div class="vcard other">
+        <h3>整机 root 的代价</h3>
+        <ul>
+          <li>所有应用共享同一套权限边界，谁都能蹭。</li>
+          <li>开机就得挂着守护进程，权限一直在。</li>
+          <li>想收回，只能卸载管理器甚至刷回去。</li>
+          <li>部分银行、支付、游戏直接拒绝运行。</li>
+        </ul>
+      </div>
+      <div class="vcard ours">
+        <h3>Shizuku</h3>
+        <ul>
+          <li>按应用授权，一个开关就是一道门。</li>
+          <li>服务可以随用随起，不用一直挂着。</li>
+          <li>关掉开关立刻失效，不用改系统。</li>
+          <li>不写系统分区，卸载即清理干净。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="specs">
+    <div class="sec-head">
+      <h2>参数</h2>
+      <p>这页给的是可直接安装的中文版安装包，与开源项目同源。授权谁、给多少，始终由你在应用管理里决定。</p>
+    </div>
+    <table class="reveal">
+      <colgroup><col><col></colgroup>
+      <tbody>
+        <tr><th>系统要求</th><td>Android 7.0 及以上（minSdk 24，targetSdk 36）；无线调试启动需 Android 11 及以上</td></tr>
+        <tr><th>安装包</th><td id="specPkg">2.5 MB · versionCode 1086</td></tr>
+        <tr><th>架构</th><td>arm64-v8a、armeabi-v7a、x86、x86_64</td></tr>
+        <tr><th>包名</th><td>moe.shizuku.privileged.api</td></tr>
+        <tr><th>权限</th><td>开机自启、前台服务、网络、通知、修改安全设置</td></tr>
+        <tr><th>启动方式</th><td>root 启动 / 无线调试配对 / adb 连接</td></tr>
+        <tr><th>授权方式</th><td>应用内弹窗确认，可在「应用管理」逐项开关</td></tr>
+        <tr><th>来源</th><td>RikkaApps 开源项目，本页为其中文说明与安装入口</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="download" id="download">
+    <div class="wrap reveal">
+      <div>
+        <h2>先装它，再去装 GhostKey。</h2>
+        <p>两个一起用：Shizuku 负责把权限递过来，GhostKey 负责把 root 提上去。顺序装反了也没事，GhostKey 会提示你去把服务开起来。</p>
+        <a class="dl-btn" id="dlBtn" href="https://hz-xb.github.io/xiao/shizuku/shizuku-13.6.0.apk">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
+          <span class="dl-label">下载 APK · v13.6.0</span>
+        </a>
+      </div>
+      <div class="dl-side">
+        <b>版本信息</b>
+        <span id="dlVer">v13.6.0（versionCode 1086）</span><br>
+        <span id="dlSize">2.5 MB · 更新于 2026 年 11 月 8 日</span><br>
+        <span id="dlNote">说明：<span id="dlNoteText">GhostKey 的授权入口。装好后用 root 或无线调试把服务开起来。</span></span>
+        <div class="hash-row">
+          <span class="hash" id="hashText">SHA-256 6e273ab0e991c4e79bc8b1bbb9b9dd739ccac1a8712a541a214078886b7b790f</span>
+          <button class="copy-btn" id="copyHash" type="button">复制校验值</button>
+        </div>
+        <div class="notice" id="noticeBox" hidden>
+          <b id="noticeTitle"></b>
+          <span class="body" id="noticeBody"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="faq">
+    <div class="sec-head">
+      <h2>常问的几件事</h2>
+    </div>
+    <div class="faq reveal">
+      <details>
+        <summary>不 root 能用 Shizuku 吗？</summary>
+        <p>能。没 root 就走无线调试：开发者选项里打开「无线调试」，配对一次，Android 11 起全程不用连电脑。代价是设备重启后服务会掉，重新启动一次就行。已 root 的设备可以开「开机启动」，重启也不用管。</p>
+      </details>
+      <details>
+        <summary>GhostKey 为什么非要它？</summary>
+        <p>GhostKey 自己不申请 root，它需要一个已经跑起来的特权进程来执行那五段流水线。Shizuku 正好提供这个入口，而且授权是你一次一次点出来的，不是装完就有。</p>
+      </details>
+      <details>
+        <summary>授权之后，它能背着我干什么吗？</summary>
+        <p>不会。授权只对请求方开放它声明的 API，不是给一个万能 shell。你在应用管理里关掉哪个开关，那个应用立刻失去访问；不放心就全关，服务还在，谁都借不到。</p>
+      </details>
+      <details>
+        <summary>重启后 Shizuku 掉了怎么办？</summary>
+        <p>没 root 的设备重启必然掉服务。打开 Shizuku 点一次「通过无线调试启动」，或者用 adb 连一次。觉得麻烦就给设备做一次常驻 root（KernelSU / Magisk），再打开「开机启动（root）」。</p>
+      </details>
+      <details>
+        <summary>和 SuperSU、Magisk 那些是一个东西吗？</summary>
+        <p>不是。那些是给你整机 root 权限的；Shizuku 是拿到权限之后，把权限借给别的应用用的一种方式。它不替代 root，它是在「有权限」和「要权限的应用」之间加了一层可管可撤的中转。</p>
+      </details>
+      <details>
+        <summary>这页是你做的吗？</summary>
+        <p>应用不是。Shizuku 由 RikkaApps 开发并开源，这里提供的是可直装的中文版安装包、中文说明，以及和 GhostKey 搭配的完整步骤。原项目在 GitHub 上公开，源码和许可见仓库。</p>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="brand-mini">
+      <img src="../assets/ic-shizuku.png" alt="">
+      Shizuku
+    </div>
+    <div class="foot-links">
+      <a data-doc="privacy">隐私说明</a>
+      <a data-doc="terms">使用说明</a>
+      <span>© 2026 相识 · 应用版权归 RikkaApps</span>
+    </div>
+  </div>
+</footer>
+
+<dialog id="docPrivacy">
+  <div class="doc-head">
+    <h3>隐私说明</h3>
+    <button class="doc-close" type="button" data-close>关闭</button>
+  </div>
+  <div class="doc-body">
+    <p class="stamp">更新日期 2026 年 11 月 8 日</p>
+    <p>这份说明针对本页提供的中文版安装包与页面本身。Shizuku 由 RikkaApps 开发并开源，应用内部的数据处理以其项目说明为准。</p>
+    <h4>应用会处理什么</h4>
+    <ul>
+      <li>运行状态：服务是否在跑、以什么身份在跑，只显示在本机界面。</li>
+      <li>授权列表：哪些应用拿到过授权，保存在本机。</li>
+      <li>启动日志：启动程序窗口里的输出，只在本地显示，用于排查。</li>
+      <li>版本检查：读取版本清单判断是否需要更新，不携带设备标识。</li>
+    </ul>
+    <h4>不会做什么</h4>
+    <ul>
+      <li>不上传授权列表、启动日志或设备信息。</li>
+      <li>不内置广告与统计 SDK，不做用户画像。</li>
+      <li>不在你未授权的情况下代任何应用执行操作。</li>
+    </ul>
+    <h4>这一页本身</h4>
+    <p>页面是静态的，不设账号、不收集访问者信息，只在打开时读取一次公开的版本清单，用于显示最新版本号与校验值。</p>
+    <h4>你的控制权</h4>
+    <p>在应用管理里关掉开关即可撤销授权；卸载应用会清掉本地授权记录与配置。</p>
+  </div>
+</dialog>
+
+<dialog id="docTerms">
+  <div class="doc-head">
+    <h3>使用说明</h3>
+    <button class="doc-close" type="button" data-close>关闭</button>
+  </div>
+  <div class="doc-body">
+    <p class="stamp">更新日期 2026 年 11 月 8 日</p>
+    <p>本页提供 Shizuku 的中文说明与安装入口。应用本体由 RikkaApps 开发并按其开源许可证分发，使用前请一并阅读原项目说明。</p>
+    <h4>它是什么</h4>
+    <p>一个权限中继服务：以 shell 或 root 身份运行服务进程，让获得授权的应用通过 API 执行特权操作。它不提供整机 root，也不管理系统模块。</p>
+    <h4>使用前提</h4>
+    <ul>
+      <li>只在你拥有或已获授权的设备上使用。</li>
+      <li>无线调试配对需要 Android 11 及以上，并保持开发者选项开启。</li>
+      <li>部分安全策略严格的系统可能限制后台服务启动，需自行放行。</li>
+    </ul>
+    <h4>风险提示</h4>
+    <ul>
+      <li>把权限借给来路不明的应用，等于把设备交给它，请逐个确认来源。</li>
+      <li>授权范围由应用声明的 API 决定，装之前先看清它要什么。</li>
+      <li>设备重启后无 root 环境下的服务会停止，属正常现象。</li>
+    </ul>
+    <h4>免责</h4>
+    <p>本页按现状提供安装包与说明，不对特定机型的可用性作出承诺。因授权给第三方应用或系统限制造成的损失，由使用者自行承担。</p>
+    <h4>许可与出处</h4>
+    <p>Shizuku 为开源项目，版权归 RikkaApps 所有，按原项目许可证分发。本页的中文说明、排版与配图整理由相识完成。</p>
+  </div>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 1800);
+  }
+
+  var copyBtn = document.getElementById('copyHash');
+  if (copyBtn) copyBtn.addEventListener('click', function(){
+    var text = document.getElementById('hashText').textContent.replace(/^SHA-256\s*/, '');
+    function fallback(){
+      var range = document.createRange();
+      range.selectNodeContents(document.getElementById('hashText'));
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      toast('已选中，请手动复制');
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function(){ toast('校验值已复制'); }, fallback);
+    } else { fallback(); }
+  });
+
+  var docs = { privacy: document.getElementById('docPrivacy'), terms: document.getElementById('docTerms') };
+  function openDoc(name){
+    var d = docs[name];
+    if (!d) return;
+    if (typeof d.showModal === 'function') { if (!d.open) d.showModal(); }
+    else { d.setAttribute('open', ''); }
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-doc]'), function(el){
+    el.addEventListener('click', function(e){ e.preventDefault(); openDoc(el.getAttribute('data-doc')); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-close]'), function(btn){
+    btn.addEventListener('click', function(){ var d = btn.closest('dialog'); if (d) d.close(); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('dialog'), function(d){
+    d.addEventListener('click', function(e){ if (e.target === d) d.close(); });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('a[href^="#"]'), function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      var top = target.getBoundingClientRect().top + window.pageYOffset - 70;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    });
+  });
+
+  var progressEl = document.getElementById('progress');
+  var queued = false;
+  function paint(){
+    queued = false;
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var ratio = max > 0 ? Math.min(1, Math.max(0, window.pageYOffset / max)) : 0;
+    if (progressEl) progressEl.style.width = (ratio * 100) + '%';
+  }
+  window.addEventListener('scroll', function(){
+    if (queued) return; queued = true; window.requestAnimationFrame(paint);
+  }, { passive: true });
+  paint();
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  function showAll(){ revealEls.forEach(function(el){ el.classList.add('in'); }); }
+  if (!reduceMotion && 'IntersectionObserver' in window && revealEls.length) {
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+    revealEls.forEach(function(el){ obs.observe(el); });
+    setTimeout(showAll, 1600);
+  } else { showAll(); }
+})();
+</script>
+
+<script>
+/* ===== 云端清单：以后发版只改 shizuku/version.json ===== */
+(function () {
+  var SRC = 'https://hz-xb.github.io/xiao/shizuku/version.json';
+
+  function fmtDate(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    return d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日';
+  }
+
+  function apply(v) {
+    if (!v || !v.versionCode || !v.apkUrl) return;
+    var name = v.versionName || '';
+    var mb = v.sizeBytes ? (v.sizeBytes / 1048576).toFixed(1) : '';
+
+    var meta = document.getElementById('metaVer');
+    if (meta) meta.textContent = 'v' + name + (mb ? ' · ' + mb + ' MB' : '');
+
+    var spec = document.getElementById('specPkg');
+    if (spec) spec.textContent = (mb ? mb + ' MB · ' : '') + 'versionCode ' + v.versionCode;
+
+    var btn = document.getElementById('dlBtn');
+    if (btn) {
+      btn.setAttribute('href', v.apkUrl);
+      var label = btn.querySelector('.dl-label');
+      if (label) label.textContent = '下载 APK · v' + name;
+    }
+
+    var dlVer = document.getElementById('dlVer');
+    if (dlVer) dlVer.textContent = 'v' + name + '（versionCode ' + v.versionCode + '）';
+
+    var dlSize = document.getElementById('dlSize');
+    if (dlSize) {
+      var date = fmtDate(v.publishedAt);
+      dlSize.textContent = (mb ? mb + ' MB' : '') + (date ? ' · 更新于 ' + date : '');
+    }
+
+    var noteText = document.getElementById('dlNoteText');
+    if (noteText && v.notes) noteText.textContent = v.notes;
+
+    var hash = document.getElementById('hashText');
+    if (hash && v.sha256) hash.textContent = 'SHA-256 ' + v.sha256;
+  }
+
+  fetch(SRC + '?t=' + Date.now(), { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(apply)
+    .catch(function () { /* 断网时保留页面里写死的默认值 */ });
+})();
+</script>
+
+</body>
+</html>
