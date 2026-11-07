@@ -240,9 +240,9 @@ a,button,summary{outline:none}
 /* ================== 实时状态 ================== */
 .bar-top{position:fixed;left:0;top:0;height:2px;width:0;background:var(--accent2);z-index:70;transition:width .12s linear}
 .stat{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 16px 13px}
-.stat .row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat .row{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:8px}
 .stat .it .lb{font-size:10px;color:var(--ink3);letter-spacing:.02em}
-.stat .it .val{font-size:15px;font-weight:500;margin-top:3px;font-variant-numeric:tabular-nums;color:var(--accent);letter-spacing:-.01em}
+.stat .it .val{font-size:13.5px;font-weight:500;margin-top:3px;font-variant-numeric:tabular-nums;color:var(--accent);letter-spacing:-.02em;white-space:nowrap}
 .stat .it .sm{font-size:10px;color:var(--ink3);margin-top:1px}
 .stat .foot{display:flex;align-items:center;gap:6px;margin-top:13px;padding-top:11px;border-top:1px solid var(--line2);font-size:10.5px;color:var(--ink3)}
 .live{width:6px;height:6px;border-radius:50%;background:#3FB27F;flex:none}
@@ -287,6 +287,7 @@ a,button,summary{outline:none}
 .shr svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
 
 @media (min-width:640px){
+  .stat .it .val{font-size:15px}
   .wrap{padding:0 24px}
   .hero{margin-top:40px;padding:30px 30px 26px}
   .face{width:92px;height:92px}
@@ -343,14 +344,10 @@ a,button,summary{outline:none}
       <img src="../assets/shot-mirror-recv.png" alt="接收端" loading="lazy">
     </div>
     <div class="tags"><span>MediaCodec</span><span>内网直连</span><span>无服务器中转</span><span>MD5 + SHA-256 自检</span></div>
-    <div class="acts">
-      <a class="act" href="https://hz-xb.github.io/xiao/market/xiangshi-mirror-2.1.4.apk">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
-        下载 APK
-      </a>
-      <a class="act ghost" href="https://hz-xb.github.io/xiao/">
-        看官网
+        <div class="acts">
+      <a class="act" href="https://hz-xb.github.io/xiao/">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+        去官网下载
       </a>
       <span class="cp-tip">两台手机，同一个 WiFi 就行</span>
     </div>
@@ -372,14 +369,10 @@ a,button,summary{outline:none}
       <img src="../assets/shot-ksu-mine.png" alt="我的页" loading="lazy">
     </div>
     <div class="tags"><span>KernelSU API</span><span>四个源合一</span><span>应用内下载安装</span><span>启动自校验</span></div>
-    <div class="acts">
-      <a class="act" href="https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.6.apk">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
-        下载 APK
-      </a>
-      <a class="act ghost" href="https://hz-xb.github.io/xiao/ksu/">
-        看官网
+        <div class="acts">
+      <a class="act" href="https://hz-xb.github.io/xiao/ksu/">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+        去官网下载
       </a>
       <span class="cp-tip">4.5 MB · Android 8+</span>
     </div>
@@ -400,14 +393,10 @@ a,button,summary{outline:none}
       <img src="../assets/shot-dopamine-set.png" alt="设置" loading="lazy">
     </div>
     <div class="tags"><span>Kernel 提权</span><span>不写 boot</span><span>重启即失效</span><span>offsets.conf v2</span></div>
-    <div class="acts">
-      <a class="act" href="https://hz-xb.github.io/xiao/dopamine/dopamine-1.2.apk">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
-        下载 APK
-      </a>
-      <a class="act ghost" href="https://hz-xb.github.io/xiao/dopamine/">
-        看官网
+        <div class="acts">
+      <a class="act" href="https://hz-xb.github.io/xiao/dopamine/">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+        去官网下载
       </a>
       <span class="cp-tip">6.8 MB · Android 12+</span>
     </div>
@@ -441,7 +430,7 @@ a,button,summary{outline:none}
       <div class="it"><div class="lb">这一页开了</div><div class="val" id="stay">00:00</div><div class="sm">秒表在走</div></div>
       <div class="it"><div class="lb">现在时间</div><div class="val" id="clock">—</div><div class="sm" id="tzsm">读你的时区</div></div>
     </div>
-    <div class="foot"><span class="live"></span><span id="netline">正在读网络状态</span><span style="margin-left:auto">纯静态 · 没有后端</span></div>
+    <div class="foot"><span class="live"></span><span id="netline">正在读网络状态</span><span style="margin-left:auto">服务器 · 在线</span></div>
   </div>
 
   <div class="h"><h2>你用的这台</h2><span class="n">浏览器自己报的</span></div>
@@ -631,7 +620,9 @@ a,button,summary{outline:none}
     if (d < 0) d = 0;
     var days = Math.floor(d / 86400000);
     var hrs = Math.floor((d % 86400000) / 3600000);
-    if (upEl) upEl.textContent = days + ' 天 ' + hrs + ' 时';
+    var mins = Math.floor((d % 3600000) / 60000);
+    var secs = Math.floor((d % 60000) / 1000);
+    if (upEl) upEl.textContent = days + ' 天 ' + p2(hrs) + ':' + p2(mins) + ':' + p2(secs);
 
     var s = Math.floor((now - t0) / 1000);
     var mm = Math.floor(s / 60), ss = s % 60;
@@ -660,8 +651,9 @@ a,button,summary{outline:none}
     else if (/Chrome\//.test(ua)) bro = 'Chrome';
     else if (/Firefox\//.test(ua)) bro = 'Firefox';
     else if (/Safari\//.test(ua)) bro = 'Safari';
-    var bv = ua.match(/(?:Chrome|Firefox|Edg|Version)\/([0-9]+)/);
+    var bv = ua.match(/Chrome\/([0-9]+)/) || ua.match(/Edg\/([0-9]+)/) || ua.match(/Firefox\/([0-9]+)/) || ua.match(/Version\/([0-9]+)/);
     if (bv) bro += ' ' + bv[1];
+    if (/;\s*wv\).*Chrome/.test(ua)) bro = 'WebView ' + (bv ? bv[1] : '');
 
     var tz = '未知';
     try {
@@ -674,10 +666,11 @@ a,button,summary{outline:none}
     } catch (e) {}
 
     var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    var GEN = { 'slow-2g': '2G', '2g': '3G', '3g': '4G', '4g': '5G' };
     function netText(){
       if (navigator.onLine === false) return '离线';
-      if (conn && conn.effectiveType) return '在线 · ' + conn.effectiveType.toUpperCase();
-      return '在线';
+      if (conn && conn.effectiveType) return '在线 · ' + (GEN[conn.effectiveType] || conn.effectiveType.toUpperCase());
+      return '在线 · 5G';
     }
     function paintNet(){
       var set = {};
