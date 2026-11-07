@@ -3,536 +3,405 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dopamine — Android 内核提权 · 临时 root</title>
-<meta name="description" content="Dopamine 是一个 Android 内核提权工具，给 arm64 设备临时拿到 root，不刷机、不改系统，重启即恢复原样。">
-<meta name="theme-color" content="#082A28">
+<title>Dopamine — 一次执行，用完就走</title>
+<meta name="description" content="Dopamine 是一个跑在设备本地的内核提权工具：临时拿到 root，重启回到原样，不刷机、不碰分区。">
+<meta name="theme-color" content="#F7F7F3">
 <link rel="preconnect" href="https://miaoda.feishu.cn">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2316A67F'/%3E%3Ccircle cx='32' cy='32' r='17' fill='none' stroke='white' stroke-width='7'/%3E%3Ccircle cx='19' cy='45' r='11' fill='%2316A67F'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230F8A68'/%3E%3Ccircle cx='32' cy='32' r='16' fill='none' stroke='white' stroke-width='7'/%3E%3C/svg%3E">
 <style>
 :root{
-  --paper:#F5F5F1; --card:#FFFFFF; --ink:#15181A; --ink2:#5E6469; --ink3:#9AA0A5;
-  --deep:#082A28; --deep2:#0C3B36; --accent:#16A67F; --accent2:#0E7C60;
-  --mint:#E9F4EF; --line:rgba(21,24,26,.09); --line2:#E6E6DF;
+  --paper:#F7F7F3; --ink:#101314; --ink2:#5C6367; --ink3:#9AA0A3;
+  --deep:#0A2B27; --accent:#0F8A68; --accent-l:#E3F1EA;
+  --rule:#E4E5DE;
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%}
 body{
   margin:0;background:var(--paper);color:var(--ink);
   font-family:"Noto Sans SC","PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",sans-serif;
-  font-size:16px;line-height:1.68;-webkit-font-smoothing:antialiased;
+  font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;
 }
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 ::selection{background:var(--accent);color:#fff}
 *,body{-webkit-tap-highlight-color:transparent}
-a,button,summary{outline:none}
-.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+a,button{outline:none}
+.page{max-width:660px;margin:0 auto;padding:0 24px}
 
-/* ================= 导航 ================= */
-.nav{
-  position:fixed;inset:0 0 auto 0;height:54px;z-index:50;
-  background:rgba(8,42,40,.82);backdrop-filter:saturate(1.6) blur(14px);
-  border-bottom:1px solid rgba(255,255,255,.07);
+/* ========== 顶部：一条细线，不是导航条 ========== */
+.bar{
+  position:sticky;top:0;z-index:30;background:rgba(247,247,243,.88);
+  backdrop-filter:saturate(1.4) blur(10px);
+  border-bottom:1px solid var(--rule);
 }
-.nav .in{max-width:760px;margin:0 auto;padding:0 20px;height:100%;display:flex;align-items:center;gap:10px}
-.nav .brand{display:flex;align-items:center;gap:9px;color:#fff;font-size:14px;font-weight:500;letter-spacing:-.01em}
-.nav .brand img{width:22px;height:22px;border-radius:6px}
-.nav .lk{margin-left:auto;display:flex;gap:2px;flex:none}
-.nav .lk a{
-  font-size:12.5px;color:rgba(255,255,255,.62);padding:6px 10px;border-radius:7px;
-  white-space:nowrap;flex:none;transition:color .16s,background .16s;
+.bar .in{max-width:660px;margin:0 auto;padding:0 24px;height:52px;display:flex;align-items:center;gap:10px}
+.bar .mk{width:19px;height:19px;border-radius:5px;flex:none}
+.bar .nm{font-size:13px;font-weight:500;letter-spacing:-.01em;white-space:nowrap}
+.bar .ver{font-size:10.5px;color:var(--ink3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar .go{
+  margin-left:auto;font-size:12.5px;font-weight:500;color:var(--accent);
+  white-space:nowrap;flex:none;display:flex;align-items:center;gap:4px;
 }
-.nav .lk a:hover{color:#fff;background:rgba(255,255,255,.08)}
-.nav .dl{
-  margin-left:8px;font-size:12.5px;color:#062018;background:var(--accent);
-  padding:6px 13px;border-radius:7px;font-weight:500;white-space:nowrap;flex:none;
-  transition:background .16s;
-}
-.nav .dl:hover{background:#1CB98D}
-.prog{position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:60;transition:width .1s linear}
+.bar .go:hover{text-decoration:underline;text-underline-offset:3px}
 
-/* ================= Hero ================= */
-.hero{
-  position:relative;overflow:hidden;padding:92px 0 0;
-  background:
-    radial-gradient(120% 78% at 50% -10%, #12554C 0%, #0B3A35 46%, #082A28 100%);
-  color:#fff;
+/* ========== 开篇 ========== */
+.open{padding:64px 0 0}
+.open .kicker{
+  display:flex;align-items:center;gap:9px;font-size:11.5px;color:var(--ink3);
+  letter-spacing:.04em;margin-bottom:20px;
 }
-.hero::before{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:
-    radial-gradient(60% 40% at 78% 12%, rgba(22,166,127,.28), transparent 62%),
-    radial-gradient(50% 40% at 18% 34%, rgba(28,185,141,.10), transparent 60%);
-}
-.hero .in{position:relative;z-index:2;text-align:center}
-.badge{
-  display:inline-flex;align-items:center;gap:7px;
-  font-size:11px;letter-spacing:.06em;color:rgba(255,255,255,.62);
-  border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:5px 12px;
-}
-.badge i{width:5px;height:5px;border-radius:50%;background:var(--accent);font-style:normal}
+.open .kicker::before{content:"";width:22px;height:1px;background:var(--accent)}
 h1{
-  margin:20px 0 0;font-size:clamp(34px,8.4vw,58px);font-weight:700;
-  letter-spacing:-.045em;line-height:1.02;
+  margin:0;font-size:clamp(38px,9.4vw,60px);font-weight:700;
+  letter-spacing:-.045em;line-height:1.12;
 }
-.sub{
-  margin:16px auto 0;max-width:22em;font-size:15px;line-height:1.8;
-  color:rgba(255,255,255,.68);
+h1 em{font-style:normal;color:var(--accent)}
+.open .lede{
+  margin:22px 0 0;font-size:15px;line-height:1.9;color:var(--ink2);max-width:27em;
 }
-.sub strong{color:#fff;font-weight:500}
-.acts{display:flex;gap:10px;justify-content:center;margin-top:26px;flex-wrap:wrap}
-.btn{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:14px;font-weight:500;padding:11px 22px;border-radius:10px;
-  transition:transform .16s,background .16s,border-color .16s;
-}
-.btn:hover{transform:translateY(-1px)}
-.btn.p{background:var(--accent);color:#04231D}
-.btn.p:hover{background:#1CB98D}
-.btn.g{border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85)}
-.btn.g:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.06)}
+.open .lede b{color:var(--ink);font-weight:500}
 
-.devices{
-  display:flex;justify-content:center;align-items:flex-end;gap:18px;
-  margin:44px auto 0;margin-bottom:26px;max-width:620px;padding:0 22px;
+.spec{
+  display:flex;flex-wrap:wrap;gap:6px 0;margin-top:26px;
+  font-size:11.5px;color:var(--ink3);
 }
-.devices .d{
-  flex:1;min-width:0;border-radius:18px;overflow:hidden;
-  box-shadow:0 0 0 1px rgba(255,255,255,.22), 0 30px 64px -34px rgba(0,0,0,.9);
-  transform:translateY(0);
+.spec span{white-space:nowrap}
+.spec span + span::before{content:"·";margin:0 9px;color:#C9CCC5}
+
+/* 首图 */
+.shot-hero{
+  margin:46px auto 0;width:min(300px,68%);
+  border-radius:26px;overflow:hidden;
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset, 0 34px 70px -40px rgba(10,43,39,.55), 0 0 0 1px rgba(10,43,39,.07);
 }
-.devices .d:nth-child(2){flex:1.16;transform:translateY(-16px)}
-.devices .d img{width:100%;height:auto}
-.fade{height:88px;background:linear-gradient(to bottom, transparent, var(--paper));margin-top:-1px;position:relative;z-index:3}
+.shot-hero img{width:100%}
 
-/* ================= Facts ================= */
-.facts{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
-  margin:0 0 0;border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);
-  padding:26px 0;
+/* ========== 章节骨架 ========== */
+.sec{
+  position:relative;padding:56px 0 0;
 }
-.facts .f{text-align:center;padding:0 6px;position:relative}
-.facts .f + .f::before{content:"";position:absolute;left:0;top:14%;height:72%;width:1px;background:var(--line2)}
-.facts .v{font-size:clamp(22px,4.4vw,30px);font-weight:500;letter-spacing:-.04em;line-height:1.15;font-variant-numeric:tabular-nums}
-.facts .k{font-size:11px;color:var(--ink3);margin-top:5px;letter-spacing:.02em}
-
-/* ================= 通用区块 ================= */
-.sec{padding:56px 0 0;scroll-margin-top:70px}
-.eyebrow{font-size:11.5px;letter-spacing:.14em;color:var(--accent2);margin:0 0 10px}
-h2{margin:0;font-size:clamp(21px,3.6vw,27px);font-weight:700;letter-spacing:-.03em;line-height:1.3}
-.lead{margin:12px 0 0;font-size:14.5px;line-height:1.85;color:var(--ink2);max-width:34em}
-
-/* ================= 特性卡 ================= */
-.grid4{display:grid;grid-template-columns:1fr;gap:10px;margin-top:24px}
-.fc{
-  background:var(--card);border:1px solid var(--line);border-radius:16px;
-  padding:19px 18px;transition:border-color .18s,transform .18s;
+.sec .idx{
+  display:flex;align-items:center;gap:11px;font-size:11px;color:var(--accent);
+  letter-spacing:.14em;font-variant-numeric:tabular-nums;
 }
-.fc:hover{border-color:rgba(22,166,127,.3);transform:translateY(-2px)}
-.fc .ic{
-  width:34px;height:34px;border-radius:9px;background:var(--mint);
-  display:flex;align-items:center;justify-content:center;color:var(--accent2);
+.sec .idx::after{content:"";flex:1;height:1px;background:var(--rule)}
+h2{
+  margin:14px 0 0;font-size:clamp(20px,4.4vw,25px);font-weight:700;
+  letter-spacing:-.028em;line-height:1.4;
 }
-.fc h3{margin:13px 0 0;font-size:14.5px;font-weight:500;letter-spacing:-.01em}
-.fc p{margin:6px 0 0;font-size:12.5px;line-height:1.75;color:var(--ink3)}
+p.body{margin:13px 0 0;font-size:14px;line-height:1.92;color:var(--ink2);max-width:32em}
+p.body strong{color:var(--ink);font-weight:500}
 
-/* ================= 截图条 ================= */
-.strip{
-  display:flex;gap:12px;overflow-x:auto;padding:24px 0 6px;
-  scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+/* ========== 执行日志块 ========== */
+.run{
+  margin-top:26px;background:var(--deep);border-radius:18px;padding:26px 24px 24px;
+  color:#fff;position:relative;overflow:hidden;
 }
-.strip::-webkit-scrollbar{height:0}
-.strip .s{flex:0 0 168px;scroll-snap-align:start;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#EBEBE5}
-.strip .s img{width:100%;height:auto}
-.strip .s .cp{padding:9px 11px 11px;font-size:11.5px;color:var(--ink2);line-height:1.5;background:var(--card)}
-
-/* ================= 步骤 ================= */
-.steps{margin-top:24px;display:grid;gap:0;border-top:1px solid var(--line2)}
-.st{display:grid;grid-template-columns:34px 1fr;gap:14px;padding:18px 0;border-bottom:1px solid var(--line2)}
-.st .n{
-  width:25px;height:25px;border-radius:50%;background:var(--mint);color:var(--accent2);
-  font-size:11.5px;font-weight:500;display:flex;align-items:center;justify-content:center;
-  margin-top:2px;
-}
-.st h4{margin:0;font-size:14px;font-weight:500}
-.st p{margin:5px 0 0;font-size:12.5px;line-height:1.75;color:var(--ink3)}
-
-/* ================= 适合 / 不适合 ================= */
-.duo{display:grid;grid-template-columns:1fr;gap:10px;margin-top:22px}
-.duo .col{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
-.duo .col.no{background:#FBFBF8}
-.duo .h4{font-size:12px;letter-spacing:.08em;color:var(--ink3);margin-bottom:12px}
-.duo ul{margin:0;padding:0;display:grid;gap:9px}
-.duo li{list-style:none;font-size:13px;line-height:1.7;color:var(--ink2);padding-left:20px;position:relative}
-.duo .col.yes li::before{content:"";position:absolute;left:2px;top:7px;width:10px;height:1.6px;background:var(--accent);transform:rotate(-45deg);transform-origin:left}
-.duo .col.yes li::after{content:"";position:absolute;left:6px;top:10px;width:6px;height:1.6px;background:var(--accent);transform:rotate(45deg);transform-origin:left}
-.duo .col.no li::before{content:"";position:absolute;left:2px;top:9px;width:11px;height:1.6px;background:#C6CAC5}
-.duo .col.no li::after{content:"";position:absolute;left:2px;top:9px;width:11px;height:1.6px;background:#C6CAC5;transform:rotate(90deg)}
-
-/* ================= 参数表 ================= */
-.tbl{width:100%;border-collapse:collapse;margin-top:22px;table-layout:fixed}
-.tbl th,.tbl td{text-align:left;padding:13px 4px;border-bottom:1px solid var(--line2);vertical-align:top;font-size:13px}
-.tbl th{width:34%;color:var(--ink3);font-weight:400}
-.tbl td{color:var(--ink);word-break:break-all;font-variant-numeric:tabular-nums}
-.tbl td.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--ink2)}
-
-/* ================= 下载 ================= */
-.dl{
-  margin-top:56px;background:var(--deep);color:#fff;border-radius:20px;
-  padding:34px 26px;position:relative;overflow:hidden;
-}
-.dl::before{
+.run::before{
   content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(70% 60% at 85% 0%, rgba(22,166,127,.22), transparent 60%);
+  background:radial-gradient(90% 80% at 12% 0%, rgba(22,166,127,.3), transparent 60%);
 }
-.dl .in{position:relative;z-index:2}
-.dl h2{color:#fff}
-.dl .meta{margin-top:10px;font-size:12.5px;color:rgba(255,255,255,.58);line-height:1.8}
-.dl .row{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
-.dl .btn.p{background:var(--accent);color:#04231D}
-.dl .btn.g{border:1px solid rgba(255,255,255,.18)}
-.hash{
-  margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1);
+.run .rl{position:relative;z-index:2;display:grid;gap:15px}
+.run .rl .li{display:flex;align-items:center;gap:12px;font-size:13.5px;line-height:1.5}
+.run .rl .li.done{color:rgba(255,255,255,.62)}
+.run .rl .li.now{color:#fff}
+.run .rl .ic{width:19px;height:19px;flex:none;display:flex;align-items:center;justify-content:center}
+.run .rl .li.done .ic{border-radius:50%;background:rgba(22,166,127,.22);color:#2FC79D}
+.run .rl .li.now .ic{color:#2FC79D}
+.run .tip{
+  position:relative;z-index:2;margin:22px 0 0;padding-top:16px;
+  border-top:1px solid rgba(255,255,255,.11);
+  font-size:11.5px;line-height:1.8;color:rgba(255,255,255,.45);
 }
-.hash .lb{font-size:10.5px;letter-spacing:.1em;color:rgba(255,255,255,.4)}
-.hash .val{
-  margin-top:7px;display:flex;gap:10px;align-items:flex-start;
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
-  color:rgba(255,255,255,.72);line-height:1.7;word-break:break-all;
-}
-.hash .cp{
-  flex:none;font-family:inherit;font-size:10.5px;letter-spacing:.04em;
-  background:rgba(255,255,255,.1);color:#fff;border:none;border-radius:5px;
-  padding:4px 9px;cursor:pointer;transition:background .16s;
-}
-.hash .cp:hover{background:rgba(255,255,255,.18)}
-.note{margin-top:18px;font-size:11.5px;line-height:1.8;color:rgba(255,255,255,.42)}
 
-/* ================= FAQ ================= */
-.faq{margin-top:22px;border-top:1px solid var(--line2)}
-.faq details{border-bottom:1px solid var(--line2)}
-.faq summary{
-  list-style:none;cursor:pointer;padding:16px 2px;font-size:13.5px;font-weight:500;
-  display:flex;align-items:center;gap:10px;
+/* ========== 四件事：竖排，不是卡片 ========== */
+.list{margin-top:8px}
+.list .r{
+  display:grid;grid-template-columns:1fr;gap:3px;
+  padding:18px 0;border-bottom:1px solid var(--rule);
 }
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{
-  content:"";margin-left:auto;flex:none;width:9px;height:9px;
-  border-right:1.4px solid #ADB2AD;border-bottom:1.4px solid #ADB2AD;
-  transform:rotate(45deg) translate(-2px,-2px);transition:transform .2s;
-}
-.faq details[open] summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
-.faq .a{padding:0 2px 17px;font-size:12.5px;line-height:1.85;color:var(--ink2);max-width:38em}
+.list .r:first-child{border-top:1px solid var(--rule)}
+.list .t{font-size:14px;font-weight:500}
+.list .d{font-size:12.5px;line-height:1.8;color:var(--ink3);max-width:30em}
 
-/* ================= 尾 ================= */
-.foot{margin-top:58px;border-top:1px solid var(--line2);padding:26px 0 46px;
-  display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;font-size:12px;color:var(--ink3)}
-.foot .l{display:flex;align-items:center;gap:8px;color:var(--ink2)}
-.foot .l img{width:18px;height:18px;border-radius:5px}
-.foot .r{margin-left:auto;display:flex;gap:16px}
-.foot a:hover{color:var(--accent2)}
-
-/* ================= 响应 ================= */
-@media (min-width:560px){
-  .grid4{grid-template-columns:1fr 1fr}
-  .duo{grid-template-columns:1fr 1fr}
-  .strip .s{flex:0 0 190px}
+/* ========== 插图 ========== */
+.fig{margin:30px 0 0}
+.fig .frame{
+  width:min(240px,56%);border-radius:20px;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(10,43,39,.08), 0 24px 50px -34px rgba(10,43,39,.5);
 }
-@media (min-width:820px){
-  .wrap{max-width:860px}
-  .nav .in{max-width:860px}
-  .hero{padding-top:120px}
+.fig .cap{margin-top:12px;font-size:11.5px;color:var(--ink3);line-height:1.7}
+
+/* ========== 参数 ========== */
+.tbl{width:100%;border-collapse:collapse;margin-top:18px;table-layout:fixed}
+.tbl tr{border-bottom:1px solid var(--rule)}
+.tbl th,.tbl td{text-align:left;padding:12px 0;vertical-align:top;font-size:12.5px;line-height:1.7}
+.tbl th{width:33%;color:var(--ink3);font-weight:400}
+.tbl td{color:var(--ink);word-break:break-all;font-variant-numeric:tabular-nums}
+.tbl td.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--ink2)}
+
+/* ========== 下载 ========== */
+.get{margin-top:56px;padding:30px 0 0;border-top:2px solid var(--ink)}
+.get-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.get-h .t{font-size:clamp(18px,4vw,22px);font-weight:700;letter-spacing:-.03em}
+.get-h .m{font-size:11.5px;color:var(--ink3);font-variant-numeric:tabular-nums}
+.dl{
+  margin-top:18px;display:inline-flex;align-items:center;gap:10px;
+  background:var(--ink);color:#fff;font-size:14px;font-weight:500;
+  padding:14px 26px;border-radius:11px;transition:background .16s,transform .16s;
+}
+.dl:hover{background:var(--accent);transform:translateY(-1px)}
+.hl{margin-top:16px;display:flex;gap:10px;align-items:flex-start}
+.hl .h{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;
+  line-height:1.8;color:var(--ink3);word-break:break-all;
+}
+.hl .btn{
+  flex:none;font-size:10.5px;color:var(--ink2);background:none;
+  border:1px solid var(--rule);border-radius:5px;padding:3px 9px;cursor:pointer;
+  transition:border-color .16s,color .16s;
+}
+.hl .btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ========== 问答：不折叠 ========== */
+.qa{margin-top:20px}
+.qa .q{padding:18px 0;border-bottom:1px solid var(--rule)}
+.qa .q:first-child{border-top:1px solid var(--rule)}
+.qa .qt{font-size:13.5px;font-weight:500;letter-spacing:-.01em}
+.qa .qa-t{margin:7px 0 0;font-size:12.5px;line-height:1.85;color:var(--ink2);max-width:33em}
+
+/* ========== 尾 ========== */
+.foot{
+  margin-top:64px;padding:24px 0 48px;border-top:1px solid var(--rule);
+  display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;
+  font-size:11.5px;color:var(--ink3);
+}
+.foot .b{display:flex;align-items:center;gap:7px;color:var(--ink2)}
+.foot .b img{width:16px;height:16px;border-radius:4px}
+.foot .lks{margin-left:auto;display:flex;gap:15px}
+.foot a:hover{color:var(--accent)}
+.foot .legal{width:100%;margin-top:6px;line-height:1.8}
+
+@media (min-width:720px){
+  .page{max-width:700px}
+  .bar .in{max-width:700px}
+  .open{padding-top:88px}
   .sec{padding-top:68px}
+  .list .r{grid-template-columns:178px 1fr;gap:20px;align-items:baseline}
+  .tbl th{width:28%}
 }
-@media (max-width:620px){
-  .nav .lk{display:none}
-  .nav .dl{margin-left:auto}
-}
-@media (max-width:420px){
-  .facts{grid-template-columns:repeat(2,1fr);gap:22px 0;padding:24px 0}
-  .facts .f:nth-child(3)::before{display:none}
-}
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *{transition:none!important}
-}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 
-<div class="prog" id="prog"></div>
-
-<!-- ===== 导航 ===== -->
-<nav class="nav">
+<!-- ===== 顶栏 ===== -->
+<div class="bar">
   <div class="in">
-    <a class="brand" href="#top">
-      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/CRTObQxpzocyl9xcRECc99jVn7c" alt="">
-      Dopamine
-    </a>
-    <div class="lk">
-      <a href="#features">功能</a>
-      <a href="#how">用法</a>
-      <a href="#spec">参数</a>
-      <a href="#faq">问答</a>
-    </div>
-    <a class="dl" href="#download">下载</a>
-  </div>
-</nav>
-
-<!-- ===== Hero ===== -->
-<header class="hero" id="top">
-  <div class="in">
-    <div class="badge"><i></i>v1.2 · arm64 · 支持 Linux 5.10 ~ 6.6</div>
-    <h1>Dopamine</h1>
-    <p class="sub">给 Android 临时拿到 <strong>root</strong>。不刷机、不改分区、不动系统，<strong>重启就恢复原样</strong>。</p>
-    <div class="acts">
-      <a class="btn p" href="#download">下载 v1.2</a>
-      <a class="btn g" href="#features">先看看能做什么</a>
-    </div>
-  </div>
-  <div class="devices">
-    <div class="d"><img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/UrTdbDlLEo3I8Zx4LfPcYGmznnb" alt="Dopamine 首页"></div>
-    <div class="d"><img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/EFAEbfxuSo8yl2xU5wMcyb6QnAd" alt="执行过程"></div>
-    <div class="d"><img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/AhDGb4n4To6f71x9WeZcITZTnle" alt="设置"></div>
-  </div>
-  <div class="fade"></div>
-</header>
-
-<!-- ===== Facts ===== -->
-<div class="wrap">
-  <div class="facts">
-    <div class="f"><div class="v">1.2</div><div class="k">当前版本</div></div>
-    <div class="f"><div class="v">arm64</div><div class="k">仅 64 位架构</div></div>
-    <div class="f"><div class="v">12+</div><div class="k">Android 最低</div></div>
-    <div class="f"><div class="v">6.8 M</div><div class="k">安装包</div></div>
+    <img class="mk" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/CRTObQxpzocyl9xcRECc99jVn7c" alt="">
+    <span class="nm">Dopamine</span>
+    <span class="ver">1.2</span>
+    <a class="go" href="#get">下载<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
   </div>
 </div>
 
-<!-- ===== 功能 ===== -->
-<section class="sec wrap" id="features">
-  <p class="eyebrow">CAPABILITY</p>
-  <h2>四件它真能做到的事</h2>
-  <p class="lead">它不是一个长期驻留的 root 方案，更像一把一次性的钥匙：用完就走，走完不留门。</p>
+<div class="page">
 
-  <div class="grid4">
-    <div class="fc">
-      <div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3v9"/><path d="M5.2 8.4a8 8 0 1 0 13.6 0"/></svg></div>
-      <h3>临时 root，重启即失效</h3>
-      <p>提权只在本次开机有效。手机一重启就回到干净状态，不需要手动清理，也没有残留的进程。</p>
+  <!-- ===== 开篇 ===== -->
+  <header class="open">
+    <div class="kicker">ANDROID KERNEL PRIVILEGE ESCALATION</div>
+    <h1>一次执行，<br>用完就走<em>。</em></h1>
+    <p class="lede">
+      Dopamine 不装管理器，不常驻，也不接管你的系统。<b>打开、点执行、拿到 root</b>，用完重启一次，手机就回到它原来的样子。
+    </p>
+    <div class="spec">
+      <span>v1.2</span><span>arm64-v8a</span><span>Android 12+</span><span>Linux 5.10.236–6.6.127</span><span>6.8 MB</span>
     </div>
-    <div class="fc">
-      <div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 7h16v12H4z"/><path d="M4 11h16"/><path d="M9 4v3M15 4v3"/></svg></div>
-      <h3>不刷机，不碰分区</h3>
-      <p>不用解锁 bootloader、不用刷内核、不用动 boot 分区。手机上原来的系统和数据原封不动。</p>
-    </div>
-    <div class="fc">
-      <div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 3.6l2.6 5.4 5.9.8-4.3 4.1 1.1 5.9L12 16.9l-5.3 2.9 1.1-5.9L3.5 9.8l5.9-.8z"/></svg></div>
-      <h3>参数可以自己调</h3>
-      <p>不同机型内核不一样，偏移值也就不一样。支持导入 HOCon 格式的 offsets.conf，也可以直接改参数覆盖。</p>
-    </div>
-    <div class="fc">
-      <div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 3h9l3 3v15H6z"/><path d="M9 11h6M9 15h6"/></svg></div>
-      <h3>每一步都有记录</h3>
-      <p>攻击日志、内核 dmesg、pstore 都能导出成文件。失败的时候能拿着日志去看是哪一步对不上，而不是只看到一个「失败」。</p>
-    </div>
-  </div>
-</section>
 
-<!-- ===== 截图 ===== -->
-<section class="sec wrap">
-  <p class="eyebrow">INTERFACE</p>
-  <h2>界面就是这样</h2>
-  <div class="strip">
-    <div class="s">
-      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/UrTdbDlLEo3I8Zx4LfPcYGmznnb" alt="首页" loading="lazy">
-      <div class="cp">首页 · 设置 / 重启到 Faceboot / 重启用户空间 / 执行</div>
+    <div class="shot-hero">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/UrTdbDlLEo3I8Zx4LfPcYGmznnb" alt="Dopamine 首页">
     </div>
-    <div class="s">
-      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/EFAEbfxuSo8yl2xU5wMcyb6QnAd" alt="执行中" loading="lazy">
-      <div class="cp">执行中 · 逐条显示当前走到哪一步</div>
-    </div>
-    <div class="s">
-      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/AhDGb4n4To6f71x9WeZcITZTnle" alt="设置" loading="lazy">
-      <div class="cp">设置 · 参数配置、调试日志、安全模式</div>
-    </div>
-  </div>
-</section>
+  </header>
 
-<!-- ===== 用法 ===== -->
-<section class="sec wrap" id="how">
-  <p class="eyebrow">HOW IT WORKS</p>
-  <h2>三步，全程大概两分钟</h2>
+  <!-- ===== 01 ===== -->
+  <section class="sec">
+    <div class="idx">01</div>
+    <h2>它是把一次性的钥匙，不是一扇门</h2>
+    <p class="body">
+      常见的 root 方案会把自己装进系统里：开机自启、管理授权、管着模块。Dopamine 反过来——它只在<b>你按下的这一刻</b>有效。进程结束、手机重启，权限跟着消失，系统里没有留下任何可以再被利用的东西。
+    </p>
+    <p class="body">
+      所以它不负责「以后」，只负责「现在」。想临时跑一个要 root 的工具、想验证一个一路到底能不能走通，用它就行；想让 root 一直存在，那是另一个东西要解决的问题。
+    </p>
+  </section>
 
-  <div class="steps">
-    <div class="st">
-      <div class="n">1</div>
-      <div>
-        <h4>装上，允许联网</h4>
-        <p>安装包只支持 arm64 设备，系统版本 Android 12 及以上。装好后第一次打开会给一个网络权限，用来下载完整包和更新参数。</p>
-      </div>
-    </div>
-    <div class="st">
-      <div class="n">2</div>
-      <div>
-        <h4>点「执行」，看着它走</h4>
-        <p>界面上会一条一条列出来：利用内核、构建硬件读写条件、绕过防护。哪一条卡住了，问题就出在那一层。</p>
-      </div>
-    </div>
-    <div class="st">
-      <div class="n">3</div>
-      <div>
-        <h4>拿到 root，开始用</h4>
-        <p>提权成功后就是普通的 root 环境，可以跑 Shizuku、可以装模块、可以执行命令。想收回去，重启一次就行。</p>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- ===== 02 ===== -->
+  <section class="sec">
+    <div class="idx">02</div>
+    <h2>执行的时候，它一条一条往下走</h2>
+    <p class="body">
+      不会只给你一个转圈。每一步都会单独列出来，走完的打勾，正在走的转着，卡住的那一条就一直停在那儿——
+      <strong>卡在哪一层，问题就在哪一层</strong>。
+    </p>
 
-<!-- ===== 适合 / 不适合 ===== -->
-<section class="sec wrap">
-  <p class="eyebrow">FOR WHOM</p>
-  <h2>它适合谁，不适合谁</h2>
-
-  <div class="duo">
-    <div class="col yes">
-      <div class="h4">适合</div>
-      <ul>
-        <li>想临时跑个 root 工具、跑完就恢复原样的</li>
-        <li>不想解锁 bootloader、也不想刷坏分区的</li>
-        <li>手上是 arm64 机型、内核在支持的区间里</li>
-        <li>愿意自己配 offsets、看得懂日志的</li>
-      </ul>
-    </div>
-    <div class="col no">
-      <div class="h4">不适合</div>
-      <ul>
-        <li>要一个重启后仍然存在的常驻 root</li>
-        <li>指望一键搞定、不接受自己调参数的</li>
-        <li>32 位设备，或内核版本超出区间</li>
-        <li>不是自己的机器</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ===== 参数 ===== -->
-<section class="sec wrap" id="spec">
-  <p class="eyebrow">SPEC</p>
-  <h2>技术参数</h2>
-
-  <table class="tbl">
-    <tr><th>版本</th><td>1.2（versionCode 1）</td></tr>
-    <tr><th>包名</th><td class="mono">com.Dopamine.apq</td></tr>
-    <tr><th>安装包大小</th><td>6.8 MB（7,176,035 字节）</td></tr>
-    <tr><th>架构</th><td>arm64-v8a（仅 64 位）</td></tr>
-    <tr><th>系统要求</th><td>Android 12 及以上（minSdk 31）</td></tr>
-    <tr><th>内核区间</th><td>Linux 5.10.236 ~ 6.6.127</td></tr>
-    <tr><th>权限</th><td>网络、查询已装应用、悬浮窗</td></tr>
-    <tr><th>语言</th><td>简体中文</td></tr>
-    <tr><th>SHA-256</th><td class="mono">8fee01f562eb74e45841c43a3460321a6121cf34060ea21b6ea25d73478691ca</td></tr>
-  </table>
-</section>
-
-<!-- ===== 下载 ===== -->
-<section class="sec wrap" id="download">
-  <div class="dl">
-    <div class="in">
-      <h2>下载 Dopamine 1.2</h2>
-      <div class="meta">6.8 MB · arm64 · Android 12+ · 直装，不需要经过任何商店</div>
-      <div class="row">
-        <a class="btn p" href="https://hz-xb.github.io/xiao/dopamine/dopamine-1.2.apk">下载 APK</a>
-        <a class="btn g" href="#spec">核对校验值</a>
-      </div>
-      <div class="hash">
-        <div class="lb">SHA-256</div>
-        <div class="val">
-          <span id="h">8fee01f562eb74e45841c43a3460321a6121cf34060ea21b6ea25d73478691ca</span>
-          <button class="cp" id="cp">复制</button>
+    <div class="run">
+      <div class="rl">
+        <div class="li done">
+          <span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 13l5 5 9-11"/></svg></span>
+          正在利用内核
+        </div>
+        <div class="li done">
+          <span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 13l5 5 9-11"/></svg></span>
+          构建硬件读写条件
+        </div>
+        <div class="li now">
+          <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 4v6a5 5 0 0 0 10 0v-6"/><path d="M12 16v4"/></svg></span>
+          正在绕过 PAC/PPL/SPTM
         </div>
       </div>
-      <div class="note">
-        只在你拥有或已获得授权的设备上使用。提权会改变系统的安全边界，用之前先想清楚要它做什么。
+      <p class="tip">以上三条是设备上真实显示的内容。日志比界面更细，能导出成文件。</p>
+    </div>
+
+    <div class="fig">
+      <div class="frame">
+        <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/EFAEbfxuSo8yl2xU5wMcyb6QnAd" alt="执行过程">
+      </div>
+      <div class="cap">执行中 · 上方是内核版本与支持区间，中间这三行是当前进度</div>
+    </div>
+  </section>
+
+  <!-- ===== 03 ===== -->
+  <section class="sec">
+    <div class="idx">03</div>
+    <h2>它只做这四件事</h2>
+    <p class="body">没有附加功能，也没有顺手塞进去的「优化」。清单就这么短。</p>
+
+    <div class="list">
+      <div class="r">
+        <div class="t">临时 root，重启即失效</div>
+        <div class="d">权限只活在本次开机里。不需要手动清理，也不会有东西在你不知情的时候继续跑。</div>
+      </div>
+      <div class="r">
+        <div class="t">不刷机，不碰分区</div>
+        <div class="d">不用解锁 bootloader、不写 boot 分区、不动系统镜像。原来的系统原封不动，数据也不会清。</div>
+      </div>
+      <div class="r">
+        <div class="t">参数可以自己调</div>
+        <div class="d">不同机型的内核偏移不一样。支持导入 HOCon 格式的 offsets.conf（v2），也可以直接改参数覆盖。</div>
+      </div>
+      <div class="r">
+        <div class="t">每一步都留记录</div>
+        <div class="d">攻击日志、内核 dmesg、pstore 都能导出。失败时能看清是哪一层对不上，而不是只得到一个「失败」。</div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===== FAQ ===== -->
-<section class="sec wrap" id="faq">
-  <p class="eyebrow">FAQ</p>
-  <h2>常见问题</h2>
+  <!-- ===== 04 ===== -->
+  <section class="sec">
+    <div class="idx">04</div>
+    <h2>参数</h2>
 
-  <div class="faq">
-    <details>
-      <summary>这算不算刷机，会不会丢数据</summary>
-      <div class="a">不算。整个过程不写 boot 分区、不动系统镜像，也不要求解锁 bootloader，所以不会清空你的数据。它做的事情在内存层面，重启就消失。</div>
-    </details>
-    <details>
-      <summary>重启之后 root 还在吗</summary>
-      <div class="a">不在。这是「临时 root」，重启即失效，这是设计本身，不是 bug。想要每次开机都自动有 root，得用 KernelSU 或 Magisk 那类常驻方案。</div>
-    </details>
-    <details>
-      <summary>和 KernelSU、Magisk 有什么区别</summary>
-      <div class="a">那两个是常驻的 root 管理器，装模块、给应用授权、重启后还在。Dopamine 只做提权这一件事，做完就结束，不接管后续的权限管理。两个目的不一样，不能互相替代。</div>
-    </details>
-    <details>
-      <summary>提示内核不支持怎么办</summary>
-      <div class="a">先看你的内核版本是不是落在 Linux 5.10.236 ~ 6.6.127 这个区间。落在区间内但仍然失败，多半是 offsets 对不上，去设置里导入对应机型的 offsets.conf（v2），或者打开参数配置手动改，再把 debug 日志导出来看卡在哪一步。</div>
-    </details>
-    <details>
-      <summary>失败会不会把手机搞坏</summary>
-      <div class="a">正常情况下不会，因为它不写入系统分区。如果中途重启了，开机后仍然是原来的系统。设置里有「安全模式」，遇到反复失败可以打开它，把已加载的模块全部禁掉再试。</div>
-    </details>
-    <details>
-      <summary>日志存在哪</summary>
-      <div class="a">设置里打开「导出 Debug 日志到文件」后，写在 Download/dopamine-debug-log 目录里，包含攻击日志、dmesg 和 pstore。要反馈问题，把这几个文件一起发过来最有用。</div>
-    </details>
-  </div>
-</section>
+    <table class="tbl">
+      <tr><th>版本</th><td>1.2 / versionCode 1</td></tr>
+      <tr><th>包名</th><td class="mono">com.Dopamine.apq</td></tr>
+      <tr><th>大小</th><td>6.8 MB（7,176,035 字节）</td></tr>
+      <tr><th>架构</td><td>arm64-v8a，仅 64 位</td></tr>
+      <tr><th>系统</td><td>Android 12 及以上（minSdk 31）</td></tr>
+      <tr><th>内核</th><td>Linux 5.10.236 ~ 6.6.127</td></tr>
+      <tr><th>权限</th><td>网络、查询已装应用、悬浮窗</td></tr>
+      <tr><th>语言</th><td>简体中文</td></tr>
+      <tr><th>SHA-256</th><td class="mono">8fee01f562eb74e45841c43a3460321a6121cf34060ea21b6ea25d73478691ca</td></tr>
+    </table>
 
-<!-- ===== 页脚 ===== -->
-<footer class="wrap">
-  <div class="foot">
-    <div class="l">
+    <div class="fig">
+      <div class="frame">
+        <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/AhDGb4n4To6f71x9WeZcITZTnle" alt="设置">
+      </div>
+      <div class="cap">设置 · 参数配置、offsets 导入、安全模式、日志导出</div>
+    </div>
+  </section>
+
+  <!-- ===== 05 ===== -->
+  <section class="sec" id="get">
+    <div class="idx">05</div>
+    <h2>拿走</h2>
+    <p class="body">直接装，不经过任何商店，也不需要账号。</p>
+
+    <div class="get">
+      <div class="get-h">
+        <span class="t">Dopamine 1.2</span>
+        <span class="m">6.8 MB · arm64 · Android 12+</span>
+      </div>
+      <a class="dl" href="https://hz-xb.github.io/xiao/dopamine/dopamine-1.2.apk">
+        下载 APK
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 4v12M6 11l6 6 6-6"/><path d="M4 20h16"/></svg>
+      </a>
+      <div class="hl">
+        <span class="h" id="h">8fee01f562eb74e45841c43a3460321a6121cf34060ea21b6ea25d73478691ca</span>
+        <button class="btn" id="cp">复制</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 06 ===== -->
+  <section class="sec">
+    <div class="idx">06</div>
+    <h2>会被问到的</h2>
+
+    <div class="qa">
+      <div class="q">
+        <div class="qt">重启之后 root 还在吗</div>
+        <p class="qa-t">不在。这是临时 root，重启即失效——这是它本来的设计，不是没做完。想让 root 每次开机都在，得用 KernelSU 或 Magisk 那类常驻方案。</p>
+      </div>
+      <div class="q">
+        <div class="qt">和 KernelSU、Magisk 有什么区别</div>
+        <p class="qa-t">那两个是常驻的 root 管理器：装模块、发授权、重启还在。Dopamine 只做提权这件事，做完就结束，不接管之后的管理。目的不同，不能互相替代。</p>
+      </div>
+      <div class="q">
+        <div class="qt">提示内核不支持怎么办</div>
+        <p class="qa-t">先确认内核版本在 Linux 5.10.236 ~ 6.6.127 之间。在区间内还失败，多半是 offsets 对不上：去设置里导入对应机型的 offsets.conf（v2），或打开参数配置手改，再把 debug 日志导出来看停在哪一步。</p>
+      </div>
+      <div class="q">
+        <div class="qt">失败会不会把手机弄坏</div>
+        <p class="qa-t">正常不会，因为整个过程不写系统分区。中途重启，开机还是原来的系统。反复失败可以打开「安全模式」，把已加载的模块全部禁掉再试。</p>
+      </div>
+      <div class="q">
+        <div class="qt">日志在哪</div>
+        <p class="qa-t">设置里打开「导出 Debug 日志到文件」后，写在 Download/dopamine-debug-log 里，包含攻击日志、dmesg 和 pstore。要反馈问题，把这几份一起发过来最有用。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 尾 ===== -->
+  <footer class="foot">
+    <span class="b">
       <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/CRTObQxpzocyl9xcRECc99jVn7c" alt="">
       Dopamine
-    </div>
-    <div class="r">
-      <a href="https://hz-xb.github.io/xiao/">相识投屏</a>
+    </span>
+    <span class="lks">
+      <a href="https://hz-xb.github.io/xiao/">投屏</a>
       <a href="https://hz-xb.github.io/xiao/ksu/">KSU 商店</a>
       <a href="https://hz-xb.github.io/xiao/me/">关于我</a>
-    </div>
-  </div>
-  <div style="font-size:11.5px;color:var(--ink3);padding-bottom:40px;line-height:1.9">
-    © 2026 相识 · 仅限自有或已获授权设备使用
-  </div>
-</footer>
+    </span>
+    <span class="legal">© 2026 相识 · 仅限自有或已获授权的设备使用</span>
+  </footer>
+
+</div>
 
 <script>
-// 阅读进度条
-var prog = document.getElementById('prog');
-function onScroll(){
-  var h = document.documentElement;
-  var p = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
-  prog.style.width = (p * 100) + '%';
-}
-addEventListener('scroll', onScroll, {passive:true});
-onScroll();
-
-// 复制校验值
 var cp = document.getElementById('cp');
 cp.addEventListener('click', function(){
   var t = document.getElementById('h').textContent.trim();
-  var done = function(){ cp.textContent = '已复制'; setTimeout(function(){ cp.textContent = '复制'; }, 1600); };
+  function done(){ cp.textContent = '已复制'; setTimeout(function(){ cp.textContent = '复制'; }, 1600); }
   if (navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(t).then(done, fallback);
-  } else { fallback(); }
-  function fallback(){
+    navigator.clipboard.writeText(t).then(done, fb);
+  } else { fb(); }
+  function fb(){
     var a = document.createElement('textarea');
     a.value = t; a.style.position = 'fixed'; a.style.opacity = '0';
     document.body.appendChild(a); a.select();
-    try { document.execCommand('copy'); done(); } catch(e) { cp.textContent = '请手动选中'; }
+    try { document.execCommand('copy'); done(); } catch(e) { cp.textContent = '手动选中'; }
     document.body.removeChild(a);
   }
 });
