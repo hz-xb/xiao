@@ -3,10 +3,10 @@
   "versionCode": 2,
   "versionName": "1.0.1",
   "size": 67492,
-  "sha256": "006f6cc36e0e3e55b0131b6f215ead51bd1cb7dbb4557aacb5b694f923db575b",
+  "sha256": "a5b95acb541a8547bc43903383348b19e193b704418a39482723d85d88fb5fae",
   "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.1.apk",
   "notice": {
     "level": "info",
-    "text": "1.0.1 修好了两条：索引改走自己的域名镜像，国内不再被重置；正版判断改成比对官网发布的包哈希，原包直接放行。"
+    "text": "1.0.1：索引改走自己域名的镜像，国内不再被重置；历史版本三源轮换；正版判断改成比对官网发布的包哈希，原包直接放行。"
   }
 }
