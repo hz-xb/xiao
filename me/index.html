@@ -3,19 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>相识 — 独立开发者</title>
-<meta name="description" content="相识，独立开发者。做 Android 上的工具：KSU 商店、相识投屏、Dopamine。这里是全部入口。">
+<title>相识 — 一个人，三个 App</title>
+<meta name="description" content="相识，独立开发者。三个 Android 应用：相识投屏、KSU 商店、Dopamine。都不收钱、不要账号、不往云上传东西。">
 <link rel="preconnect" href="https://miaoda.feishu.cn">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2322564A'/%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='30' font-weight='700' fill='white' text-anchor='middle'%3E相%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2312332A'/%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='30' font-weight='700' fill='white' text-anchor='middle'%3E相%3C/text%3E%3C/svg%3E">
 <style>
 :root{
   --paper:#F5F5F1; --card:#FFFFFF; --ink:#15181A; --ink2:#5E6469; --ink3:#9AA0A5;
-  --deep:#12332A; --accent:#22564A; --mint:#E4EFEA;
+  --deep:#12332A; --deep2:#0C2620; --accent:#22564A; --accent2:#2F6F5C; --mint:#E4EFEA;
   --line:rgba(21,24,26,.085); --line2:#EDEDE7;
+  --on-soft:rgba(255,255,255,.56); --on-line:rgba(255,255,255,.12);
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{
   margin:0;background:var(--paper);color:var(--ink);
   font-family:"Noto Sans SC","PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",sans-serif;
@@ -26,97 +27,169 @@ a{color:inherit;text-decoration:none}
 ::selection{background:var(--accent);color:#fff}
 *,body{-webkit-tap-highlight-color:transparent}
 a,button,summary{outline:none}
-.wrap{max-width:620px;margin:0 auto;padding:0 20px}
+.wrap{max-width:680px;margin:0 auto;padding:0 20px}
 
-/* ================= 名片 ================= */
-.card{
-  margin-top:34px;position:relative;overflow:hidden;
-  background:var(--deep);color:#fff;border-radius:24px;
-  padding:27px 24px 23px;
+/* ================== 顶部名片 ================== */
+.hero{
+  position:relative;overflow:hidden;margin-top:26px;border-radius:26px;
+  background:var(--deep);color:#fff;padding:26px 24px 22px;
 }
-.card::after{
-  content:"";position:absolute;right:-62px;top:-62px;width:196px;height:196px;
-  border-radius:50%;background:rgba(228,239,234,.05);pointer-events:none;
+.hero::before{
+  content:"";position:absolute;left:-30%;top:-70%;width:230px;height:230px;border-radius:50%;
+  background:radial-gradient(circle,rgba(47,111,92,.55),rgba(47,111,92,0) 70%);
+  pointer-events:none;animation:drift 14s ease-in-out infinite alternate;
 }
+.hero::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:26px 26px;
+  mask-image:radial-gradient(circle at 70% 0%,#000 20%,transparent 72%);
+  -webkit-mask-image:radial-gradient(circle at 70% 0%,#000 20%,transparent 72%);
+}
+@keyframes drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(40px,30px,0)}}
+
+.top{display:flex;align-items:flex-start;gap:16px;position:relative;z-index:2}
+.face-wrap{position:relative;flex:none}
 .face{
-  width:86px;height:86px;border-radius:50%;object-fit:cover;
-  border:3px solid rgba(255,255,255,.92);background:#fff;
+  width:82px;height:82px;border-radius:50%;object-fit:cover;
+  border:3px solid rgba(255,255,255,.94);background:#fff;
 }
-.nm{margin-top:16px;font-size:27px;font-weight:700;letter-spacing:-.035em;line-height:1.15}
-.rl{margin-top:6px;font-size:12.5px;color:rgba(255,255,255,.55)}
-.line{margin-top:17px;height:1px;background:rgba(255,255,255,.12)}
-.bio{margin-top:15px;font-size:14.5px;line-height:1.88;color:rgba(255,255,255,.84);max-width:26em}
-.bio b{color:#fff;font-weight:500}
-.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:21px}
-.nums .v{font-size:16px;font-weight:500;letter-spacing:-.02em;line-height:1.2;font-variant-numeric:tabular-nums}
-.nums .k{font-size:10px;color:rgba(255,255,255,.48);margin-top:3px;line-height:1.4}
+.dot{
+  position:absolute;right:2px;bottom:4px;width:17px;height:17px;border-radius:50%;
+  background:#4ADE80;border:2.5px solid var(--deep);
+  box-shadow:0 0 0 3px rgba(74,222,128,.18);
+  animation:pulse 2.6s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(74,222,128,.18)}50%{box-shadow:0 0 0 6px rgba(74,222,128,.07)}}
 
-/* ================= 分区标题 ================= */
-.h{display:flex;align-items:baseline;gap:9px;margin:36px 0 0}
+.who{flex:1;min-width:0;padding-top:4px}
+.nm{font-size:27px;font-weight:700;letter-spacing:-.035em;line-height:1.16}
+.rl{margin-top:6px;font-size:12px;color:var(--on-soft);letter-spacing:.01em}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chips span{
+  font-size:10.5px;color:rgba(255,255,255,.78);line-height:1.5;
+  border:1px solid rgba(255,255,255,.18);border-radius:5px;padding:2px 7px;
+}
+
+.bio{
+  position:relative;z-index:2;margin-top:16px;font-size:14px;line-height:1.9;
+  color:rgba(255,255,255,.84);max-width:28em;
+}
+.bio b{color:#fff;font-weight:500}
+
+/* ================== 数字 ================== */
+.nums{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:6px;
+  margin-top:20px;padding-top:18px;border-top:1px solid var(--on-line);
+  position:relative;z-index:2;
+}
+.nums .cell{text-align:left}
+.nums .v{font-size:17px;font-weight:500;letter-spacing:-.02em;line-height:1.15;font-variant-numeric:tabular-nums}
+.nums .k{font-size:10px;color:rgba(255,255,255,.45);margin-top:3px;line-height:1.35}
+
+/* ================== 分区标题 ================== */
+.h{display:flex;align-items:baseline;gap:9px;margin:40px 0 0}
 .h h2{font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--ink2);margin:0}
 .h .n{font-size:11.5px;color:var(--ink3);margin-left:auto}
 
-/* ================= 作品 ================= */
+/* ================== 应用卡 ================== */
 .w{
-  display:block;margin-top:11px;background:var(--card);
-  border:1px solid var(--line);border-radius:18px;padding:16px;
-  transition:transform .18s cubic-bezier(.22,.7,.2,1),border-color .18s,box-shadow .18s;
+  display:block;margin-top:12px;background:var(--card);
+  border:1px solid var(--line);border-radius:20px;padding:17px 16px 16px;
+  transition:transform .22s cubic-bezier(.22,.7,.2,1),border-color .22s,box-shadow .22s;
 }
-.w:hover{transform:translateY(-2px);border-color:rgba(34,86,74,.22);box-shadow:0 20px 40px -32px rgba(21,24,26,.55)}
-.w-top{display:flex;align-items:center;gap:14px}
-.w-top .logo{width:46px;height:46px;flex:none;border-radius:12px}
+.w:hover{transform:translateY(-3px);border-color:rgba(34,86,74,.22);box-shadow:0 26px 48px -34px rgba(21,24,26,.55)}
+.w-top{display:flex;align-items:center;gap:13px}
+.w-top .logo{width:48px;height:48px;flex:none;border-radius:13px}
 .w-top .txt{flex:1;min-width:0}
-.w-top .tt{font-size:15.5px;font-weight:500;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.w-top .tt{font-size:16px;font-weight:500;letter-spacing:-.015em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .w-top .ver{
   font-size:9.5px;font-weight:400;color:var(--accent);background:var(--mint);
   padding:2px 6px;border-radius:4px;line-height:1.5;
 }
 .w-top .ss{margin-top:3px;font-size:12.5px;color:var(--ink3);line-height:1.5}
-.w-top .go{flex:none;color:#C3C7C3;display:flex}
-.w:hover .w-top .go{color:var(--accent)}
+.w-top .go{flex:none;color:#C3C7C3;display:flex;transition:color .18s,transform .18s}
+.w:hover .w-top .go{color:var(--accent);transform:translateX(2px)}
 
-.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:14px}
-.shots img{
-  width:100%;height:132px;object-fit:cover;object-position:top center;
+.rail{
+  display:grid;grid-auto-flow:column;grid-auto-columns:84px;gap:8px;margin-top:15px;
+  overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.rail::-webkit-scrollbar{display:none}
+.rail img{
+  width:84px;height:150px;object-fit:cover;object-position:top center;
   border-radius:9px;border:1px solid var(--line2);background:#EDEDE7;
+  scroll-snap-align:start;transition:transform .25s cubic-bezier(.22,.7,.2,1)
 }
+.rail img:hover{transform:translateY(-3px)}
 
-.pts{margin-top:13px;padding-top:12px;border-top:1px solid var(--line2);display:grid;gap:4px}
-.pts li{list-style:none;font-size:12.5px;color:var(--ink2);line-height:1.7;padding-left:15px;position:relative}
-.pts li::before{content:"";position:absolute;left:2px;top:8px;width:5px;height:1.5px;background:#B9BEB9}
-
-/* ================= 来源 ================= */
-.src{margin-top:11px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.src .c{
-  background:var(--card);border:1px solid var(--line);border-radius:13px;
-  padding:13px 14px;
-}
-.src .c .t{font-size:12.5px;font-weight:500;line-height:1.4}
-.src .c .v{font-size:19px;font-weight:500;letter-spacing:-.03em;margin-top:5px;line-height:1.15;font-variant-numeric:tabular-nums;color:var(--accent)}
-.src .c .u{font-size:10.5px;color:var(--ink3);margin-top:1px}
-
-/* ================= 技术 ================= */
-.tech{margin-top:11px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px}
-.tech p{margin:0;font-size:13px;line-height:1.85;color:var(--ink2)}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
 .tags span{
-  font-size:11px;color:var(--ink2);background:var(--paper);
-  border:1px solid var(--line2);border-radius:5px;padding:3px 8px;line-height:1.6;
+  font-size:10.5px;color:var(--ink2);background:var(--paper);
+  border:1px solid var(--line2);border-radius:5px;padding:2px 7px;line-height:1.6;
 }
 
-/* ================= 平台 ================= */
-.plats{margin-top:11px;background:var(--card);border:1px solid var(--line);border-radius:17px;overflow:hidden}
-.p{display:flex;align-items:center;gap:13px;padding:13px 15px;border-bottom:1px solid var(--line2);transition:background .16s}
-.p:last-child{border-bottom:none}
-.p:hover{background:#F7F8F5}
-.p .mk{width:33px;height:33px;flex:none;border-radius:9px}
-.p .n2{font-size:14.5px;font-weight:500;line-height:1.35}
-.p .h2s{font-size:11.5px;color:var(--ink3);margin-top:1px;line-height:1.4}
-.p .arw{margin-left:auto;color:#C3C7C3;flex:none;display:flex}
-.p:hover .arw{color:var(--accent)}
+.acts{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;padding-top:13px;border-top:1px solid var(--line2)}
+.act{
+  display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:9px;
+  font-size:12.5px;font-weight:500;background:var(--deep);color:#fff;text-decoration:none;
+  transition:background .16s,transform .16s;
+}
+.act:hover{background:var(--deep2);transform:translateY(-1px)}
+.act svg{width:14px;height:14px;stroke:var(--mint);fill:none;stroke-width:1.8;stroke-linecap:round}
+.act.ghost{background:transparent;color:var(--accent);border:1px solid rgba(34,86,74,.22)}
+.act.ghost:hover{background:var(--mint);color:var(--accent)}
+.act.ghost svg{stroke:var(--accent)}
+.cp-tip{margin-left:auto;font-size:11px;color:var(--ink3)}
 
-/* ================= 问答 ================= */
-.faq{margin-top:11px;border-top:1px solid var(--line2)}
+/* ================== 时间线 ================== */
+.tl{margin-top:14px;position:relative;padding-left:20px}
+.tl::before{content:"";position:absolute;left:4px;top:6px;bottom:6px;width:1px;background:var(--line2)}
+.tl .it{position:relative;padding:0 0 18px}
+.tl .it:last-child{padding-bottom:0}
+.tl .it::before{
+  content:"";position:absolute;left:-20px;top:5px;width:9px;height:9px;border-radius:50%;
+  background:var(--card);border:1.5px solid #C9CEC9;
+}
+.tl .it.now::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 3px rgba(34,86,74,.1)}
+.tl .d{font-size:10.5px;color:var(--ink3);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.tl .t{font-size:13.5px;font-weight:500;margin-top:2px;line-height:1.5}
+.tl .p{font-size:12px;color:var(--ink2);margin-top:2px;line-height:1.7}
+
+/* ================== 来源 ================== */
+.src{margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.src .c{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;
+  transition:border-color .18s,transform .18s;
+}
+.src .c:hover{border-color:rgba(34,86,74,.2);transform:translateY(-2px)}
+.src .c .t{font-size:12px;font-weight:500;line-height:1.4}
+.src .c .v{font-size:20px;font-weight:500;letter-spacing:-.03em;margin-top:5px;line-height:1.15;font-variant-numeric:tabular-nums;color:var(--accent)}
+.src .c .u{font-size:10.5px;color:var(--ink3);margin-top:1px}
+
+/* ================== 平台 ================== */
+.plats{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.p{display:flex;align-items:center;border-bottom:1px solid var(--line2)}
+.p:last-child{border-bottom:none}
+.p-main{display:flex;align-items:center;gap:13px;padding:13px 6px 13px 15px;flex:1;min-width:0;transition:background .16s}
+.p-main:hover{background:#F7F8F5}
+.p-main .mk{width:34px;height:34px;flex:none;border-radius:9px}
+.p-main .n2{font-size:14.5px;font-weight:500;line-height:1.35}
+.p-main .h2s{font-size:11.5px;color:var(--ink3);margin-top:1px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-main .arw{margin-left:auto;color:#C3C7C3;flex:none;display:flex;transition:color .18s}
+.p-main:hover .arw{color:var(--accent)}
+.cpy{
+  appearance:none;border:1px solid var(--line2);background:var(--paper);color:var(--ink3);
+  font-family:inherit;font-size:11px;height:28px;padding:0 10px;border-radius:6px;
+  cursor:pointer;margin-right:14px;flex:none;transition:background .16s,color .16s,border-color .16s;
+}
+.cpy:hover{background:var(--mint);color:var(--accent);border-color:rgba(34,86,74,.22)}
+.cpy:active{transform:scale(.97)}
+
+/* ================== 问答 ================== */
+.faq{margin-top:12px;border-top:1px solid var(--line2)}
 .faq details{border-bottom:1px solid var(--line2)}
 .faq summary{
   list-style:none;cursor:pointer;padding:14px 2px;font-size:13.5px;font-weight:500;
@@ -131,158 +204,237 @@ a,button,summary{outline:none}
 .faq details[open] summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
 .faq .a{padding:0 2px 15px;font-size:12.5px;line-height:1.85;color:var(--ink2);max-width:34em}
 
-/* ================= 尾 ================= */
-.end{margin-top:30px;padding:19px 0 44px;border-top:1px solid var(--line2);font-size:12px;color:var(--ink3);line-height:1.95}
+/* ================== 尾 ================== */
+.end{margin-top:34px;padding:20px 0 40px;border-top:1px solid var(--line2);font-size:12px;color:var(--ink3);line-height:1.95}
 .end .lg{display:flex;flex-wrap:wrap;gap:7px 16px;margin-top:9px}
 .end a{padding-bottom:1px;border-bottom:1px solid var(--line2)}
 .end a:hover{color:var(--accent);border-color:var(--accent)}
 
-@media (min-width:640px){
-  .card{margin-top:48px;padding:31px 29px 26px}
-  .face{width:94px;height:94px}
-  .nm{font-size:30px}
-  .nums .v{font-size:17px}
-  .shots img{height:150px}
+/* ================== toast ================== */
+#toast{
+  position:fixed;left:50%;bottom:30px;transform:translate(-50%,14px);z-index:60;
+  background:#12332A;color:#fff;font-size:12.5px;padding:10px 16px;border-radius:9px;
+  opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;
+  box-shadow:0 16px 34px -18px rgba(12,38,32,.7);
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ================== 进场 ================== */
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.hero .top,.hero .bio,.hero .nums{animation:rise .7s cubic-bezier(.22,.7,.2,1) both}
+.hero .top{animation-delay:.05s}
+.hero .bio{animation-delay:.14s}
+.hero .nums{animation-delay:.22s}
+
+.rev{opacity:0;transform:translateY(18px);transition:opacity .65s cubic-bezier(.22,.7,.2,1),transform .65s cubic-bezier(.22,.7,.2,1)}
+.rev.in{opacity:1;transform:translateY(0)}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hero .top,.hero .bio,.hero .nums{animation:none}
+  .hero::before,.dot{animation:none}
+  .rev{opacity:1;transform:none;transition:none}
+  *{transition:none!important}
+}
+@media (min-width:640px){
+  .wrap{padding:0 24px}
+  .hero{margin-top:40px;padding:30px 30px 26px}
+  .face{width:92px;height:92px}
+  .nm{font-size:30px}
+  .nums .v{font-size:18px}
+  .w{padding:19px 20px 18px}
+  .rail{grid-auto-columns:96px}
+  .rail img{width:96px;height:172px}
+}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- ===== 名片 ===== -->
-  <section class="card">
-    <img class="face" src="../assets/avatar.png" alt="相识">
-    <div class="nm">相识</div>
-    <div class="rl">独立开发者 · Android · 河南 许昌</div>
-    <div class="line"></div>
-    <p class="bio">一个人写点 Android 上的工具，<b>装在自己手机上顺手</b>才做出来的那种。三个应用，都不收钱、不要账号、不往云上传东西。</p>
+  <!-- ================== 名片 ================== -->
+  <section class="hero">
+    <div class="top">
+      <div class="face-wrap">
+        <img class="face" src="../assets/avatar.png" alt="相识">
+        <span class="dot" aria-hidden="true"></span>
+      </div>
+      <div class="who">
+        <div class="nm">相识</div>
+        <div class="rl">独立开发者 · Android · 河南 许昌</div>
+        <div class="chips"><span>自己做 · 自己发</span><span>不收钱</span><span>不要账号</span></div>
+      </div>
+    </div>
+    <p class="bio">一个人写点 Android 上的工具，<b>装在自己手机上顺手</b>才做出来的那种。三个 App，从界面到打包到官网都是自己弄的，中间没有团队也没有甲方。</p>
     <div class="nums">
-      <div><div class="v">3</div><div class="k">在做的应用</div></div>
-      <div><div class="v">1561</div><div class="k">收录资源</div></div>
-      <div><div class="v">4</div><div class="k">个公开来源</div></div>
-      <div><div class="v">6</div><div class="k">年迭代</div></div>
+      <div class="cell"><div class="v" data-count="3">0</div><div class="k">在做的应用</div></div>
+      <div class="cell"><div class="v" data-count="1561">0</div><div class="k">收录资源</div></div>
+      <div class="cell"><div class="v" data-count="4">0</div><div class="k">个公开来源</div></div>
+      <div class="cell"><div class="v" data-count="6">0</div><div class="k">年迭代</div></div>
     </div>
   </section>
 
-  <!-- ===== 作品 ===== -->
-  <div class="h"><h2>在做的三个</h2><span class="n">都能直接装</span></div>
+  <!-- ================== 三个应用 ================== -->
+  <div class="h"><h2>手上这三个</h2><span class="n">点开就是官网</span></div>
 
-  <a class="w" href="https://hz-xb.github.io/xiao/ksu/">
-    <div class="w-top">
-      <img class="logo" src="../assets/ic-ksu.png" alt="KSU 商店">
-      <div class="txt">
-        <div class="tt">KSU 商店<span class="ver">v1.1.6</span></div>
-        <div class="ss">root 模块市场 · 五个标签页，一个搜索框</div>
-      </div>
-      <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
-    </div>
-    <div class="shots">
-      <img src="../assets/shot-ksu-modules.png" alt="模块页" loading="lazy">
-      <img src="../assets/shot-ksu-lsposed.png" alt="LSPosed 页" loading="lazy">
-      <img src="../assets/shot-ksu-apps.png" alt="应用页" loading="lazy">
-    </div>
-    <ul class="pts">
-      <li>KernelSU、Magisk、LSPosed 和开源应用四个源合成一个索引，不来回切 App</li>
-      <li>下载和安装都在应用里跑完，不跳浏览器、不用自己去文件夹挑位置</li>
-      <li>已装模块、收藏、下载记录留在本机，卸载才清</li>
-    </ul>
-  </a>
-
-  <a class="w" href="https://hz-xb.github.io/xiao/">
-    <div class="w-top">
+  <div class="w rev">
+    <a class="w-top" href="https://hz-xb.github.io/xiao/">
       <img class="logo" src="../assets/ic-mirror.png" alt="相识投屏">
       <div class="txt">
         <div class="tt">相识投屏<span class="ver">v2.1.4</span></div>
-        <div class="ss">局域网投屏 · 2160p / 120 帧</div>
+        <div class="ss">局域网投屏 · 画面声音触摸分开调</div>
       </div>
       <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
-    </div>
-    <div class="shots">
+    </a>
+    <div class="rail">
       <img src="../assets/shot-mirror-home.png" alt="首页" loading="lazy">
       <img src="../assets/shot-mirror-send.png" alt="发送端" loading="lazy">
+      <img src="../assets/shot-mirror-video.png" alt="画面设置" loading="lazy">
+      <img src="../assets/shot-mirror-audio.png" alt="音频与触摸" loading="lazy">
       <img src="../assets/shot-mirror-recv.png" alt="接收端" loading="lazy">
     </div>
-    <ul class="pts">
-      <li>两个手机连同一个 WiFi 就能投，画面走内网直连，不经过任何服务器</li>
-      <li>分辨率、帧率、码率都能自己调，卡了就往下压一档</li>
-      <li>有 root 可以免弹窗采集，没有就用系统那次授权，两种都能用</li>
-    </ul>
+    <div class="tags"><span>MediaCodec</span><span>内网直连</span><span>无服务器中转</span><span>MD5 + SHA-256 自检</span></div>
+    <div class="acts">
+      <a class="act" href="https://hz-xb.github.io/xiao/market/xiangshi-mirror-2.1.4.apk">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
+        下载 APK
+      </a>
+      <a class="act ghost" href="https://hz-xb.github.io/xiao/">
+        看官网
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+      </a>
+      <span class="cp-tip">两台手机，同一个 WiFi 就行</span>
+    </div>
   </a>
 
-  <a class="w" href="https://hz-xb.github.io/xiao/dopamine/">
-    <div class="w-top">
+  <div class="w rev">
+    <a class="w-top" href="https://hz-xb.github.io/xiao/ksu/">
+      <img class="logo" src="../assets/ic-ksu.png" alt="KSU 商店">
+      <div class="txt">
+        <div class="tt">KSU 商店<span class="ver">v1.1.6</span></div>
+        <div class="ss">root 模块市场 · 1561 条，一个搜索框</div>
+      </div>
+      <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a>
+    <div class="rail">
+      <img src="../assets/shot-ksu-modules.png" alt="模块页" loading="lazy">
+      <img src="../assets/shot-ksu-lsposed.png" alt="LSPosed 页" loading="lazy">
+      <img src="../assets/shot-ksu-apps.png" alt="应用页" loading="lazy">
+      <img src="../assets/shot-ksu-mine.png" alt="我的页" loading="lazy">
+    </div>
+    <div class="tags"><span>KernelSU API</span><span>四个源合一</span><span>应用内下载安装</span><span>启动自校验</span></div>
+    <div class="acts">
+      <a class="act" href="https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.6.apk">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
+        下载 APK
+      </a>
+      <a class="act ghost" href="https://hz-xb.github.io/xiao/ksu/">
+        看官网
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+      </a>
+      <span class="cp-tip">4.5 MB · Android 8+</span>
+    </div>
+  </a>
+
+  <div class="w rev">
+    <a class="w-top" href="https://hz-xb.github.io/xiao/dopamine/">
       <img class="logo" src="../assets/ic-dopamine.png" alt="Dopamine">
       <div class="txt">
         <div class="tt">Dopamine<span class="ver">v1.2</span></div>
-        <div class="ss">临时 root · Android 12+ · 仅 arm64</div>
+        <div class="ss">临时 root · 用完就走 · 仅 arm64</div>
       </div>
       <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
-    </div>
-    <div class="shots">
+    </a>
+    <div class="rail">
       <img src="../assets/shot-dopamine-home.png" alt="首页" loading="lazy">
       <img src="../assets/shot-dopamine-run.png" alt="执行中" loading="lazy">
       <img src="../assets/shot-dopamine-set.png" alt="设置" loading="lazy">
     </div>
-    <ul class="pts">
-      <li>一次执行临时拿到 root，重启就恢复原样，系统里不留门</li>
-      <li>不刷机、不写 boot 分区，参数对不上也不会把机器搞坏</li>
-      <li>能导入 offsets.conf（v2），失败时导出 debug 日志看清停在哪一层</li>
-    </ul>
+    <div class="tags"><span>Kernel 提权</span><span>不写 boot</span><span>重启即失效</span><span>offsets.conf v2</span></div>
+    <div class="acts">
+      <a class="act" href="https://hz-xb.github.io/xiao/dopamine/dopamine-1.2.apk">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
+        下载 APK
+      </a>
+      <a class="act ghost" href="https://hz-xb.github.io/xiao/dopamine/">
+        看官网
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+      </a>
+      <span class="cp-tip">6.8 MB · Android 12+</span>
+    </div>
   </a>
 
-  <!-- ===== 来源 ===== -->
+  <!-- ================== 更新记录 ================== -->
+  <div class="h"><h2>最近动过什么</h2><span class="n">都是这一周</span></div>
+  <div class="tl rev">
+    <div class="it now">
+      <div class="d">2026 · 11 · 07</div>
+      <div class="t">Dopamine v1.2 第一次公开</div>
+      <div class="p">临时 root 那个。首页、执行页、设置页三屏定稿，官网跟着上线，APK 直接放在自己的仓库里。</div>
+    </div>
+    <div class="it">
+      <div class="d">2026 · 11 · 07</div>
+      <div class="t">KSU 商店 v1.1.6</div>
+      <div class="p">换了新图标，桌面、首启页、我的页统一；云端清单补上发布时间，更新提示能显示日期了。</div>
+    </div>
+    <div class="it">
+      <div class="d">2026 · 11 · 06</div>
+      <div class="t">相识投屏 v2.1.4</div>
+      <div class="p">首页改了四卡布局，接收端补齐返回键；官网的下载按钮从临时链接换成了仓库直链。</div>
+    </div>
+  </div>
+
+  <!-- ================== 那 1561 条 ================== -->
   <div class="h"><h2>那 1561 条是哪来的</h2><span class="n">全是公开索引</span></div>
-  <div class="src">
+  <div class="src rev">
     <div class="c"><div class="t">KernelSU</div><div class="v">43</div><div class="u">官方模块索引</div></div>
     <div class="c"><div class="t">Magisk</div><div class="v">135</div><div class="u">Alt-Repo 社区源</div></div>
     <div class="c"><div class="t">LSPosed</div><div class="v">1321</div><div class="u">Xposed 模块仓库</div></div>
     <div class="c"><div class="t">开源应用</div><div class="v">62</div><div class="u">手工筛过的</div></div>
   </div>
 
-  <!-- ===== 技术 ===== -->
-  <div class="h"><h2>怎么做的</h2></div>
-  <div class="tech">
-    <p>三个应用都没有服务端。云上只有一份静态 JSON 和几个安装包，客户端自己读、自己拼索引；投屏干脆连这个都不要，两个设备直接对面聊；Dopamine 的提权逻辑整个跑在你自己这台机器上，连过去看一眼的机会都没有。所以既没有机器要维护，也不会因为你用得多就变慢。</p>
-    <div class="tags">
-      <span>Kotlin</span><span>Java</span><span>Material 3</span><span>MediaCodec</span><span>MediaProjection</span><span>KernelSU API</span><span>Kernel 提权</span><span>arm64</span><span>Gradle</span>
+  <!-- ================== 平台 ================== -->
+  <div class="h"><h2>在别处</h2><span class="n">点名字跳转，点复制存账号</span></div>
+  <div class="plats rev">
+    <div class="p">
+      <a class="p-main" href="https://v.douyin.com/Z39Eq_f2grc/" target="_blank" rel="noopener">
+        <img class="mk" src="../assets/ic-douyin.png" alt="抖音">
+        <div><div class="n2">抖音</div><div class="h2s">26948667091</div></div>
+        <span class="arw"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+      </a>
+      <button class="cpy" type="button" data-copy="26948667091">复制</button>
+    </div>
+    <div class="p">
+      <a class="p-main" href="https://v.kuaishou.com/JoAqDghZ" target="_blank" rel="noopener">
+        <img class="mk" src="../assets/ic-kuaishou.png" alt="快手">
+        <div><div class="n2">快手</div><div class="h2s">ImGuiN-NB</div></div>
+        <span class="arw"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+      </a>
+      <button class="cpy" type="button" data-copy="ImGuiN-NB">复制</button>
+    </div>
+    <div class="p">
+      <a class="p-main" href="https://www.coolapk.com/u/36009594" target="_blank" rel="noopener">
+        <img class="mk" src="../assets/ic-coolapk.png" alt="酷安">
+        <div><div class="n2">酷安</div><div class="h2s">Dopaminea</div></div>
+        <span class="arw"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+      </a>
+      <button class="cpy" type="button" data-copy="Dopaminea">复制</button>
     </div>
   </div>
 
-  <!-- ===== 平台 ===== -->
-  <div class="h"><h2>在别处</h2><span class="n">更新和想法先发这里</span></div>
-  <div class="plats">
-    <a class="p" href="https://v.douyin.com/Z39Eq_f2grc/" target="_blank" rel="noopener">
-      <img class="mk" src="../assets/ic-douyin.png" alt="抖音">
-      <div><div class="n2">抖音</div><div class="h2s">26948667091</div></div>
-      <span class="arw"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
-    </a>
-    <a class="p" href="https://v.kuaishou.com/JoAqDghZ" target="_blank" rel="noopener">
-      <img class="mk" src="../assets/ic-kuaishou.png" alt="快手">
-      <div><div class="n2">快手</div><div class="h2s">ImGuiN-NB</div></div>
-      <span class="arw"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
-    </a>
-    <a class="p" href="https://www.coolapk.com/u/36009594" target="_blank" rel="noopener">
-      <img class="mk" src="../assets/ic-coolapk.png" alt="酷安">
-      <div><div class="n2">酷安</div><div class="h2s">Dopaminea</div></div>
-      <span class="arw"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
-    </a>
-  </div>
-
-  <!-- ===== 问答 ===== -->
+  <!-- ================== 问答 ================== -->
   <div class="h"><h2>几个常问的</h2></div>
-  <div class="faq">
+  <div class="faq rev">
     <details>
       <summary>不 root 能装吗</summary>
-      <div class="a">能。KSU 商店本身不需要 root，浏览、搜索、下载、收藏都能用，只是装模块那一步要用到 root 权限。投屏也只有「免弹窗采集」这一项要 root，其余走系统授权，不 root 一样投。Dopamine 是反过来——它就是用来拿 root 的，只在按下执行那段时间有效，重启自己就没了。</div>
+      <div class="a">能。KSU 商店本身不需要 root，浏览、搜索、下载、收藏都能用，只有装模块那一步要用到。投屏也只有「免弹窗采集」这一项要 root，其余走系统授权。Dopamine 反过来——它就是用来拿 root 的，只在按下执行那段时间有效，重启自己就没了。</div>
     </details>
     <details>
       <summary>为什么不收费</summary>
-      <div class="a">因为没有要花钱的地方。没有服务器要租，没有账号系统要维护，下载流量交给 GitHub 的静态托管。既然成本接近零，就没有理由收钱，也懒得做广告。</div>
+      <div class="a">因为没有要花钱的地方。没有服务器要租，没有账号系统要维护，静态托管交给 GitHub，安装包就放在仓库里。成本接近零，就没理由收钱，也懒得做广告。</div>
     </details>
     <details>
       <summary>我的数据在哪</summary>
-      <div class="a">全在本机。已装模块、收藏、下载记录、头像和昵称都存在应用自己的目录里，不上传。所以换手机不会同步，卸载重装也会清空。覆盖安装（同一个签名）会保留。</div>
+      <div class="a">全在本机。已装模块、收藏、下载记录、头像和昵称都存在应用自己的目录里，不上传。所以换手机不会同步，卸载重装也会清空；覆盖安装（同一个签名）会保留。</div>
     </details>
     <details>
       <summary>装不上或者被系统拦了怎么办</summary>
@@ -301,5 +453,79 @@ a,button,summary{outline:none}
   </div>
 
 </div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var toastEl = document.getElementById('toast');
+  var tmr = null;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(tmr);
+    tmr = setTimeout(function(){ toastEl.classList.remove('show'); }, 1600);
+  }
+
+  document.querySelectorAll('[data-copy]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      var text = btn.getAttribute('data-copy');
+      function done(){ toast('已复制：' + text); }
+      function fallback(){
+        var ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); done(); }
+        catch(err){ toast('复制失败，请手动选择'); }
+        document.body.removeChild(ta);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } else { fallback(); }
+    });
+  });
+
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var cells = Array.prototype.slice.call(document.querySelectorAll('[data-count]'));
+  function runCount(el){
+    var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+    if (reduce || target < 10){ el.textContent = target; return; }
+    var start = null, dur = 1100;
+    function step(ts){
+      if (!start) start = ts;
+      var p = Math.min(1, (ts - start) / dur);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased);
+      if (p < 1) requestAnimationFrame(step);
+      else el.textContent = target;
+    }
+    requestAnimationFrame(step);
+  }
+  if ('IntersectionObserver' in window && cells.length){
+    var co = new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if (en.isIntersecting){ runCount(en.target); co.unobserve(en.target); }
+      });
+    }, { threshold: .4 });
+    cells.forEach(function(c){ co.observe(c); });
+  } else { cells.forEach(function(c){ c.textContent = c.getAttribute('data-count'); }); }
+
+  var revs = Array.prototype.slice.call(document.querySelectorAll('.rev'));
+  function showAll(){ revs.forEach(function(el){ el.classList.add('in'); }); }
+  if (!reduce && 'IntersectionObserver' in window && revs.length){
+    var ro = new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if (en.isIntersecting){ en.target.classList.add('in'); ro.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: .08 });
+    revs.forEach(function(el){ ro.observe(el); });
+    setTimeout(showAll, 2000);
+  } else { showAll(); }
+})();
+</script>
+
 </body>
 </html>
