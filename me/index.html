@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>相识 — 独立开发者</title>
-<meta name="description" content="相识，独立开发者。做 Android 上的工具：KSU 商店、相识投屏。这里是全部入口。">
+<meta name="description" content="相识，独立开发者。做 Android 上的工具：KSU 商店、相识投屏、Dopamine。这里是全部入口。">
 <link rel="preconnect" href="https://miaoda.feishu.cn">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2322564A'/%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='30' font-weight='700' fill='white' text-anchor='middle'%3E相%3C/text%3E%3C/svg%3E">
@@ -156,9 +156,9 @@ a,button,summary{outline:none}
     <div class="nm">相识</div>
     <div class="rl">独立开发者 · Android · 河南 许昌</div>
     <div class="line"></div>
-    <p class="bio">一个人写点 Android 上的工具，<b>装在自己手机上顺手</b>才做出来的那种。两个应用，都不收钱、不要账号、不往云上传东西。</p>
+    <p class="bio">一个人写点 Android 上的工具，<b>装在自己手机上顺手</b>才做出来的那种。三个应用，都不收钱、不要账号、不往云上传东西。</p>
     <div class="nums">
-      <div><div class="v">2</div><div class="k">在做的应用</div></div>
+      <div><div class="v">3</div><div class="k">在做的应用</div></div>
       <div><div class="v">1561</div><div class="k">收录资源</div></div>
       <div><div class="v">4</div><div class="k">个公开来源</div></div>
       <div><div class="v">6</div><div class="k">年迭代</div></div>
@@ -166,7 +166,7 @@ a,button,summary{outline:none}
   </section>
 
   <!-- ===== 作品 ===== -->
-  <div class="h"><h2>在做的两个</h2><span class="n">都能直接装</span></div>
+  <div class="h"><h2>在做的三个</h2><span class="n">都能直接装</span></div>
 
   <a class="w" href="https://hz-xb.github.io/xiao/ksu/">
     <div class="w-top">
@@ -210,6 +210,27 @@ a,button,summary{outline:none}
     </ul>
   </a>
 
+  <a class="w" href="https://hz-xb.github.io/xiao/dopamine/">
+    <div class="w-top">
+      <img class="logo" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/CRTObQxpzocyl9xcRECc99jVn7c" alt="Dopamine">
+      <div class="txt">
+        <div class="tt">Dopamine<span class="ver">v1.2</span></div>
+        <div class="ss">临时 root · Android 12+ · 仅 arm64</div>
+      </div>
+      <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+    </div>
+    <div class="shots">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/UrTdbDlLEo3I8Zx4LfPcYGmznnb" alt="首页" loading="lazy">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/EFAEbfxuSo8yl2xU5wMcyb6QnAd" alt="执行中" loading="lazy">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/AhDGb4n4To6f71x9WeZcITZTnle" alt="设置" loading="lazy">
+    </div>
+    <ul class="pts">
+      <li>一次执行临时拿到 root，重启就恢复原样，系统里不留门</li>
+      <li>不刷机、不写 boot 分区，参数对不上也不会把机器搞坏</li>
+      <li>能导入 offsets.conf（v2），失败时导出 debug 日志看清停在哪一层</li>
+    </ul>
+  </a>
+
   <!-- ===== 来源 ===== -->
   <div class="h"><h2>那 1561 条是哪来的</h2><span class="n">全是公开索引</span></div>
   <div class="src">
@@ -222,9 +243,9 @@ a,button,summary{outline:none}
   <!-- ===== 技术 ===== -->
   <div class="h"><h2>怎么做的</h2></div>
   <div class="tech">
-    <p>两个应用都没有服务端。云上只有一份静态 JSON 和几个安装包，客户端自己读、自己拼索引；投屏干脆连这个都不要，两个设备直接对面聊。所以既没有机器要维护，也不会因为你用得多就变慢。</p>
+    <p>三个应用都没有服务端。云上只有一份静态 JSON 和几个安装包，客户端自己读、自己拼索引；投屏干脆连这个都不要，两个设备直接对面聊；Dopamine 的提权逻辑整个跑在你自己这台机器上，连过去看一眼的机会都没有。所以既没有机器要维护，也不会因为你用得多就变慢。</p>
     <div class="tags">
-      <span>Kotlin</span><span>Java</span><span>Material 3</span><span>MediaCodec</span><span>MediaProjection</span><span>KernelSU API</span><span>Gradle</span>
+      <span>Kotlin</span><span>Java</span><span>Material 3</span><span>MediaCodec</span><span>MediaProjection</span><span>KernelSU API</span><span>Kernel 提权</span><span>arm64</span><span>Gradle</span>
     </div>
   </div>
 
@@ -253,7 +274,7 @@ a,button,summary{outline:none}
   <div class="faq">
     <details>
       <summary>不 root 能装吗</summary>
-      <div class="a">能。KSU 商店本身不需要 root，浏览、搜索、下载、收藏都能用，只是装模块那一步要用到 root 权限。投屏也只有「免弹窗采集」这一项要 root，其余走系统授权，不 root 一样投。</div>
+      <div class="a">能。KSU 商店本身不需要 root，浏览、搜索、下载、收藏都能用，只是装模块那一步要用到 root 权限。投屏也只有「免弹窗采集」这一项要 root，其余走系统授权，不 root 一样投。Dopamine 是反过来——它就是用来拿 root 的，只在按下执行那段时间有效，重启自己就没了。</div>
     </details>
     <details>
       <summary>为什么不收费</summary>
@@ -265,7 +286,7 @@ a,button,summary{outline:none}
     </details>
     <details>
       <summary>装不上或者被系统拦了怎么办</summary>
-      <div class="a">先在系统设置里允许这一个来源安装未知应用。如果提示「签名不一致」，说明手机上还留着别的版本，先卸载再装——这样会清掉本机数据。两个应用都要装，就去各自的官网下最新的包。</div>
+      <div class="a">先在系统设置里允许这一个来源安装未知应用。如果提示「签名不一致」，说明手机上还留着别的版本，先卸载再装——这样会清掉本机数据。三个应用都要装，就去各自的官网下最新的包。</div>
     </details>
   </div>
 
@@ -274,6 +295,7 @@ a,button,summary{outline:none}
     <div class="lg">
       <a href="https://hz-xb.github.io/xiao/ksu/">KSU 商店官网</a>
       <a href="https://hz-xb.github.io/xiao/">相识投屏官网</a>
+      <a href="https://hz-xb.github.io/xiao/dopamine/">Dopamine 官网</a>
       <span>© 2026 相识</span>
     </div>
   </div>
