@@ -104,7 +104,8 @@ a,button,summary{outline:none}
 .w-top .logo{width:48px;height:48px;flex:none;border-radius:13px}
 .w-top .txt{flex:1;min-width:0}
 .w-top .tt{font-size:16px;font-weight:500;letter-spacing:-.015em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.w-top .ver{
+.w-top .badge{display:inline-flex;align-items:center;height:17px;padding:0 6px;border-radius:5px;background:var(--mint);color:var(--accent);font-size:10.5px;font-weight:500;margin-left:6px;vertical-align:2px}
+.ver{
   font-size:9.5px;font-weight:400;color:var(--accent);background:var(--mint);
   padding:2px 6px;border-radius:4px;line-height:1.5;
 }
@@ -325,7 +326,7 @@ a,button,summary{outline:none}
   </section>
 
   <!-- ================== 三个应用 ================== -->
-  <div class="h"><h2>手上这四个</h2><span class="n">点开就是官网</span></div>
+  <div class="h"><h2>手上的四个，加一个搭档</h2><span class="n">点开就是官网</span></div>
 
   <div class="w rev">
     <a class="w-top" href="https://hz-xb.github.io/xiao/">
@@ -426,10 +427,40 @@ a,button,summary{outline:none}
     </div>
   </div>
 
+  <div class="w rev">
+    <a class="w-top" href="https://hz-xb.github.io/xiao/shizuku/">
+      <img class="logo" src="../assets/ic-shizuku.png" alt="Shizuku">
+      <div class="txt">
+        <div class="tt">Shizuku<span class="ver">v13.6.0</span><span class="badge">搭档</span></div>
+        <div class="ss">开源的权限中继 · GhostKey 的执行入口</div>
+      </div>
+      <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a>
+    <div class="rail">
+      <img src="../assets/shot-shizuku-home.png" alt="首页" loading="lazy">
+      <img src="../assets/shot-shizuku-apps.png" alt="应用管理" loading="lazy">
+      <img src="../assets/shot-shizuku-start.png" alt="启动程序" loading="lazy">
+      <img src="../assets/shot-shizuku-set.png" alt="设置" loading="lazy">
+    </div>
+    <div class="tags"><span>RikkaApps 开源</span><span>root / 无线调试启动</span><span>按应用授权</span><span>2.5 MB</span></div>
+    <div class="acts">
+      <a class="act" href="https://hz-xb.github.io/xiao/shizuku/">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+        去官网下载
+      </a>
+      <span class="cp-tip">不是我的应用，页和说明书是我整理的</span>
+    </div>
+  </div>
+
   <!-- ================== 更新记录 ================== -->
   <div class="h"><h2>最近动过什么</h2><span class="n">都是这一周</span></div>
   <div class="tl rev">
     <div class="it now">
+      <div class="d">2026 · 11 · 08</div>
+      <div class="t">Shizuku 13.6.0 中文页上线</div>
+      <div class="p">GhostKey 的授权入口装了却不方便看懂，就给它也写了一套说明页：两种启动方式、按应用开关授权、和 GhostKey 搭配的三步。</div>
+    </div>
+    <div class="it">
       <div class="d">2026 · 11 · 08</div>
       <div class="t">GhostKey v1.2.0 第一次公开</div>
       <div class="p">高版本系统的临时 root。接 Shizuku、五段流水线走完就拿权限，重启自动恢复；调试过的内核上成功率 99%。</div>
@@ -540,6 +571,7 @@ a,button,summary{outline:none}
       <a href="https://hz-xb.github.io/xiao/">相识投屏官网</a>
       <a href="https://hz-xb.github.io/xiao/dopamine/">Dopamine 官网</a>
       <a href="https://hz-xb.github.io/xiao/ghostkey/">GhostKey 官网</a>
+      <a href="https://hz-xb.github.io/xiao/shizuku/">Shizuku 说明</a>
       <span>© 2026 相识</span>
     </div>
 <button class="shr" id="share" type="button">
