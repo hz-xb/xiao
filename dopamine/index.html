@@ -38,22 +38,23 @@ a,button,summary{outline:none}
 .nav .in{max-width:760px;margin:0 auto;padding:0 20px;height:100%;display:flex;align-items:center;gap:10px}
 .nav .brand{display:flex;align-items:center;gap:9px;color:#fff;font-size:14px;font-weight:500;letter-spacing:-.01em}
 .nav .brand img{width:22px;height:22px;border-radius:6px}
-.nav .lk{margin-left:auto;display:flex;gap:2px}
+.nav .lk{margin-left:auto;display:flex;gap:2px;flex:none}
 .nav .lk a{
   font-size:12.5px;color:rgba(255,255,255,.62);padding:6px 10px;border-radius:7px;
-  transition:color .16s,background .16s;
+  white-space:nowrap;flex:none;transition:color .16s,background .16s;
 }
 .nav .lk a:hover{color:#fff;background:rgba(255,255,255,.08)}
 .nav .dl{
   margin-left:8px;font-size:12.5px;color:#062018;background:var(--accent);
-  padding:6px 13px;border-radius:7px;font-weight:500;transition:background .16s;
+  padding:6px 13px;border-radius:7px;font-weight:500;white-space:nowrap;flex:none;
+  transition:background .16s;
 }
 .nav .dl:hover{background:#1CB98D}
 .prog{position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:60;transition:width .1s linear}
 
 /* ================= Hero ================= */
 .hero{
-  position:relative;overflow:hidden;padding:104px 0 0;
+  position:relative;overflow:hidden;padding:92px 0 0;
   background:
     radial-gradient(120% 78% at 50% -10%, #12554C 0%, #0B3A35 46%, #082A28 100%);
   color:#fff;
@@ -72,7 +73,7 @@ a,button,summary{outline:none}
 }
 .badge i{width:5px;height:5px;border-radius:50%;background:var(--accent);font-style:normal}
 h1{
-  margin:22px 0 0;font-size:clamp(38px,9vw,68px);font-weight:700;
+  margin:20px 0 0;font-size:clamp(34px,8.4vw,58px);font-weight:700;
   letter-spacing:-.045em;line-height:1.02;
 }
 .sub{
@@ -93,17 +94,17 @@ h1{
 .btn.g:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.06)}
 
 .devices{
-  display:flex;justify-content:center;align-items:flex-end;gap:14px;
-  margin:52px auto 0;max-width:660px;padding:0 22px;
+  display:flex;justify-content:center;align-items:flex-end;gap:18px;
+  margin:44px auto 0;margin-bottom:26px;max-width:620px;padding:0 22px;
 }
 .devices .d{
-  flex:1;min-width:0;border-radius:16px 16px 0 0;overflow:hidden;
-  box-shadow:0 -1px 0 rgba(255,255,255,.09) inset, 0 20px 60px -30px rgba(0,0,0,.9);
-  transform:translateY(16px);
+  flex:1;min-width:0;border-radius:18px;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,.22), 0 30px 64px -34px rgba(0,0,0,.9);
+  transform:translateY(0);
 }
-.devices .d:nth-child(2){flex:1.14;transform:translateY(-14px)}
+.devices .d:nth-child(2){flex:1.16;transform:translateY(-16px)}
 .devices .d img{width:100%;height:auto}
-.fade{height:110px;background:linear-gradient(to bottom, transparent, var(--paper));margin-top:-1px;position:relative;z-index:3}
+.fade{height:88px;background:linear-gradient(to bottom, transparent, var(--paper));margin-top:-1px;position:relative;z-index:3}
 
 /* ================= Facts ================= */
 .facts{
@@ -243,6 +244,10 @@ h2{margin:0;font-size:clamp(21px,3.6vw,27px);font-weight:700;letter-spacing:-.03
   .nav .in{max-width:860px}
   .hero{padding-top:120px}
   .sec{padding-top:68px}
+}
+@media (max-width:620px){
+  .nav .lk{display:none}
+  .nav .dl{margin-left:auto}
 }
 @media (max-width:420px){
   .facts{grid-template-columns:repeat(2,1fr);gap:22px 0;padding:24px 0}
