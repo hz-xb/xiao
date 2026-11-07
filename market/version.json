@@ -1,15 +1,15 @@
 {
-  "versionCode": 116,
-  "versionName": "1.1.5",
-  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.5.apk",
-  "notes": "头像可换：内置 8 张，也可以从相册选；名字随便改。",
-  "sha256": "60494bddb3da6de4e3af3a4046123d733dde97822adaa639fa7cc3ecf481e9ed",
-  "sizeBytes": 4582188,
+  "versionCode": 117,
+  "versionName": "1.1.6",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.6.apk",
+  "notes": "换了新图标：六边形加一颗球，桌面、首启页、我的页统一。",
+  "sha256": "b6ae5c57ce79afc67a53b96606edb0a1bf2ea967f576d440423b2f290f0fadd0",
+  "sizeBytes": 4685964,
   "forceUpdate": false,
   "notice": {
-    "id": "20261107-v116",
-    "title": "KSU 商店 1.1.5",
-    "body": "点头像就能换。内置了 8 张，第一次进「我的」会随便给你挑一张；也可以从相册里选自己的照片，选完自动裁成方形的，存本机不上传。\n名字点右边的「编辑」随便改，改完立刻生效。\n头像和名字都只存在这台设备上，换手机不会跟着走。",
+    "id": "20261107-v117",
+    "title": "KSU 商店 1.1.6",
+    "body": "换了新图标，就是那个灰蓝底、白色六边形裹着一颗浅蓝球的样子。桌面、首启页、我的页头像位置都换成它了。\n原来那个深绿六边形退休。",
     "level": "info"
   }
 }
