@@ -1,15 +1,15 @@
 {
-  "versionCode": 115,
-  "versionName": "1.1.4",
-  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.4.apk",
-  "notes": "改名 KSU 商店；首启同意页换成独立整页；「我的」重做成个人中心，不再带搜索。",
-  "sha256": "69c6a46100db055fee400ad2c2e36eaa5b31e6905aaf537472042eb9557182f2",
-  "sizeBytes": 4517696,
+  "versionCode": 116,
+  "versionName": "1.1.5",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.5.apk",
+  "notes": "头像可换：内置 8 张，也可以从相册选；名字随便改。",
+  "sha256": "60494bddb3da6de4e3af3a4046123d733dde97822adaa639fa7cc3ecf481e9ed",
+  "sizeBytes": 4582188,
   "forceUpdate": false,
   "notice": {
-    "id": "20261107-v115",
-    "title": "KSU 商店 1.1.4",
-    "body": "名字改成了 KSU 商店。\n首启那一页现在是独立的一整页，不是浮在上面的弹窗了，从上到下就是页面本身，底部按钮固定住不跟着滚。里面「用户协议」和「隐私政策」分开写成了两页，可以点进去看。\n「我的」重做了：整页没有搜索框，上面是你自己，中间三个数（已装模块、收藏、下载），下面依次是最近浏览、下载记录、本机模块，每一行都带图标。",
+    "id": "20261107-v116",
+    "title": "KSU 商店 1.1.5",
+    "body": "点头像就能换。内置了 8 张，第一次进「我的」会随便给你挑一张；也可以从相册里选自己的照片，选完自动裁成方形的，存本机不上传。\n名字点右边的「编辑」随便改，改完立刻生效。\n头像和名字都只存在这台设备上，换手机不会跟着走。",
     "level": "info"
   }
 }
