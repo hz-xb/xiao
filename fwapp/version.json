@@ -1,12 +1,12 @@
 {
   "name": "固件库",
-  "versionCode": 3,
-  "versionName": "1.0.2",
-  "size": 67632,
-  "sha256": "4e0f50c02e2d12601317dde6f37ef2b44b79c539cb4b5a54027f9bfcf0e425c0",
-  "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.2.apk",
+  "versionCode": 5,
+  "versionName": "1.0.4",
+  "size": 71942,
+  "sha256": "3ca9ecf156c833aaba88587f79f63fca69f9fad32e088592e157b0aed51e5970",
+  "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.4.apk",
   "notice": {
     "level": "info",
-    "text": "1.0.2：界面整体重做。列表改为双行信息 + 单行版本号，缺日期不再显示 null；详情页重排分组、计数与下载按钮。"
+    "text": "1.0.4：列表去掉彩色块，改细线排版；详情页可按地区筛选，顶部直接给出推荐包，选错版本的机会小了。"
   }
 }
