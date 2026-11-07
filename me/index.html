@@ -25,88 +25,124 @@ img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 ::selection{background:var(--accent);color:#fff}
 *,body{-webkit-tap-highlight-color:transparent}
-a,button{outline:none}
-.wrap{max-width:600px;margin:0 auto;padding:0 20px}
+a,button,summary{outline:none}
+.wrap{max-width:620px;margin:0 auto;padding:0 20px}
 
 /* ================= 名片 ================= */
 .card{
-  margin-top:36px;position:relative;overflow:hidden;
+  margin-top:34px;position:relative;overflow:hidden;
   background:var(--deep);color:#fff;border-radius:24px;
-  padding:28px 24px 22px;
+  padding:27px 24px 23px;
 }
 .card::after{
-  content:"";position:absolute;right:-58px;top:-58px;width:190px;height:190px;
-  border-radius:50%;background:rgba(228,239,234,.055);pointer-events:none;
+  content:"";position:absolute;right:-62px;top:-62px;width:196px;height:196px;
+  border-radius:50%;background:rgba(228,239,234,.05);pointer-events:none;
 }
 .face{
-  width:88px;height:88px;border-radius:50%;object-fit:cover;
-  border:3px solid rgba(255,255,255,.92);
-  background:#fff;
+  width:86px;height:86px;border-radius:50%;object-fit:cover;
+  border:3px solid rgba(255,255,255,.92);background:#fff;
 }
-.nm{margin-top:17px;font-size:27px;font-weight:700;letter-spacing:-.035em;line-height:1.15}
-.rl{margin-top:7px;font-size:12.5px;color:rgba(255,255,255,.56)}
-.line{margin-top:18px;height:1px;background:rgba(255,255,255,.12)}
-.bio{margin-top:16px;font-size:14.5px;line-height:1.85;color:rgba(255,255,255,.82);max-width:27em}
+.nm{margin-top:16px;font-size:27px;font-weight:700;letter-spacing:-.035em;line-height:1.15}
+.rl{margin-top:6px;font-size:12.5px;color:rgba(255,255,255,.55)}
+.line{margin-top:17px;height:1px;background:rgba(255,255,255,.12)}
+.bio{margin-top:15px;font-size:14.5px;line-height:1.88;color:rgba(255,255,255,.84);max-width:26em}
 .bio b{color:#fff;font-weight:500}
-.nums{display:flex;gap:26px;margin-top:20px;flex-wrap:wrap}
-.nums .u{min-width:0}
-.nums .v{font-size:17px;font-weight:500;letter-spacing:-.02em;line-height:1.2;font-variant-numeric:tabular-nums}
-.nums .k{font-size:10.5px;color:rgba(255,255,255,.5);margin-top:3px}
+.nums{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:21px}
+.nums .v{font-size:16px;font-weight:500;letter-spacing:-.02em;line-height:1.2;font-variant-numeric:tabular-nums}
+.nums .k{font-size:10px;color:rgba(255,255,255,.48);margin-top:3px;line-height:1.4}
 
-/* ================= 分区 ================= */
-.h{
-  display:flex;align-items:baseline;gap:9px;
-  margin:38px 0 0;
-}
-.h h2{font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--ink2)}
-.h .n{font-size:11.5px;color:var(--ink3)}
+/* ================= 分区标题 ================= */
+.h{display:flex;align-items:baseline;gap:9px;margin:36px 0 0}
+.h h2{font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--ink2);margin:0}
+.h .n{font-size:11.5px;color:var(--ink3);margin-left:auto}
 
 /* ================= 作品 ================= */
-.works{margin-top:11px;display:grid;gap:10px}
 .w{
-  display:flex;align-items:center;gap:15px;
-  background:var(--card);border:1px solid var(--line);border-radius:17px;
-  padding:16px;
+  display:block;margin-top:11px;background:var(--card);
+  border:1px solid var(--line);border-radius:18px;padding:16px;
   transition:transform .18s cubic-bezier(.22,.7,.2,1),border-color .18s,box-shadow .18s;
 }
-.w:hover{transform:translateY(-2px);border-color:rgba(34,86,74,.22);box-shadow:0 18px 36px -30px rgba(21,24,26,.55)}
-.w .logo{width:48px;height:48px;flex:none;border-radius:12px}
-.w .txt{flex:1;min-width:0}
-.w .tt{font-size:15.5px;font-weight:500;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.w .ver{
+.w:hover{transform:translateY(-2px);border-color:rgba(34,86,74,.22);box-shadow:0 20px 40px -32px rgba(21,24,26,.55)}
+.w-top{display:flex;align-items:center;gap:14px}
+.w-top .logo{width:46px;height:46px;flex:none;border-radius:12px}
+.w-top .txt{flex:1;min-width:0}
+.w-top .tt{font-size:15.5px;font-weight:500;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.w-top .ver{
   font-size:9.5px;font-weight:400;color:var(--accent);background:var(--mint);
-  padding:2px 6px;border-radius:4px;line-height:1.5;letter-spacing:.02em;
+  padding:2px 6px;border-radius:4px;line-height:1.5;
 }
-.w .ss{margin-top:4px;font-size:12.5px;color:var(--ink3);line-height:1.55}
-.w .go{flex:none;color:#C3C7C3;display:flex}
-.w:hover .go{color:var(--accent)}
+.w-top .ss{margin-top:3px;font-size:12.5px;color:var(--ink3);line-height:1.5}
+.w-top .go{flex:none;color:#C3C7C3;display:flex}
+.w:hover .w-top .go{color:var(--accent)}
+
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:14px}
+.shots img{
+  width:100%;height:132px;object-fit:cover;object-position:top center;
+  border-radius:9px;border:1px solid var(--line2);background:#EDEDE7;
+}
+
+.pts{margin-top:13px;padding-top:12px;border-top:1px solid var(--line2);display:grid;gap:4px}
+.pts li{list-style:none;font-size:12.5px;color:var(--ink2);line-height:1.7;padding-left:15px;position:relative}
+.pts li::before{content:"";position:absolute;left:2px;top:8px;width:5px;height:1.5px;background:#B9BEB9}
+
+/* ================= 来源 ================= */
+.src{margin-top:11px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.src .c{
+  background:var(--card);border:1px solid var(--line);border-radius:13px;
+  padding:13px 14px;
+}
+.src .c .t{font-size:12.5px;font-weight:500;line-height:1.4}
+.src .c .v{font-size:19px;font-weight:500;letter-spacing:-.03em;margin-top:5px;line-height:1.15;font-variant-numeric:tabular-nums;color:var(--accent)}
+.src .c .u{font-size:10.5px;color:var(--ink3);margin-top:1px}
+
+/* ================= 技术 ================= */
+.tech{margin-top:11px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px}
+.tech p{margin:0;font-size:13px;line-height:1.85;color:var(--ink2)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
+.tags span{
+  font-size:11px;color:var(--ink2);background:var(--paper);
+  border:1px solid var(--line2);border-radius:5px;padding:3px 8px;line-height:1.6;
+}
 
 /* ================= 平台 ================= */
 .plats{margin-top:11px;background:var(--card);border:1px solid var(--line);border-radius:17px;overflow:hidden}
-.p{
-  display:flex;align-items:center;gap:14px;padding:14px 16px;
-  border-bottom:1px solid var(--line2);transition:background .16s;
-}
+.p{display:flex;align-items:center;gap:13px;padding:13px 15px;border-bottom:1px solid var(--line2);transition:background .16s}
 .p:last-child{border-bottom:none}
 .p:hover{background:#F7F8F5}
-.p .mk{width:34px;height:34px;flex:none;border-radius:9px}
-.p .tx{min-width:0}
+.p .mk{width:33px;height:33px;flex:none;border-radius:9px}
 .p .n2{font-size:14.5px;font-weight:500;line-height:1.35}
-.p .h2s{font-size:11.5px;color:var(--ink3);margin-top:2px;line-height:1.4}
+.p .h2s{font-size:11.5px;color:var(--ink3);margin-top:1px;line-height:1.4}
 .p .arw{margin-left:auto;color:#C3C7C3;flex:none;display:flex}
 .p:hover .arw{color:var(--accent)}
 
+/* ================= 问答 ================= */
+.faq{margin-top:11px;border-top:1px solid var(--line2)}
+.faq details{border-bottom:1px solid var(--line2)}
+.faq summary{
+  list-style:none;cursor:pointer;padding:14px 2px;font-size:13.5px;font-weight:500;
+  display:flex;align-items:center;gap:10px;
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{
+  content:"";margin-left:auto;flex:none;width:9px;height:9px;
+  border-right:1.4px solid #ADB2AD;border-bottom:1.4px solid #ADB2AD;
+  transform:rotate(45deg) translate(-2px,-2px);transition:transform .2s;
+}
+.faq details[open] summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
+.faq .a{padding:0 2px 15px;font-size:12.5px;line-height:1.85;color:var(--ink2);max-width:34em}
+
 /* ================= 尾 ================= */
-.end{margin-top:34px;padding:20px 0 44px;border-top:1px solid var(--line2);font-size:12px;color:var(--ink3);line-height:1.95}
+.end{margin-top:30px;padding:19px 0 44px;border-top:1px solid var(--line2);font-size:12px;color:var(--ink3);line-height:1.95}
 .end .lg{display:flex;flex-wrap:wrap;gap:7px 16px;margin-top:9px}
 .end a{padding-bottom:1px;border-bottom:1px solid var(--line2)}
 .end a:hover{color:var(--accent);border-color:var(--accent)}
 
 @media (min-width:640px){
-  .card{margin-top:52px;padding:32px 30px 26px}
-  .face{width:96px;height:96px}
+  .card{margin-top:48px;padding:31px 29px 26px}
+  .face{width:94px;height:94px}
   .nm{font-size:30px}
-  .w{padding:18px}
+  .nums .v{font-size:17px}
+  .shots img{height:150px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -120,65 +156,121 @@ a,button{outline:none}
     <div class="nm">相识</div>
     <div class="rl">独立开发者 · Android · 河南 许昌</div>
     <div class="line"></div>
-    <p class="bio">一个人写点 Android 上的工具，<b>装在自己手机上顺手</b>才做出来的那种。</p>
+    <p class="bio">一个人写点 Android 上的工具，<b>装在自己手机上顺手</b>才做出来的那种。两个应用，都不收钱、不要账号、不往云上传东西。</p>
     <div class="nums">
-      <div class="u"><div class="v">2</div><div class="k">在做的应用</div></div>
-      <div class="u"><div class="v">1561</div><div class="k">收录资源</div></div>
-      <div class="u"><div class="v">4</div><div class="k">个公开来源</div></div>
-      <div class="u"><div class="v">6</div><div class="k">年迭代</div></div>
+      <div><div class="v">2</div><div class="k">在做的应用</div></div>
+      <div><div class="v">1561</div><div class="k">收录资源</div></div>
+      <div><div class="v">4</div><div class="k">个公开来源</div></div>
+      <div><div class="v">6</div><div class="k">年迭代</div></div>
     </div>
   </section>
 
   <!-- ===== 作品 ===== -->
-  <div class="h"><h2>在做的</h2><span class="n">都免费，不要账号</span></div>
-  <div class="works">
+  <div class="h"><h2>在做的两个</h2><span class="n">都能直接装</span></div>
 
-    <a class="w" href="https://hz-xb.github.io/xiao/ksu/">
+  <a class="w" href="https://hz-xb.github.io/xiao/ksu/">
+    <div class="w-top">
       <img class="logo" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Tbr3bBl6voqCtFxKHfGcEMnNnJf" alt="KSU 商店">
       <div class="txt">
         <div class="tt">KSU 商店<span class="ver">v1.1.6</span></div>
-        <div class="ss">root 模块市场 · 下载安装都在应用内</div>
+        <div class="ss">root 模块市场 · 五个标签页，一个搜索框</div>
       </div>
       <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
-    </a>
+    </div>
+    <div class="shots">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/DcX5bOV5DortEuxPAa3cGeG5nCe" alt="模块页" loading="lazy">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/CNn5by93boDUuJx9J6ccHmw7nOh" alt="LSPosed 页" loading="lazy">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/OPyGbjK7PoYCTLxpBXIcGyMXnnB" alt="应用页" loading="lazy">
+    </div>
+    <ul class="pts">
+      <li>KernelSU、Magisk、LSPosed 和开源应用四个源合成一个索引，不来回切 App</li>
+      <li>下载和安装都在应用里跑完，不跳浏览器、不用自己去文件夹挑位置</li>
+      <li>已装模块、收藏、下载记录留在本机，卸载才清</li>
+    </ul>
+  </a>
 
-    <a class="w" href="https://hz-xb.github.io/xiao/">
+  <a class="w" href="https://hz-xb.github.io/xiao/">
+    <div class="w-top">
       <img class="logo" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/B3iebriDZoAbZDxqMu6coixIndf" alt="相识投屏">
       <div class="txt">
         <div class="tt">相识投屏<span class="ver">v2.1.4</span></div>
-        <div class="ss">局域网投屏 · 2160p / 120 帧，画面不过服务器</div>
+        <div class="ss">局域网投屏 · 2160p / 120 帧</div>
       </div>
       <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
-    </a>
+    </div>
+    <div class="shots">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/ApD4b61HKo8XyEx6AESc5ozqnnd" alt="首页" loading="lazy">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/MjCabd3QGo6tSoxdwydcwXHnnbf" alt="发送端" loading="lazy">
+      <img src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/SEkebD8wboWeEkxXK2Kc4lJRnjf" alt="接收端" loading="lazy">
+    </div>
+    <ul class="pts">
+      <li>两个手机连同一个 WiFi 就能投，画面走内网直连，不经过任何服务器</li>
+      <li>分辨率、帧率、码率都能自己调，卡了就往下压一档</li>
+      <li>有 root 可以免弹窗采集，没有就用系统那次授权，两种都能用</li>
+    </ul>
+  </a>
 
+  <!-- ===== 来源 ===== -->
+  <div class="h"><h2>那 1561 条是哪来的</h2><span class="n">全是公开索引</span></div>
+  <div class="src">
+    <div class="c"><div class="t">KernelSU</div><div class="v">43</div><div class="u">官方模块索引</div></div>
+    <div class="c"><div class="t">Magisk</div><div class="v">135</div><div class="u">Alt-Repo 社区源</div></div>
+    <div class="c"><div class="t">LSPosed</div><div class="v">1321</div><div class="u">Xposed 模块仓库</div></div>
+    <div class="c"><div class="t">开源应用</div><div class="v">62</div><div class="u">手工筛过的</div></div>
+  </div>
+
+  <!-- ===== 技术 ===== -->
+  <div class="h"><h2>怎么做的</h2></div>
+  <div class="tech">
+    <p>两个应用都没有服务端。云上只有一份静态 JSON 和几个安装包，客户端自己读、自己拼索引；投屏干脆连这个都不要，两个设备直接对面聊。所以既没有机器要维护，也不会因为你用得多就变慢。</p>
+    <div class="tags">
+      <span>Kotlin</span><span>Java</span><span>Material 3</span><span>MediaCodec</span><span>MediaProjection</span><span>KernelSU API</span><span>Gradle</span>
+    </div>
   </div>
 
   <!-- ===== 平台 ===== -->
-  <div class="h"><h2>在别处</h2><span class="n">有事直接找我</span></div>
+  <div class="h"><h2>在别处</h2><span class="n">更新和想法先发这里</span></div>
   <div class="plats">
-
     <a class="p" href="https://v.douyin.com/Z39Eq_f2grc/" target="_blank" rel="noopener">
       <img class="mk" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/A24ibtQtToVQFvxExiecsKVAn1b" alt="抖音">
-      <div class="tx"><div class="n2">抖音</div><div class="h2s">26948667091</div></div>
+      <div><div class="n2">抖音</div><div class="h2s">26948667091</div></div>
       <span class="arw"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
     </a>
-
     <a class="p" href="https://v.kuaishou.com/JoAqDghZ" target="_blank" rel="noopener">
       <img class="mk" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/ZnlEbwl9QoJcJixYZ4bciU60nrh" alt="快手">
-      <div class="tx"><div class="n2">快手</div><div class="h2s">ImGuiN-NB</div></div>
+      <div><div class="n2">快手</div><div class="h2s">ImGuiN-NB</div></div>
       <span class="arw"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
     </a>
-
     <a class="p" href="https://www.coolapk.com/u/36009594" target="_blank" rel="noopener">
       <img class="mk" src="https://media.doubao.com/space/api/box/stream/download/all_by_mount_point/Bz4NbvvPxotev1xEtrUcrk0qn5f" alt="酷安">
-      <div class="tx"><div class="n2">酷安</div><div class="h2s">Dopaminea</div></div>
+      <div><div class="n2">酷安</div><div class="h2s">Dopaminea</div></div>
       <span class="arw"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
     </a>
+  </div>
 
+  <!-- ===== 问答 ===== -->
+  <div class="h"><h2>几个常问的</h2></div>
+  <div class="faq">
+    <details>
+      <summary>不 root 能装吗</summary>
+      <div class="a">能。KSU 商店本身不需要 root，浏览、搜索、下载、收藏都能用，只是装模块那一步要用到 root 权限。投屏也只有「免弹窗采集」这一项要 root，其余走系统授权，不 root 一样投。</div>
+    </details>
+    <details>
+      <summary>为什么不收费</summary>
+      <div class="a">因为没有要花钱的地方。没有服务器要租，没有账号系统要维护，下载流量交给 GitHub 的静态托管。既然成本接近零，就没有理由收钱，也懒得做广告。</div>
+    </details>
+    <details>
+      <summary>我的数据在哪</summary>
+      <div class="a">全在本机。已装模块、收藏、下载记录、头像和昵称都存在应用自己的目录里，不上传。所以换手机不会同步，卸载重装也会清空。覆盖安装（同一个签名）会保留。</div>
+    </details>
+    <details>
+      <summary>装不上或者被系统拦了怎么办</summary>
+      <div class="a">先在系统设置里允许这一个来源安装未知应用。如果提示「签名不一致」，说明手机上还留着别的版本，先卸载再装——这样会清掉本机数据。两个应用都要装，就去各自的官网下最新的包。</div>
+    </details>
   </div>
 
   <div class="end">
-    两个应用都只发 Android，覆盖安装保留设置。没有服务器，也没有账号系统——东西都存在你自己手机上。有新版本先发酷安。
+    有事直接在上面任意一个地方找我，回得最快的是酷安。
     <div class="lg">
       <a href="https://hz-xb.github.io/xiao/ksu/">KSU 商店官网</a>
       <a href="https://hz-xb.github.io/xiao/">相识投屏官网</a>
