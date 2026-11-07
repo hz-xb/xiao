@@ -1,15 +1,15 @@
 {
-  "versionCode": 105,
-  "versionName": "1.0.5",
-  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.0.5.apk",
-  "notes": "公告改成每次打开都弹；启动就校验安装包并显示结果；LSPosed 全部换成作者真实头像；详情页去掉重复的来源、补上大小和版本。",
-  "sha256": "4a8d466cb04a423cbb1a3e50c82baeea612a89bb0e14b395fbec53bbd76fe05e",
-  "sizeBytes": 4477240,
+  "versionCode": 106,
+  "versionName": "1.0.6",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.0.6.apk",
+  "notes": "Magisk 模块全部换上统一图标；LSPosed、开源应用都补上了更新时间和版本号；开源应用从 39 个加到 62 个；详情改成屏幕中间弹出，只留版本、大小、类型、更新时间，不再显示作者；下载有实时进度。",
+  "sha256": "cba7507850dab547135c06a5280a9a0040d2bce59214cd587a4bc1f65088abb7",
+  "sizeBytes": 4484870,
   "forceUpdate": false,
   "notice": {
-    "id": "20261107-v105",
-    "title": "相识市场 1.0.5",
-    "body": "这次三件事：一，公告改成每次打开都弹，你没看到就等于没发；二，打开就校验安装包，结果显示在标题下面；三，LSPosed 的图标换成模块作者本人的头像了，之前全是同一个组织图标。详情页重复的来源、缺的大小和版本也一并修了。",
+    "id": "20261107-v106",
+    "title": "相识市场 1.0.6",
+    "body": "面具模块以前全是一堆字母，现在统一成面具图标了；LSPosed 和开源应用都补上了「多久前更新」和版本号，应用从 39 个加到了 62 个。详情不再从底下往上冒，改成屏幕中间弹出来，只显示版本、大小、类型、更新时间这些实在信息。下载的时候顶部会有进度条和百分比。",
     "level": "info"
   }
 }
