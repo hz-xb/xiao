@@ -236,6 +236,56 @@ a,button,summary{outline:none}
   .rev{opacity:1;transform:none;transition:none}
   *{transition:none!important}
 }
+
+/* ================== 实时状态 ================== */
+.bar-top{position:fixed;left:0;top:0;height:2px;width:0;background:var(--accent2);z-index:70;transition:width .12s linear}
+.stat{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 16px 13px}
+.stat .row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat .it .lb{font-size:10px;color:var(--ink3);letter-spacing:.02em}
+.stat .it .val{font-size:15px;font-weight:500;margin-top:3px;font-variant-numeric:tabular-nums;color:var(--accent);letter-spacing:-.01em}
+.stat .it .sm{font-size:10px;color:var(--ink3);margin-top:1px}
+.stat .foot{display:flex;align-items:center;gap:6px;margin-top:13px;padding-top:11px;border-top:1px solid var(--line2);font-size:10.5px;color:var(--ink3)}
+.live{width:6px;height:6px;border-radius:50%;background:#3FB27F;flex:none}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.live{animation:blink 2.4s ease-in-out infinite}
+.devs{margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line2);border:1px solid var(--line2);border-radius:16px;overflow:hidden}
+.devs .d{background:var(--card);padding:11px 13px;min-width:0}
+.devs .d .k{font-size:10px;color:var(--ink3)}
+.devs .d .v{font-size:11.5px;color:var(--ink);margin-top:2px;line-height:1.5;word-break:break-word}
+
+/* ================== 灯箱 ================== */
+#lb{position:fixed;inset:0;z-index:80;background:rgba(10,18,15,.94);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .22s}
+#lb.on{opacity:1;pointer-events:auto}
+#lb img{max-height:84vh;max-width:84vw;border-radius:12px;box-shadow:0 30px 70px -34px #000}
+#lb .nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;appearance:none}
+#lb .nav:hover{background:rgba(255,255,255,.2)}
+#lb .pv{left:16px}
+#lb .nx{right:16px}
+#lb .x{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;cursor:pointer;appearance:none;display:flex;align-items:center;justify-content:center}
+#lb .cap{position:absolute;bottom:22px;left:0;right:0;text-align:center;color:rgba(255,255,255,.66);font-size:11.5px;letter-spacing:.02em}
+.rail img{cursor:zoom-in}
+
+/* ================== 回顶 ================== */
+#up{
+  position:fixed;right:16px;bottom:20px;width:42px;height:42px;border-radius:50%;
+  border:none;cursor:pointer;background:var(--deep);color:#fff;z-index:50;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .22s,transform .22s,background .16s;
+  box-shadow:0 14px 30px -16px rgba(12,38,32,.7);
+}
+#up.on{opacity:1;pointer-events:auto;transform:none}
+#up:hover{background:var(--deep2)}
+
+/* ================== 分享 ================== */
+.shr{
+  appearance:none;margin-top:12px;height:34px;padding:0 14px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line2);background:var(--card);color:var(--ink2);
+  font-family:inherit;font-size:12px;display:inline-flex;align-items:center;gap:7px;
+  transition:background .16s,color .16s,border-color .16s;
+}
+.shr:hover{background:var(--mint);color:var(--accent);border-color:rgba(34,86,74,.22)}
+.shr svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
+
 @media (min-width:640px){
   .wrap{padding:0 24px}
   .hero{margin-top:40px;padding:30px 30px 26px}
@@ -304,7 +354,7 @@ a,button,summary{outline:none}
       </a>
       <span class="cp-tip">两台手机，同一个 WiFi 就行</span>
     </div>
-  </a>
+  </div>
 
   <div class="w rev">
     <a class="w-top" href="https://hz-xb.github.io/xiao/ksu/">
@@ -333,7 +383,7 @@ a,button,summary{outline:none}
       </a>
       <span class="cp-tip">4.5 MB · Android 8+</span>
     </div>
-  </a>
+  </div>
 
   <div class="w rev">
     <a class="w-top" href="https://hz-xb.github.io/xiao/dopamine/">
@@ -361,7 +411,7 @@ a,button,summary{outline:none}
       </a>
       <span class="cp-tip">6.8 MB · Android 12+</span>
     </div>
-  </a>
+  </div>
 
   <!-- ================== 更新记录 ================== -->
   <div class="h"><h2>最近动过什么</h2><span class="n">都是这一周</span></div>
@@ -381,6 +431,29 @@ a,button,summary{outline:none}
       <div class="t">相识投屏 v2.1.4</div>
       <div class="p">首页改了四卡布局，接收端补齐返回键；官网的下载按钮从临时链接换成了仓库直链。</div>
     </div>
+  </div>
+
+  <!-- ================== 实时状态 ================== -->
+  <div class="h"><h2>现在什么状态</h2><span class="n">都是现算的</span></div>
+  <div class="stat rev">
+    <div class="row">
+      <div class="it"><div class="lb">站点已运行</div><div class="val" id="upTime">—</div><div class="sm">从 11 月 6 日算起</div></div>
+      <div class="it"><div class="lb">这一页开了</div><div class="val" id="stay">00:00</div><div class="sm">秒表在走</div></div>
+      <div class="it"><div class="lb">现在时间</div><div class="val" id="clock">—</div><div class="sm" id="tzsm">读你的时区</div></div>
+    </div>
+    <div class="foot"><span class="live"></span><span id="netline">正在读网络状态</span><span style="margin-left:auto">纯静态 · 没有后端</span></div>
+  </div>
+
+  <div class="h"><h2>你用的这台</h2><span class="n">浏览器自己报的</span></div>
+  <div class="devs rev" id="devs">
+    <div class="d"><div class="k">系统</div><div class="v" data-d="sys">—</div></div>
+    <div class="d"><div class="k">浏览器</div><div class="v" data-d="bro">—</div></div>
+    <div class="d"><div class="k">窗口</div><div class="v" data-d="scr">—</div></div>
+    <div class="d"><div class="k">语言</div><div class="v" data-d="lang">—</div></div>
+    <div class="d"><div class="k">时区</div><div class="v" data-d="tz">—</div></div>
+    <div class="d"><div class="k">网络</div><div class="v" data-d="net">—</div></div>
+    <div class="d"><div class="k">处理器</div><div class="v" data-d="cpu">—</div></div>
+    <div class="d"><div class="k">内存</div><div class="v" data-d="mem">—</div></div>
   </div>
 
   <!-- ================== 那 1561 条 ================== -->
@@ -450,11 +523,28 @@ a,button,summary{outline:none}
       <a href="https://hz-xb.github.io/xiao/dopamine/">Dopamine 官网</a>
       <span>© 2026 相识</span>
     </div>
+<button class="shr" id="share" type="button">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4"/><path d="M8 8l4-4 4 4"/><path d="M5 14v5h14v-5"/></svg>
+    分享这一页
+  </button>
   </div>
 
 </div>
 
 <div id="toast" role="status" aria-live="polite"></div>
+
+<div class="bar-top" id="bar" aria-hidden="true"></div>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="看图">
+  <button class="nav pv" id="lbPrev" type="button" aria-label="上一张"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+  <img id="lbImg" src="" alt="">
+  <button class="nav nx" id="lbNext" type="button" aria-label="下一张"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+  <button class="x" id="lbClose" type="button" aria-label="关闭"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6l-12 12"/></svg></button>
+  <div class="cap" id="lbCap"></div>
+</div>
+
+<button id="up" type="button" aria-label="回到顶部"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V6"/><path d="M6 12l6-6 6 6"/></svg></button>
+
 
 <script>
 (function(){
@@ -524,6 +614,175 @@ a,button,summary{outline:none}
     revs.forEach(function(el){ ro.observe(el); });
     setTimeout(showAll, 2000);
   } else { showAll(); }
+
+  // ===== 实时状态 =====
+  var upEl = document.getElementById('upTime');
+  var stayEl = document.getElementById('stay');
+  var clockEl = document.getElementById('clock');
+  var tzSm = document.getElementById('tzsm');
+  var netLine = document.getElementById('netline');
+  var START = Date.UTC(2026, 10, 5, 16, 0, 0);
+  var t0 = Date.now();
+  function p2(n){ return n < 10 ? '0' + n : '' + n; }
+
+  function tick(){
+    var now = Date.now();
+    var d = now - START;
+    if (d < 0) d = 0;
+    var days = Math.floor(d / 86400000);
+    var hrs = Math.floor((d % 86400000) / 3600000);
+    if (upEl) upEl.textContent = days + ' 天 ' + hrs + ' 时';
+
+    var s = Math.floor((now - t0) / 1000);
+    var mm = Math.floor(s / 60), ss = s % 60;
+    if (stayEl) stayEl.textContent = p2(mm) + ':' + p2(ss);
+
+    var dt = new Date();
+    if (clockEl) clockEl.textContent = p2(dt.getHours()) + ':' + p2(dt.getMinutes()) + ':' + p2(dt.getSeconds());
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // ===== 设备信息 =====
+  (function(){
+    var ua = navigator.userAgent || '';
+    var sys = '未知';
+    var m = ua.match(/Android[\s\/]([0-9.]+)/);
+    if (m) sys = 'Android ' + m[1];
+    else if (/iPhone|iPad|iPod/.test(ua)) sys = 'iOS';
+    else if (/Windows NT/.test(ua)) sys = 'Windows';
+    else if (/Mac OS X/.test(ua)) sys = 'macOS';
+    else if (/Linux/.test(ua)) sys = 'Linux';
+
+    var bro = '未知';
+    if (/Edg\//.test(ua)) bro = 'Edge';
+    else if (/OPR\//.test(ua)) bro = 'Opera';
+    else if (/Chrome\//.test(ua)) bro = 'Chrome';
+    else if (/Firefox\//.test(ua)) bro = 'Firefox';
+    else if (/Safari\//.test(ua)) bro = 'Safari';
+    var bv = ua.match(/(?:Chrome|Firefox|Edg|Version)\/([0-9]+)/);
+    if (bv) bro += ' ' + bv[1];
+
+    var tz = '未知';
+    try {
+      var zone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      var off = -new Date().getTimezoneOffset() / 60;
+      var sign = off >= 0 ? '+' : '-';
+      var aoff = Math.abs(off);
+      tz = (zone ? zone + ' · ' : '') + 'UTC' + sign + (aoff % 1 ? aoff.toFixed(1) : aoff);
+      if (tzSm) tzSm.textContent = 'UTC' + sign + aoff;
+    } catch (e) {}
+
+    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    function netText(){
+      if (navigator.onLine === false) return '离线';
+      if (conn && conn.effectiveType) return '在线 · ' + conn.effectiveType.toUpperCase();
+      return '在线';
+    }
+    function paintNet(){
+      var set = {};
+      set.net = netText();
+      if (netLine) netLine.textContent = netText();
+      var el = document.querySelector('[data-d="net"]');
+      if (el) el.textContent = set.net;
+    }
+
+    var info = {
+      sys: sys,
+      bro: bro,
+      scr: window.innerWidth + '×' + window.innerHeight + ' · ' + (window.devicePixelRatio || 1) + 'x',
+      lang: navigator.language || '未知',
+      tz: tz,
+      cpu: (navigator.hardwareConcurrency || 0) ? navigator.hardwareConcurrency + ' 核' : '未公开',
+      mem: navigator.deviceMemory ? navigator.deviceMemory + ' GB' : '未公开'
+    };
+    Object.keys(info).forEach(function(k){
+      var el = document.querySelector('[data-d="' + k + '"]');
+      if (el) el.textContent = info[k];
+    });
+    paintNet();
+    window.addEventListener('online', paintNet);
+    window.addEventListener('offline', paintNet);
+    if (conn && conn.addEventListener) {
+      conn.addEventListener('change', paintNet);
+    }
+    var sc = document.querySelector('[data-d="scr"]');
+    window.addEventListener('resize', function(){
+      if (sc) sc.textContent = window.innerWidth + '×' + window.innerHeight + ' · ' + (window.devicePixelRatio || 1) + 'x';
+    });
+  })();
+
+  // ===== 灯箱 =====
+  (function(){
+    var imgs = Array.prototype.slice.call(document.querySelectorAll('.rail img'));
+    var lb = document.getElementById('lb');
+    var lbImg = document.getElementById('lbImg');
+    var cap = document.getElementById('lbCap');
+    if (!lb || !imgs.length) return;
+    var cur = 0;
+    function open(i){
+      cur = i;
+      lbImg.src = imgs[i].src;
+      lbImg.alt = imgs[i].alt;
+      cap.textContent = (i + 1) + ' / ' + imgs.length + ' · ' + (imgs[i].alt || '');
+      lb.classList.add('on');
+      document.body.style.overflow = 'hidden';
+    }
+    function close(){
+      lb.classList.remove('on');
+      document.body.style.overflow = '';
+    }
+    function go(step){ open((cur + step + imgs.length) % imgs.length); }
+    imgs.forEach(function(im, i){
+      im.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); open(i); });
+    });
+    document.getElementById('lbClose').addEventListener('click', close);
+    document.getElementById('lbPrev').addEventListener('click', function(e){ e.stopPropagation(); go(-1); });
+    document.getElementById('lbNext').addEventListener('click', function(e){ e.stopPropagation(); go(1); });
+    lb.addEventListener('click', function(e){ if (e.target === lb || e.target === lbImg) close(); });
+    document.addEventListener('keydown', function(e){
+      if (!lb.classList.contains('on')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') go(-1);
+      if (e.key === 'ArrowRight') go(1);
+    });
+  })();
+
+  // ===== 进度条 + 回顶 =====
+  (function(){
+    var bar = document.getElementById('bar');
+    var up = document.getElementById('up');
+    function onScroll(){
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      var p = h > 0 ? (window.scrollY / h) : 0;
+      if (bar) bar.style.width = (p * 100).toFixed(2) + '%';
+      if (up) up.classList.toggle('on', window.scrollY > 420);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    if (up) up.addEventListener('click', function(){
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  })();
+
+  // ===== 分享 =====
+  (function(){
+    var btn = document.getElementById('share');
+    if (!btn) return;
+    btn.addEventListener('click', function(){
+      var url = location.href;
+      if (navigator.share) {
+        navigator.share({ title: document.title, url: url }).catch(function(){});
+        return;
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function(){ toast('链接已复制'); }, function(){ toast('复制失败'); });
+      } else {
+        toast('地址栏里复制即可');
+      }
+    });
+  })();
+
 })();
 </script>
 
