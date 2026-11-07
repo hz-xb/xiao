@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>固件库 — 小米 / 红米 / 平板全系固件</title>
+<meta name="description" content="小米、红米、POCO 与平板全系固件下载：卡刷包（Recovery）与线刷包（Fastboot）一体检索，官方 CDN 直链，自动切换镜像。">
+<link rel="icon" href="/xiao/assets/ic-fwlib.png">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#f6f5f3; --ink:#14161a; --ink2:#5a5f66; --ink3:#8c9198;
+    --line:#e6e4e0; --accent:#c0521d; --accent-soft:#fbefe8;
+    --r:12px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:"PingFang SC","HarmonyOS Sans SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;
+    line-height:1.62; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:960px; margin:0 auto; padding:0 22px;}
+  a{color:inherit; text-decoration:none;}
+
+  /* 顶栏 */
+  .top{display:flex; align-items:center; gap:11px; padding:20px 0 0;}
+  .top img{width:26px; height:26px; border-radius:7px; display:block;}
+  .top .name{font-size:14px; font-weight:700; letter-spacing:.01em;}
+  .top .back{margin-left:auto; font-size:12.5px; color:var(--ink3);}
+
+  /* 主区 */
+  .hero{padding:44px 0 34px; border-bottom:1px solid var(--line);}
+  .badge{
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:11.5px; color:var(--accent); background:var(--accent-soft);
+    padding:5px 10px; border-radius:7px; letter-spacing:.02em;
+  }
+  .badge i{width:5px; height:5px; border-radius:50%; background:var(--accent); display:block;}
+  h1{font-size:clamp(27px,6.4vw,44px); line-height:1.14; letter-spacing:-.028em; margin:18px 0 0; font-weight:800;}
+  h1 em{font-style:normal; color:var(--accent);}
+  .sub{margin-top:14px; font-size:14.5px; color:var(--ink2); max-width:37em;}
+
+  .dl{display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-top:26px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:9px;
+    background:var(--ink); color:#fff; font-size:14px; font-weight:600;
+    padding:13px 22px; border-radius:10px; transition:transform .16s ease, background .16s;
+  }
+  .btn:hover{transform:translateY(-1px); background:#000;}
+  .btn svg{width:15px; height:15px;}
+  .meta-line{font-size:12px; color:var(--ink3); font-variant-numeric:tabular-nums;}
+  .meta-line b{color:var(--ink2); font-weight:600;}
+
+  /* 数字 */
+  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border-bottom:1px solid var(--line);}
+  .stat{background:var(--bg); padding:22px 0;}
+  .stat .n{font-size:26px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums;}
+  .stat .n small{font-size:12px; font-weight:500; color:var(--ink3); margin-left:3px;}
+  .stat .k{font-size:12px; color:var(--ink2); margin-top:2px;}
+  .stat:nth-child(2){padding-left:18px;} .stat:nth-child(3){padding-left:18px;}
+
+  /* 功能 */
+  section.sec{padding:38px 0 6px;}
+  .sec-h{display:flex; align-items:baseline; gap:10px; margin-bottom:18px;}
+  .sec-h h2{font-size:15px; font-weight:700; letter-spacing:.01em;}
+  .sec-h span{font-size:11.5px; color:var(--ink3);}
+  .grid{display:grid; grid-template-columns:1fr; gap:10px;}
+  .card{
+    border:1px solid var(--line); border-radius:var(--r); padding:17px 18px;
+    background:var(--bg);
+  }
+  .card h3{font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:8px;}
+  .card h3 .dot{width:6px; height:6px; border-radius:2px; background:var(--accent); flex:none;}
+  .card p{font-size:12.5px; color:var(--ink2); margin-top:7px; line-height:1.7;}
+
+  /* 说明 */
+  .note{margin-top:34px; background:var(--bg2); border-radius:var(--r); padding:20px 20px 18px;}
+  .note h3{font-size:13px; font-weight:700;}
+  .note ol{margin-top:10px; padding-left:18px; font-size:12.5px; color:var(--ink2);}
+  .note ol li{margin-bottom:6px;}
+  .note .risk{margin-top:14px; padding-top:13px; border-top:1px solid var(--line); font-size:12.5px; color:#8a3a12;}
+
+  footer{margin-top:44px; padding:22px 0 40px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:8px 18px; font-size:12px; color:var(--ink3);}
+  footer .right{margin-left:auto;}
+
+  @media(min-width:720px){
+    .grid{grid-template-columns:1fr 1fr;}
+    .hero{padding:60px 0 42px;}
+    .stats{grid-template-columns:repeat(3,1fr);}
+    .stat{padding:26px 0 26px 0;}
+    .stat:first-child{padding-left:0;}
+    .stat:nth-child(2),.stat:nth-child(3){padding-left:26px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <img src="/xiao/assets/ic-fwlib.png" alt="固件库">
+    <span class="name">固件库</span>
+    <a class="back" href="https://hz-xb.github.io/xiao/me/">相识 · 应用列表</a>
+  </div>
+
+  <div class="hero">
+    <div class="badge"><i></i>v1.0.0 · 已上线</div>
+    <h1>小米、红米、平板的<br><em>全部固件</em>，一个 App 找齐</h1>
+    <p class="sub">347 台设备、3685 个包，卡刷包（Recovery · zip）和线刷包（Fastboot · tgz）一起搜。数据直接从开源索引实时读，包体指向小米官方 CDN，原样未改。</p>
+
+    <div class="dl">
+      <a class="btn" href="https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.0.apk">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+        下载安卓版
+      </a>
+      <div class="meta-line">Android 7.0 及以上 · <b>62 KB</b> · 无需 root</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">347<small>台</small></div><div class="k">在库设备</div></div>
+    <div class="stat"><div class="n">3685<small>个</small></div><div class="k">固件包</div></div>
+    <div class="stat"><div class="n">2<small>种</small></div><div class="k">卡刷 / 线刷</div></div>
+  </div>
+
+  <section class="sec">
+    <div class="sec-h"><h2>它能干什么</h2><span>下载、核对、选包</span></div>
+    <div class="grid">
+      <div class="card">
+        <h3><span class="dot"></span>按机型找，不按代号猜</h3>
+        <p>同一台机器在海外、欧洲、印度、俄罗斯会挂不同代号。这里已经按机型合并，一台设备下面就是它所有地区的包，不用自己记 aurora 和 aurora_global 的区别。</p>
+      </div>
+      <div class="card">
+        <h3><span class="dot"></span>403 自动换节点</h3>
+        <p>官方 bigota 节点现在对大部分请求直接回 403。App 在下之前先试镜像节点，通就用镜像，不通再回落原链，不会点一下就撞死。</p>
+      </div>
+      <div class="card">
+        <h3><span class="dot"></span>包多到能挑版本</h3>
+        <p>每台机器中位数 10 个包，最多的有 28 个。想升最新的、退回去年的、换海外版，列表里按日期排好，点开就能看到版本号、Android 版本、大小和 MD5。</p>
+      </div>
+      <div class="card">
+        <h3><span class="dot"></span>MD5 摆在明面上</h3>
+        <p>每个包都带原始 MD5，一键复制。下完先对一遍再刷，省得下到半截的文件把机器刷坏。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-h"><h2>用之前知道这几件事</h2></div>
+    <div class="note">
+      <h3>下载与刷写</h3>
+      <ol>
+        <li>卡刷包是 zip，丢进手机存储，系统更新里选「选择安装包」，或进 Recovery 刷。</li>
+        <li>线刷包是 tgz，解压出 images 文件夹，用 MiFlash 或 fastboot 整机重写。救砖走这条。</li>
+        <li>跨区域、跨大版本降级可能触发防回滚，先确认自己的机型能不能降。</li>
+      </ol>
+      <p class="risk">刷机有风险。数据先备份，电量留够 30% 以上，刷的过程中别拔线。刷坏了要自己承担。</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>固件索引：XiaomiFirmwareUpdater / miui-updates-tracker（开源）</span>
+    <span class="right">相识 · 服务器在线</span>
+  </footer>
+</div>
+</body>
+</html>
