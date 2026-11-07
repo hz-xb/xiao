@@ -1,15 +1,15 @@
 {
-  "versionCode": 114,
-  "versionName": "1.1.3",
-  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.3.apk",
-  "notes": "首启页顶部不再发灰；底部多了「我的」：本机标识、最近浏览、下载记录、已装模块。",
-  "sha256": "668cf1d22b71f0c0d1c3f10ad87500d875d206b1ab5f2cb4696402c399a6de02",
-  "sizeBytes": 4507211,
+  "versionCode": 115,
+  "versionName": "1.1.4",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.4.apk",
+  "notes": "改名 KSU 商店；首启同意页换成独立整页；「我的」重做成个人中心，不再带搜索。",
+  "sha256": "69c6a46100db055fee400ad2c2e36eaa5b31e6905aaf537472042eb9557182f2",
+  "sizeBytes": 4517696,
   "forceUpdate": false,
   "notice": {
-    "id": "20261107-v114",
-    "title": "相识市场 1.1.3",
-    "body": "首启那一页顶上的灰边去掉了，现在从上到下都是白的。\n底下多了一个「我的」：左边是你自己，头像下面一行是本机标识；再往下分别是最近浏览过什么、下过什么、以及这台机子上已经装了哪些模块（读得到 /data/adb/modules 就会列出来，没 root 会告诉你读不到）。\n名字可以自己改。",
+    "id": "20261107-v115",
+    "title": "KSU 商店 1.1.4",
+    "body": "名字改成了 KSU 商店。\n首启那一页现在是独立的一整页，不是浮在上面的弹窗了，从上到下就是页面本身，底部按钮固定住不跟着滚。里面「用户协议」和「隐私政策」分开写成了两页，可以点进去看。\n「我的」重做了：整页没有搜索框，上面是你自己，中间三个数（已装模块、收藏、下载），下面依次是最近浏览、下载记录、本机模块，每一行都带图标。",
     "level": "info"
   }
 }
