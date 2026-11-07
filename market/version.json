@@ -1,15 +1,15 @@
 {
-  "versionCode": 112,
-  "versionName": "1.1.1",
-  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.1.apk",
-  "notes": "列表里能看到哪个已经装了；详情右上角可以收藏；新增收藏筛选；列表交错进场。",
-  "sha256": "e66af1f163a04794ba22b0b4672875c42b48ae35688c3cc54695cea881b6ff2e",
-  "sizeBytes": 4496530,
+  "versionCode": 113,
+  "versionName": "1.1.2",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.2.apk",
+  "notes": "首次打开有一个说明页：讲清楚它为什么需要这几项权限，同意之后才进市场。",
+  "sha256": "73d0e80fac8a50339fabb25093220dd902002afde698c5bb78b3ef4b11ce1858",
+  "sizeBytes": 4501283,
   "forceUpdate": false,
   "notice": {
-    "id": "20261107-v112",
-    "title": "相识市场 1.1.1",
-    "body": "三样东西。\n列表里装过的条目，右下角标「已安装」——从这台机子上扫出来的，或者是你从这儿装过的都算。\n详情弹窗右上角多了一颗星，点一下收藏；排序那行最右边多了个「收藏」，点亮就只看收藏过的。\n列表进来的时候，卡片会一个接一个浮上来，不再是整块蹦出来。",
+    "id": "20261107-v113",
+    "title": "相识市场 1.1.2",
+    "body": "第一次打开会先看到一页说明，把网络、安装、通知、Root 这四件事各要干什么写清楚，同意之后才进市场。\n里面那句协议是可以点开的，写的是这个应用到底碰不碰你的数据——答案是只碰它自己要下的那些文件。\n已经同意过的老用户不会再看到这一页。",
     "level": "info"
   }
 }
