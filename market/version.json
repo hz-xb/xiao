@@ -1,15 +1,15 @@
 {
-  "versionCode": 113,
-  "versionName": "1.1.2",
-  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.2.apk",
-  "notes": "首次打开有一个说明页：讲清楚它为什么需要这几项权限，同意之后才进市场。",
-  "sha256": "73d0e80fac8a50339fabb25093220dd902002afde698c5bb78b3ef4b11ce1858",
-  "sizeBytes": 4501283,
+  "versionCode": 114,
+  "versionName": "1.1.3",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.3.apk",
+  "notes": "首启页顶部不再发灰；底部多了「我的」：本机标识、最近浏览、下载记录、已装模块。",
+  "sha256": "668cf1d22b71f0c0d1c3f10ad87500d875d206b1ab5f2cb4696402c399a6de02",
+  "sizeBytes": 4507211,
   "forceUpdate": false,
   "notice": {
-    "id": "20261107-v113",
-    "title": "相识市场 1.1.2",
-    "body": "第一次打开会先看到一页说明，把网络、安装、通知、Root 这四件事各要干什么写清楚，同意之后才进市场。\n里面那句协议是可以点开的，写的是这个应用到底碰不碰你的数据——答案是只碰它自己要下的那些文件。\n已经同意过的老用户不会再看到这一页。",
+    "id": "20261107-v114",
+    "title": "相识市场 1.1.3",
+    "body": "首启那一页顶上的灰边去掉了，现在从上到下都是白的。\n底下多了一个「我的」：左边是你自己，头像下面一行是本机标识；再往下分别是最近浏览过什么、下过什么、以及这台机子上已经装了哪些模块（读得到 /data/adb/modules 就会列出来，没 root 会告诉你读不到）。\n名字可以自己改。",
     "level": "info"
   }
 }
