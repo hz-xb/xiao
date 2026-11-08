@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>相识 — 一个人，六个 App</title>
-<meta name="description" content="相识，独立开发者。六个 Android 应用：相识投屏、KSU 商店、Dopamine、GhostKey、刷写器、MI 固件库。都不收钱、不要账号、不往云上传东西。">
+<title>相识 — 一个人，七个 App</title>
+<meta name="description" content="相识，独立开发者。七个 Android 应用：相识投屏、KSU 商店、Dopamine、GhostKey、Shizuku、刷写器、MI 固件库。都不收钱、不要账号、不往云上传东西。">
 <link rel="preconnect" href="https://miaoda.feishu.cn">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2312332A'/%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='30' font-weight='700' fill='white' text-anchor='middle'%3E相%3C/text%3E%3C/svg%3E">
@@ -66,6 +66,7 @@ a,button,summary{outline:none}
 .who{flex:1;min-width:0;padding-top:4px}
 .nm{font-size:27px;font-weight:700;letter-spacing:-.035em;line-height:1.16}
 .rl{margin-top:6px;font-size:12px;color:var(--on-soft);letter-spacing:.01em}
+.en{margin-top:5px;font:500 9.5px/1 ui-monospace,"SF Mono",Menlo,Consolas,monospace;letter-spacing:.19em;color:rgba(255,255,255,.38)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .chips span{
   font-size:10.5px;color:rgba(255,255,255,.78);line-height:1.5;
@@ -90,7 +91,7 @@ a,button,summary{outline:none}
 
 /* ================== 分区标题 ================== */
 .h{display:flex;align-items:baseline;gap:9px;margin:40px 0 0}
-.h h2{font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--ink2);margin:0}
+.h h2{font-size:15px;font-weight:600;letter-spacing:-.01em;color:var(--ink);margin:0}
 .h .n{font-size:11.5px;color:var(--ink3);margin-left:auto}
 
 /* ================== 应用卡 ================== */
@@ -297,6 +298,54 @@ a,button,summary{outline:none}
   .rail{grid-auto-columns:96px}
   .rail img{width:96px;height:172px}
 }
+
+/* ================== 装修层 ================== */
+.w{position:relative}
+.w::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:3px;border-radius:20px 20px 0 0;
+  background:linear-gradient(90deg,var(--c) 0%,rgba(0,0,0,0) 86%);
+  opacity:.85;transition:opacity .25s;
+}
+.w::after{
+  content:attr(data-n);position:absolute;right:15px;top:9px;
+  font:500 9.5px/1 ui-monospace,"SF Mono",Menlo,Consolas,monospace;letter-spacing:.08em;
+  color:var(--c);opacity:.28;transition:opacity .25s;
+  pointer-events:none;
+}
+.w:hover{border-color:var(--c);box-shadow:0 26px 48px -34px rgba(21,24,26,.55),0 0 0 1px var(--c) inset}
+.w:hover::before,.w:hover::after{opacity:1}
+.w:hover .w-top .go{color:var(--c)}
+.w-top .logo{transition:transform .3s cubic-bezier(.22,.7,.2,1)}
+.w:hover .w-top .logo{transform:rotate(-3deg) scale(1.045)}
+.w .ver{border:1px solid rgba(21,24,26,.06)}
+
+/* 分区标题：左侧短标 */
+.h{position:relative;padding-left:11px}
+.h::before{
+  content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:2px;height:13px;border-radius:2px;background:var(--accent);opacity:.55;
+}
+
+/* 时间线最新一条：呼吸点 */
+.tl .it.now::before{animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(34,86,74,.1)}50%{box-shadow:0 0 0 7px rgba(34,86,74,.04)}}
+
+/* 名片底部：七个应用索引 */
+.idx{
+  display:flex;gap:7px;margin-top:16px;position:relative;z-index:2;
+  overflow-x:auto;padding-bottom:2px;scrollbar-width:none;
+}
+.idx::-webkit-scrollbar{display:none}
+.idx a{
+  flex:none;width:33px;height:33px;border-radius:9px;display:grid;place-items:center;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);
+  transition:transform .22s cubic-bezier(.22,.7,.2,1),background .22s,border-color .22s;
+}
+.idx a img{width:21px;height:21px;border-radius:6px}
+.idx a:hover{transform:translateY(-3px);background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.34)}
+@media (prefers-reduced-motion:reduce){
+  .w::before,.w::after,.tl .it.now::before{animation:none!important;transition:none!important}
+}
 </style>
 </head>
 <body>
@@ -311,23 +360,33 @@ a,button,summary{outline:none}
       </div>
       <div class="who">
         <div class="nm">相识</div>
+        <div class="en">XIANG SHI · ANDROID TOOLS</div>
         <div class="rl">独立开发者 · Android · 河南 许昌</div>
         <div class="chips"><span>自己做 · 自己发</span><span>不收钱</span><span>不要账号</span></div>
       </div>
     </div>
-    <p class="bio">一个人写点 Android 上的工具，<b>装在自己手机上顺手</b>才做出来的那种。五个 App，从界面到打包到官网都是自己弄的，中间没有团队也没有甲方。</p>
+    <p class="bio">一个人写点 Android 上的工具，<b>装在自己手机上顺手</b>才做出来的那种。七个 App，从界面到打包到官网都是自己弄的，中间没有团队也没有甲方。</p>
     <div class="nums">
-      <div class="cell"><div class="v" data-count="5">0</div><div class="k">在做的应用</div></div>
+      <div class="cell"><div class="v" data-count="7">0</div><div class="k">在做的应用</div></div>
       <div class="cell"><div class="v" data-count="1561">0</div><div class="k">收录资源</div></div>
       <div class="cell"><div class="v" data-count="5">0</div><div class="k">个公开来源</div></div>
       <div class="cell"><div class="v" data-count="6">0</div><div class="k">年迭代</div></div>
     </div>
+    <div class="idx" aria-label="跳到某个应用">
+      <a href="#a1" title="相识投屏"><img src="../assets/ic-mirror.png" alt="相识投屏"></a>
+      <a href="#a2" title="KSU 商店"><img src="../assets/ic-ksu.png" alt="KSU 商店"></a>
+      <a href="#a3" title="Dopamine"><img src="../assets/ic-dopamine.png" alt="Dopamine"></a>
+      <a href="#a4" title="GhostKey"><img src="../assets/ic-ghostkey.png" alt="GhostKey"></a>
+      <a href="#a5" title="Shizuku"><img src="../assets/ic-shizuku.png" alt="Shizuku"></a>
+      <a href="#a6" title="刷写器"><img src="../assets/ic-flasher.png" alt="刷写器"></a>
+      <a href="#a7" title="MI 固件库"><img src="../assets/ic-fwlib.png" alt="MI 固件库"></a>
+    </div>
   </section>
 
-  <!-- ================== 三个应用 ================== -->
+  <!-- ================== 手上这七个 ================== -->
   <div class="h"><h2>手上这些</h2><span class="n">点开就是官网</span></div>
 
-  <div class="w rev">
+  <div class="w rev" id="a1" style="--c:#2F6F5C" data-n="01">
     <a class="w-top" href="https://hz-xb.github.io/xiao/">
       <img class="logo" src="../assets/ic-mirror.png" alt="相识投屏">
       <div class="txt">
@@ -353,7 +412,7 @@ a,button,summary{outline:none}
     </div>
   </div>
 
-  <div class="w rev">
+  <div class="w rev" id="a2" style="--c:#1F5A45" data-n="02">
     <a class="w-top" href="https://hz-xb.github.io/xiao/ksu/">
       <img class="logo" src="../assets/ic-ksu.png" alt="KSU 商店">
       <div class="txt">
@@ -378,7 +437,7 @@ a,button,summary{outline:none}
     </div>
   </div>
 
-  <div class="w rev">
+  <div class="w rev" id="a3" style="--c:#6B4C9A" data-n="03">
     <a class="w-top" href="https://hz-xb.github.io/xiao/dopamine/">
       <img class="logo" src="../assets/ic-dopamine.png" alt="Dopamine">
       <div class="txt">
@@ -402,7 +461,7 @@ a,button,summary{outline:none}
     </div>
   </div>
 
-  <div class="w rev">
+  <div class="w rev" id="a4" style="--c:#2A5F96" data-n="04">
     <a class="w-top" href="https://hz-xb.github.io/xiao/ghostkey/">
       <img class="logo" src="../assets/ic-ghostkey.png" alt="GhostKey">
       <div class="txt">
@@ -426,7 +485,7 @@ a,button,summary{outline:none}
     </div>
   </div>
 
-  <div class="w rev">
+  <div class="w rev" id="a5" style="--c:#1C7C74" data-n="05">
     <a class="w-top" href="https://hz-xb.github.io/xiao/shizuku/">
       <img class="logo" src="../assets/ic-shizuku.png" alt="Shizuku">
       <div class="txt">
@@ -451,7 +510,7 @@ a,button,summary{outline:none}
     </div>
   </div>
 
-  <div class="w rev">
+  <div class="w rev" id="a6" style="--c:#565AA8" data-n="06">
     <a class="w-top" href="https://hz-xb.github.io/xiao/flasher/">
       <img class="logo" src="../assets/ic-flasher.png" alt="刷写器">
       <div class="txt">
@@ -475,7 +534,7 @@ a,button,summary{outline:none}
     </div>
   </div>
 
-  <div class="w">
+  <div class="wNone" id="a7" style="--c:#3E7A34" data-n="07">
     <a class="w-top" href="https://hz-xb.github.io/xiao/fwapp/">
       <img class="logo" src="../assets/ic-fwlib.png" alt="MI 固件库">
       <div class="txt">
