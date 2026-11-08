@@ -1,12 +1,12 @@
 {
   "name": "MI 固件库",
-  "versionCode": 9,
-  "versionName": "1.0.8",
+  "versionCode": 10,
+  "versionName": "1.0.9",
   "size": 129726,
-  "sha256": "0307de397039b8722d97a53fbfd97380ca02f597a940878e613ba67cdec58fa1",
-  "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.8.apk",
+  "sha256": "d4cc08cd726b4c359ac7c56b4e55f83ea3c92b47b8216b898128cad66ebb3685",
+  "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.9.apk",
   "notice": {
     "level": "info",
-    "text": "1.0.8：缓存里的品牌标识一并重算，升级后 MI 1S、MIX 这些不会再被标成「其他」；详情页品牌改成中文，地区解析不出的包只显示刷法与分支。"
+    "text": "1.0.9：升级提示里直接写明「现在装的」和「新版」的版本号，装完不会再被反复提醒；其余与 1.0.8 一致。"
   }
 }
