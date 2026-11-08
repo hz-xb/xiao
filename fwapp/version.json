@@ -1,12 +1,18 @@
 {
   "name": "MI 固件库",
-  "versionCode": 10,
-  "versionName": "1.0.9",
-  "size": 129726,
-  "sha256": "d4cc08cd726b4c359ac7c56b4e55f83ea3c92b47b8216b898128cad66ebb3685",
-  "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.9.apk",
+  "versionCode": 11,
+  "versionName": "1.1.0",
+  "size": 133822,
+  "sha256": "49a101d4f4a65cbdb8af52ede325b33a0db88fde48490513e75d7248269641bb",
+  "sha256_history": [
+    "49a101d4f4a65cbdb8af52ede325b33a0db88fde48490513e75d7248269641bb",
+    "d4cc08cd726b4c359ac7c56b4e55f83ea3c92b47b8216b898128cad66ebb3685",
+    "0307de397039b8722d97a53fbfd97380ca02f597a940878e613ba67cdec58fa1"
+  ],
+  "cert": "1a61fd9c3dc4f029e53e5cf9c34534532b847e448be06ed563748ec6354ed53b",
+  "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.1.0.apk",
   "notice": {
     "level": "info",
-    "text": "1.0.9：升级提示里直接写明「现在装的」和「新版」的版本号，装完不会再被反复提醒；其余与 1.0.8 一致。"
+    "text": "1.1.0：正版校验重做。现在比对安装包的签名证书指纹和文件哈希，跟版本号没有关系；改过内容或重新签过名的包会被直接拦下，进不了主界面。"
   }
 }
