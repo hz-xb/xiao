@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GhostKey 用户协议与隐私政策</title>
+<meta name="description" content="GhostKey 的用户协议、隐私政策与风险告知。">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
+<style>
+  :root{
+    --paper:#F5F5F1; --surface:#FFFFFF; --ink:#15181A; --ink-2:#5E6469;
+    --line:#DCDCD4; --accent:#22564A; --warn:#8A6420;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75}
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px 64px}
+  header{background:#0B1A1C;color:#F5F5F1;padding:44px 22px 36px}
+  header .inner{max-width:760px;margin:0 auto}
+  header .kicker{font-size:12px;letter-spacing:.14em;color:#9FB8B2;margin:0 0 10px}
+  h1{font-size:26px;font-weight:700;margin:0 0 10px;letter-spacing:.01em}
+  header p{color:#B9C9C5;font-size:13px;margin:0}
+  h2{font-size:16px;margin:34px 0 10px;color:var(--ink)}
+  h2 .n{color:var(--accent);font-variant-numeric:tabular-nums;margin-right:8px}
+  p,li{font-size:14px;color:#2E3336}
+  p.sec{color:var(--ink-2)}
+  ul{margin:6px 0 0 18px;padding:0}
+  li{margin:4px 0}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:22px 0}
+  .warn{background:#FBF3E6;border:1px solid #E6D3AC;border-radius:12px;padding:16px 20px;margin:22px 0;color:#6B4E18;font-size:13.5px}
+  footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--ink-2);font-size:12.5px}
+  a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<header><div class="inner">
+  <p class="kicker">GHOSTKEY · 协议与隐私</p>
+  <h1>用户协议与隐私政策</h1>
+  <p>最近更新：2026-11-09　适用版本：GhostKey 1.5.7 及以后</p>
+</div></header>
+
+<div class="wrap">
+  <div class="warn">
+    <strong>风险告知</strong><br>
+    GhostKey 会临时绕过 Android 的权限与完整性校验，为当前设备取得 root，重启后恢复原样。请只在你本人名下、你愿意承担后果的设备上使用；不要用于他人设备、单位设备或存有重要数据的设备。提权期间系统防护被临时打开，任何应用都可能借机提升权限；由此产生的后果由使用者自行承担。
+  </div>
+
+  <h2><span class="n">01</span>我们申请什么</h2>
+  <p class="sec">只申请跑通功能所必需的三项，不做后台采集。</p>
+  <ul>
+    <li><strong>网络访问</strong>：拉取云公告与更新清单、校验安装包哈希，并连接本机无线调试端口（局域网内）。</li>
+    <li><strong>通知</strong>：配对时把 6 位配对码输入框放到通知栏；不做推送、不发广告。</li>
+    <li><strong>应用列表</strong>：从你已安装的 Root 管理器里取出 ksud，仅读取包名与该应用的库文件。</li>
+  </ul>
+
+  <h2><span class="n">02</span>我们不上传什么</h2>
+  <p>不上传通讯录、相册、短信、位置、设备标识，也不建立账号体系。应用内没有统计 SDK 与广告 SDK。</p>
+
+  <h2><span class="n">03</span>云端会收到什么</h2>
+  <p>检查公告和更新时，会向本站点请求一个 JSON 文件，服务器日志中会留下常规的访问记录（IP、时间、User-Agent），这与浏览任意网页相同。安装包完整性校验在你的设备本地完成：读取自身 APK 计算 SHA-256，再与云端发布值比对，哈希不会上传。</p>
+  <div class="card">
+    <p style="margin:0"><strong>数据留存</strong>　本站点由静态托管提供，不设数据库；我们不主动保存访问者的任何个人信息。</p>
+  </div>
+
+  <h2><span class="n">04</span>使用约定</h2>
+  <ul>
+    <li>仅用于你自己的设备做安全研究与自用调试，不得用于入侵、控制他人设备。</li>
+    <li>不得将本工具改包、二次分发后冒用官方名义；官方包以本页公布的哈希为准。</li>
+    <li>提权成功后的权限发放由你安装的 Root 管理器负责，请只授予可信应用。</li>
+    <li>设备保修、系统更新、数据丢失等风险由使用者自行评估并承担。</li>
+  </ul>
+
+  <h2><span class="n">05</span>你的选择</h2>
+  <p>首启不同意本协议可直接退出，应用不会继续运行。已同意后可在系统设置中清除应用数据，回到首启状态。卸载应用会一并清除应用内的软件密钥与本地记录；系统「已配对的设备」里由本应用登记的历史条目需你在系统页面手动删除，系统未提供删除接口。</p>
+
+  <h2><span class="n">06</span>联系我们</h2>
+  <p>问题反馈与漏洞报告请走项目主页的入口。协议如有变更，会在应用内公告并在本页更新，继续使用即视为接受更新后的版本。</p>
+
+  <footer>GhostKey · 临时 root 工具　本页与安装包内文案一致，如有冲突以本页为准。</footer>
+</div>
+</body>
+</html>
