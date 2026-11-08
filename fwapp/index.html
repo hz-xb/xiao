@@ -3,208 +3,404 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MI 固件库 — 小米 / 红米 / POCO / 平板全系官方固件</title>
-<meta name="description" content="小米、红米、POCO 与平板全系官方固件下载。347 台设备、3685 个卡刷与线刷包，按机型、按地区查找，直连官方 CDN，MD5 可核对。">
-<link rel="icon" href="/xiao/assets/ic-fwlib.png">
+<title>MI 固件库 — 3685 个官方固件，按机型直接查</title>
+<meta name="description" content="小米、红米、POCO 与平板全系官方固件：347 台设备、3685 个卡刷与线刷包。按机型、代号、地区查找，包体直连官方 CDN，不改字节，MD5 可核对。">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
+<link rel="icon" href="https://hz-xb.github.io/xiao/assets/ic-fwlib.png">
 <style>
 :root{
-  --ink:#0E1013; --ink2:#4E545B; --ink3:#8A9098; --ink4:#B9BEC5;
-  --line:#E9E9E6; --surface:#F8F8F6; --accent:#B4501C;
-  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
-  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --deep:#171310;
+  --deep2:#0E0C09;
+  --paper:#F6F4F0;
+  --card:#FFFFFF;
+  --text:#15181A;
+  --soft:rgba(21,24,26,.62);
+  --faint:rgba(21,24,26,.42);
+  --line:rgba(21,24,26,.085);
+  --accent:#B4501C;
+  --accent2:#C4612A;
+  --wash:#F1E7DE;
+  --on:rgba(255,255,255,.95);
+  --on-soft:rgba(255,255,255,.56);
+  --line-d:rgba(255,255,255,.11);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
-body{background:#fff;color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
-.wrap{max-width:980px;margin:0 auto;padding:0 24px}
-a{color:inherit;text-decoration:none}
-.nav{display:flex;align-items:center;gap:12px;padding:22px 0;border-bottom:1px solid var(--line)}
-.nav img{width:30px;height:30px;border-radius:8px;display:block}
-.nav .nm{font-size:15px;font-weight:600;letter-spacing:-.01em}
-.nav .ver{font-family:var(--mono);font-size:11px;color:var(--ink3);letter-spacing:.04em}
-.nav .sp{flex:1}
-.nav .dl{font-size:12.5px;padding:9px 18px;border-radius:9px;background:var(--ink);color:#fff}
-.hero{padding:54px 0 42px;display:grid;gap:40px}
-@media(min-width:820px){.hero{grid-template-columns:1fr 280px;align-items:end}}
-.hero h1{font-size:36px;line-height:1.16;letter-spacing:-.035em;font-weight:650}
-@media(min-width:820px){.hero h1{font-size:48px}}
-.hero h1 em{font-style:normal;color:var(--accent)}
-.hero p{margin-top:18px;font-size:15px;color:var(--ink2);max-width:30em}
-.hero .acts{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 26px;border-radius:11px;font-size:14.5px;letter-spacing:.02em}
-.btn-p{background:var(--ink);color:#fff}
-.btn-s{border:1px solid var(--line);color:var(--ink2);background:#fff}
-.stats{border-top:1px solid var(--line);padding-top:16px}
-.stats div{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0}
-.stats .k{font-size:12px;color:var(--ink3)}
-.stats .v{font-family:var(--mono);font-size:15px;letter-spacing:-.01em}
-.stats .unit{font-size:11px;color:var(--ink3);margin-left:4px}
-.sec{padding:44px 0;border-top:1px solid var(--line)}
-.sec-h{display:flex;align-items:baseline;gap:10px;margin-bottom:26px;flex-wrap:wrap}
-.sec-h h2{font-size:19px;letter-spacing:-.02em;font-weight:620}
-.sec-h .d{font-size:12.5px;color:var(--ink3)}
-.grid{display:grid;gap:26px}
-@media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
-.feat h3{font-size:15px;font-weight:620;display:flex;align-items:center;gap:8px}
-.feat h3 i{width:3px;height:13px;background:var(--accent);border-radius:2px;display:block}
-.feat p{margin-top:9px;font-size:13.5px;color:var(--ink2);line-height:1.75}
-.sample{border:1px solid var(--line);border-radius:14px;padding:18px;max-width:560px}
-.sample .top{display:flex;align-items:center;gap:8px}
-.tag{font-size:10px;font-weight:600;color:var(--accent)}
-.tag2{font-size:10px;color:var(--ink3)}
-.sample .top .sp{flex:1}
-.sample .mini{font-size:11px;padding:7px 14px;border-radius:8px;background:var(--ink);color:#fff}
-.sample .vv{font-family:var(--mono);font-size:15px;margin-top:14px}
-.sample .mm{font-size:12px;color:var(--ink2);margin-top:8px}
-.sample .md5{font-family:var(--mono);font-size:10px;color:var(--ink4);margin-top:12px;word-break:break-all}
-.sample-note{margin-top:16px;font-size:12px;color:var(--ink3);line-height:1.8}
-.trio{display:grid;gap:24px}
-@media(min-width:760px){.trio{grid-template-columns:repeat(3,1fr)}}
-.trio .c{border-top:2px solid var(--ink);padding-top:15px}
-.trio .c h4{font-size:13.5px;font-weight:620}
-.trio .c p{margin-top:8px;font-size:12.5px;color:var(--ink2);line-height:1.8}
-.trio code{font-family:var(--mono);font-size:11px;color:var(--ink3)}
-.steps{display:grid;gap:24px}
-@media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr)}}
-.step .num{font-family:var(--mono);font-size:11px;color:var(--ink4);letter-spacing:.08em}
-.step h4{font-size:14.5px;font-weight:620;margin-top:8px}
-.step p{margin-top:8px;font-size:13px;color:var(--ink2);line-height:1.8}
-.get{background:var(--surface);border-radius:18px;padding:30px}
-@media(min-width:760px){.get{padding:38px}}
-.get .l{font-size:11px;color:var(--ink3);letter-spacing:.08em}
-.get h2{font-size:26px;letter-spacing:-.03em;margin-top:10px;font-weight:640}
-.get .meta{font-family:var(--mono);font-size:12px;color:var(--ink3);margin-top:12px;line-height:2;word-break:break-all}
-.get .btn{width:100%;margin-top:22px;background:var(--ink);color:#fff;height:52px;font-size:15px}
-.get .fine{font-size:11.5px;color:var(--ink3);margin-top:14px;line-height:1.8}
-.foot{padding:32px 0 46px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink3);line-height:1.95}
-.foot b{color:var(--ink2);font-weight:600}
-.foot a{color:var(--ink2);border-bottom:1px solid var(--line)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--text);
+  font-family:"Noto Sans SC","PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em;line-height:1.18}
+a{color:inherit}
+img{max-width:100%}
+::selection{background:var(--accent);color:#fff}
+a,button,summary{outline:none;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+header{position:fixed;top:0;left:0;right:0;z-index:30;background:rgba(14,12,9,.78);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line-d)}
+.nav{display:flex;align-items:center;gap:12px;height:58px;max-width:1120px;margin:0 auto;padding:0 20px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;flex:1;min-width:0;color:var(--on)}
+.brand img{width:26px;height:26px;border-radius:7px;display:block;flex:none}
+.brand span{font-size:14.5px;font-weight:500;white-space:nowrap}
+.nav-links{display:none;gap:22px;font-size:13.5px;color:var(--on-soft)}
+.nav-links a{text-decoration:none}
+.nav-links a:hover{color:var(--on)}
+.nav-cta{display:inline-flex;align-items:center;height:34px;padding:0 14px;border-radius:8px;
+  background:var(--wash);color:var(--deep);text-decoration:none;font-size:13px;font-weight:500;white-space:nowrap;transition:background .16s}
+.nav-cta:hover{background:#fff}
+
+.hero{background:var(--deep);color:var(--on);padding:92px 0 0;position:relative;overflow:hidden}
+.hero-head{text-align:center;max-width:820px;margin:0 auto;padding:0 20px}
+.hero h1{font-size:clamp(31px,8.2vw,62px);letter-spacing:-.03em;line-height:1.12}
+.hero h1 .dim{color:var(--on-soft)}
+.hero .lede{margin:20px auto 0;max-width:39em;font-size:15px;line-height:1.85;color:var(--on-soft)}
+.hero-actions{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px 18px;margin-top:30px}
+.btn-main{display:inline-flex;align-items:center;gap:9px;height:52px;padding:0 28px;border-radius:11px;
+  background:var(--wash);color:var(--deep);text-decoration:none;font-size:15.5px;font-weight:500;transition:background .16s,transform .16s}
+.btn-main:hover{background:#fff;transform:translateY(-1px)}
+.btn-main svg{width:17px;height:17px;stroke:var(--deep);fill:none;stroke-width:1.7;stroke-linecap:round}
+.hero-meta{font-size:12.5px;color:var(--on-soft);line-height:1.7;text-align:left}
+.hero-meta b{font-weight:500;color:rgba(255,255,255,.82)}
+
+.devices{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:660px;margin:46px auto 0;padding:0 20px;align-items:end}
+.devices figure{margin:0}
+.devices img{display:block;width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.14)}
+.devices .mid{margin-top:-22px}
+.devices .mid img{border-color:rgba(255,255,255,.26)}
+.fade{height:130px;margin-top:-108px;position:relative;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg,rgba(23,19,16,0) 0%,rgba(246,244,240,.84) 62%,var(--paper) 96%)}
+
+.facts{background:var(--paper);padding:8px 0 44px}
+.facts ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:30px 16px}
+.facts li{min-width:0}
+.facts b{display:block;font-size:clamp(30px,7.6vw,50px);font-weight:700;line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.facts b small{font-size:.4em;font-weight:500;color:var(--soft);margin-left:5px;letter-spacing:0}
+.facts .desc{display:block;margin-top:9px;font-size:12.5px;line-height:1.62;color:var(--faint)}
+
+section{padding:62px 0}
+.sec-head{max-width:36em}
+.sec-head h2{font-size:clamp(25px,5.4vw,38px)}
+.sec-head p{margin:14px 0 0;font-size:14.5px;line-height:1.82;color:var(--soft)}
+
+.cards{margin-top:32px;display:grid;grid-template-columns:1fr;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 20px;transition:border-color .18s,transform .18s}
+.card:hover{border-color:rgba(180,80,28,.28);transform:translateY(-2px)}
+.ic{width:42px;height:42px;border-radius:12px;background:var(--wash);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.ic svg{width:21px;height:21px;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-size:16.5px;font-weight:500;letter-spacing:-.01em;line-height:1.45}
+.card p{margin:8px 0 0;font-size:13.5px;line-height:1.78;color:var(--soft)}
+
+.pkg{display:grid;grid-template-columns:1fr;gap:14px;margin-top:32px}
+.pk{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:20px}
+.pk .row1{display:flex;align-items:center;gap:8px}
+.pk .cn{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.02em}
+.pk .br{font-size:11px;color:var(--faint)}
+.pk .dl{margin-left:auto;font-size:11.5px;padding:7px 14px;border-radius:8px;background:var(--deep);color:#fff}
+.pk .ver{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:15px;margin-top:14px;letter-spacing:-.01em}
+.pk .mm{font-size:12.5px;color:var(--soft);margin-top:8px}
+.pk .md5{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:10.5px;color:var(--faint);margin-top:12px;word-break:break-all}
+.pk .why{font-size:12px;color:var(--accent);margin-top:12px}
+.pk.rec{background:#FDF8F5;border-color:rgba(180,80,28,.22)}
+.pk.rec .why{margin-top:0;margin-bottom:10px;font-size:12px}
+
+.steps{margin-top:30px;display:grid;grid-template-columns:1fr;gap:0}
+.step{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:20px 0;border-top:1px solid var(--line)}
+.step .num{width:28px;height:28px;border-radius:50%;background:var(--deep);color:#fff;font-size:12px;font-weight:500;
+  display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px}
+.step h3{font-size:15.5px;font-weight:500;letter-spacing:0}
+.step p{margin:5px 0 0;font-size:13.5px;line-height:1.8;color:var(--soft)}
+
+.download{background:var(--deep);color:var(--on);padding:64px 0}
+.download .wrap{display:grid;grid-template-columns:1fr;gap:34px}
+.download h2{font-size:clamp(27px,5.8vw,42px);color:#fff}
+.download p{margin:12px 0 0;font-size:14.5px;line-height:1.8;color:var(--on-soft);max-width:32em}
+.dl-btn{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 30px;margin-top:26px;border-radius:12px;
+  background:var(--wash);color:var(--deep);text-decoration:none;font-size:16px;font-weight:500;transition:background .16s,transform .16s}
+.dl-btn:hover{background:#fff;transform:translateY(-1px)}
+.dl-btn svg{width:18px;height:18px;stroke:var(--deep);fill:none;stroke-width:1.7;stroke-linecap:round}
+.dl-side{font-size:12.5px;line-height:2;color:var(--on-soft)}
+.dl-side b{display:block;color:#fff;font-weight:500;font-size:13.5px;margin-bottom:2px}
+.hash-row{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.hash{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:11px;line-height:1.6;
+  word-break:break-all;color:var(--on-soft);max-width:26em}
+.copy-btn{appearance:none;border:1px solid rgba(255,255,255,.24);background:transparent;color:rgba(255,255,255,.8);
+  font-size:12px;height:30px;padding:0 12px;border-radius:6px;cursor:pointer;font-family:inherit}
+.copy-btn:hover{background:rgba(255,255,255,.09)}
+.notice{margin-top:22px;border-left:2px solid rgba(241,231,222,.35);padding-left:14px;font-size:13px;line-height:1.8;color:var(--on-soft)}
+.notice b{display:block;color:#fff;font-weight:500;font-size:13.5px;margin-bottom:3px}
+
+.faq{margin-top:28px;border-top:1px solid var(--line)}
+details{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;padding:19px 0;display:flex;align-items:flex-start;gap:14px;font-size:15px;line-height:1.6}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";width:9px;height:9px;margin-left:auto;margin-top:7px;flex:none;
+  border-right:1.5px solid var(--faint);border-bottom:1.5px solid var(--faint);transform:rotate(45deg)}
+details[open] summary::after{transform:rotate(-135deg);margin-top:11px}
+details p{margin:0 0 20px;font-size:13.5px;line-height:1.85;color:var(--soft);max-width:42em}
+
+footer{border-top:1px solid var(--line);padding:32px 0 44px;background:var(--paper)}
+.foot{display:flex;flex-wrap:wrap;gap:16px 26px;align-items:center;font-size:12.5px;color:var(--faint)}
+.brand-mini{display:flex;align-items:center;gap:8px;color:var(--soft);font-size:13px}
+.brand-mini img{width:20px;height:20px;border-radius:5px}
+.foot a{text-decoration:none;color:var(--faint)}
+.foot a:hover{color:var(--text)}
+.foot-links{display:flex;gap:20px;flex-wrap:wrap;margin-left:auto}
+
+#toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,14px);background:#241E18;color:#fff;
+  font-size:13px;padding:10px 16px;border-radius:8px;opacity:0;pointer-events:none;
+  transition:opacity .18s,transform .18s;z-index:60}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.hero h1,.hero .lede,.hero-actions,.devices figure{animation:fadeUp .8s cubic-bezier(.22,.7,.2,1) both}
+.hero h1{animation-delay:.06s}
+.hero .lede{animation-delay:.16s}
+.hero-actions{animation-delay:.26s}
+.devices figure:nth-child(1){animation-delay:.28s}
+.devices figure:nth-child(2){animation-delay:.38s}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.22,.7,.2,1),transform .7s cubic-bezier(.22,.7,.2,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  .hero h1,.hero .lede,.hero-actions,.devices figure{animation:none}
+  *{transition:none!important}
+}
+@media (min-width:768px){
+  .wrap{padding:0 32px}
+  .nav{padding:0 32px;height:64px}
+  .nav-links{display:flex}
+  .hero{padding:108px 0 0}
+  .devices{gap:16px;margin-top:54px;max-width:720px}
+  .devices .mid{margin-top:-30px}
+  .facts{padding:14px 0 60px}
+  .facts ul{grid-template-columns:repeat(4,1fr);gap:20px}
+  section{padding:90px 0}
+  .cards{grid-template-columns:1fr 1fr;gap:16px}
+  .card{padding:26px 24px}
+  .pkg{grid-template-columns:1fr 1fr;gap:18px}
+  .steps{grid-template-columns:repeat(3,1fr);gap:0 28px}
+  .step{grid-template-columns:1fr;padding:22px 0 0;border-right:1px solid var(--line)}
+  .step:last-child{border-right:none}
+  .download .wrap{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:44px;align-items:end}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <nav class="nav">
-    <img src="/xiao/assets/ic-fwlib.png" alt="MI 固件库">
-    <span class="nm">MI 固件库</span>
-    <span class="ver">v1.0.6</span>
-    <span class="sp"></span>
-    <a class="dl" href="https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.6.apk">下载 APK</a>
-  </nav>
+<header>
+  <div class="nav">
+    <a class="brand" href="#top">
+      <img src="https://hz-xb.github.io/xiao/assets/ic-fwlib.png" alt="MI 固件库">
+      <span>MI 固件库</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#features">它做什么</a>
+      <a href="#pkg">包长什么样</a>
+      <a href="#how">怎么用</a>
+      <a href="#faq">问答</a>
+    </nav>
+    <a class="nav-cta" href="#download">下载安卓版</a>
+  </div>
+</header>
 
-  <section class="hero">
-    <div>
-      <h1>小米全系固件<br>按机型<em>直接查</em></h1>
-      <p>卡刷包与线刷包放在一处。347 台设备、3685 个官方包，按机型、代号或地区找到对的那一个，交给系统下载器。</p>
-      <div class="acts">
-        <a class="btn btn-p" href="https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.6.apk">下载安装</a>
-        <a class="btn btn-s" href="#get">版本信息</a>
+<main id="top">
+  <div class="hero">
+    <div class="hero-head">
+      <h1>3685 个固件包，<br><span class="dim">按机型直接查。</span></h1>
+      <p class="lede">小米、红米、POCO 与平板全系，卡刷与线刷都收在一处。索引取自公开仓库，包体直连官方 CDN——不改一个字节，也不转存。</p>
+      <div class="hero-actions">
+        <a class="btn-main" href="https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.7.apk">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
+          免费下载
+        </a>
+        <div class="hero-meta"><b>Android 7.0 及以上</b> · 不需要账号 · 无广告<br>v1.0.7 · 127 KB</div>
       </div>
     </div>
-    <div class="stats">
-      <div><span class="k">收录设备</span><span><span class="v">347</span><span class="unit">台</span></span></div>
-      <div><span class="k">固件包</span><span><span class="v">3685</span><span class="unit">个</span></span></div>
-      <div><span class="k">卡刷 zip</span><span><span class="v">2100</span><span class="unit">个</span></span></div>
-      <div><span class="k">线刷 tgz</span><span><span class="v">1585</span><span class="unit">个</span></span></div>
-      <div><span class="k">更新</span><span><span class="v">每日</span></span></div>
-    </div>
-  </section>
 
-  <section class="sec">
-    <div class="sec-h"><h2>找包不用靠猜</h2><span class="d">同一台机器被上游拆成多个销售地区代号，这里合并后再摊开</span></div>
-    <div class="grid">
-      <div class="feat">
-        <h3><i></i>一台机器一条记录</h3>
-        <p>上游按销售地区把同一机型拆成多个代号，POCO F3 在数据里有六个。应用按代号主干合并，你看到的是「一台设备，24 个包」，不是六条重复。</p>
-      </div>
-      <div class="feat">
-        <h3><i></i>先筛地区，再挑版本</h3>
-        <p>版本号尾部的 CN / EU / ID / MI 翻成中文地区名，详情页可按地区筛选。国行机先点「中国版」，剩下才是能刷的包。</p>
-      </div>
-      <div class="feat">
-        <h3><i></i>不知道下哪个，看推荐</h3>
-        <p>详情页顶部直接给一个包并写明理由：国行机优先中国版稳定卡刷包，没有则退到国际版、全球版。想自己挑，下面分类列表照样在。</p>
-      </div>
-      <div class="feat">
-        <h3><i></i>官方节点打不开就换</h3>
-        <p>官方 CDN 有整域返回 403 的域名。下载前先探一次镜像节点，通了走镜像，不通回原链，两个都不通才提示「这个包可能已下架」。</p>
-      </div>
+    <div class="devices">
+      <figure><img src="https://hz-xb.github.io/xiao/assets/shot-fw-list.png" alt="设备列表：347 台，按名称排序，右侧显示最新版本与日期"></figure>
+      <figure class="mid"><img src="https://hz-xb.github.io/xiao/assets/shot-fw-tab.png" alt="平板筛选：34 台，含 Xiaomi Pad 7 Pro、Pad 8 / 9 等"></figure>
     </div>
-  </section>
+    <div class="fade"></div>
+  </div>
 
-  <section class="sec">
-    <div class="sec-h"><h2>每个包摆明这几项</h2><span class="d">版本 · 地区 · 分支 · Android · 大小 · 日期 · MD5</span></div>
-    <div class="sample">
-      <div class="top">
-        <span class="tag">中国版</span>
-        <span class="tag2">稳定版</span>
-        <span class="sp"></span>
-        <span class="mini">下载</span>
-      </div>
-      <div class="vv">OS3.0.318.0.WPRCNXM</div>
-      <div class="mm">Android 16 · 7.3 GB · 2026-09-25</div>
-      <div class="md5">MD5 baed5e36133b1faf4dd92b161f319025</div>
+  <div class="facts wrap">
+    <ul>
+      <li><b>347<small>台</small></b><span class="desc">手机 313、平板 34，覆盖小米、Redmi、POCO、MIX</span></li>
+      <li><b>3685<small>个</small></b><span class="desc">卡刷 zip 2100、线刷 tgz 1585，按版本与地区分类</span></li>
+      <li><b>28<small>个地区</small></b><span class="desc">CN 中国版、EU 欧洲版、ID 印尼版、MI 国际版等</span></li>
+      <li><b>在线<small>服务器</small></b><span class="desc">索引每天更新一次，启动即取最新</span></li>
+    </ul>
+  </div>
+
+  <section class="wrap" id="features">
+    <div class="sec-head">
+      <h2>下错包，多半是因为看不见差别。</h2>
+      <p>同一个机型在上游会被拆成多个销售地区代号，POCO F3 就有六个。合并之后再摊开，分类、地区、刷法一眼分清。</p>
     </div>
-    <p class="sample-note">卡刷包拷进手机，系统更新里选「选择安装包」；线刷包解压后是 images 文件夹，用 MiFlash 或 fastboot 整机重写。分类和风险提示都写在详情页里。</p>
-  </section>
-
-  <section class="sec">
-    <div class="sec-h"><h2>三个固定机制</h2><span class="d">公告 · 安全防护 · 云更新</span></div>
-    <div class="trio">
-      <div class="c">
-        <h4>公告</h4>
-        <p>启动读一次 <code>version.json</code> 的 <code>notice</code>，有内容显示在首页顶部。改文案不用重新发版。</p>
+    <div class="cards reveal">
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/></svg></div>
+        <h3>一台机器一条记录</h3>
+        <p>按代号主干合并，看到的是「一台设备，24 个包」，不是六条重复条目。设备名、代号、包数、覆盖地区都写在同一行。</p>
       </div>
-      <div class="c">
-        <h4>安全防护</h4>
-        <p>比对官网发布的安装包 SHA-256 与本地 <code>base.apk</code>，只在同版本时校验。不是正版会拦住并给官网入口。</p>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><path d="M12 4a14 14 0 0 1 0 16"/></svg></div>
+        <h3>先筛地区，再挑版本</h3>
+        <p>版本号尾部的两位地区码翻成中文，详情页可点选筛选。国行机勾「中国版」后，剩下的才是能刷的包。</p>
       </div>
-      <div class="c">
-        <h4>云更新</h4>
-        <p>比对 <code>versionCode</code>，云端更新就提示并跳官网。不偷偷后台下载，也不强制升级。</p>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 20 6v6c0 5-3.4 8.6-8 11-4.6-2.4-8-6-8-11V6L12 3Z"/><path d="M8.6 12.4 11 14.8 15.6 10.2"/></svg></div>
+        <h3>不知道下哪个，看推荐</h3>
+        <p>顶部给一个包并写明理由：国行优先中国版稳定卡刷，没有则退到国际版、全球版。想自己挑，下面分类列表照样在。</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10"/><path d="M4 12h16"/><path d="M4 17h7"/><circle cx="18" cy="7" r="2.4"/></svg></div>
+        <h3>官方节点不通就换</h3>
+        <p>官方 CDN 有整域返回 403 的域名。下载前先探镜像节点，通了走镜像，不通回原链，两个都不通才提示「可能已下架」。</p>
       </div>
     </div>
   </section>
 
-  <section class="sec">
-    <div class="sec-h"><h2>三步拿到包</h2></div>
-    <div class="steps">
+  <section class="wrap" id="pkg">
+    <div class="sec-head">
+      <h2>每个包都摆明这几项。</h2>
+      <p>版本号、地区、分支、Android 版本、体积、发布日期、MD5，缺一项都可能刷错。</p>
+    </div>
+    <div class="pkg reveal">
+      <div class="pk rec">
+        <div class="why">推荐 · 国行机直接下这个</div>
+        <div class="row1"><span class="cn">中国版</span><span class="br">稳定版</span><span class="dl">下载这个</span></div>
+        <div class="ver">OS3.0.318.0.WPRCNXM</div>
+        <div class="mm">卡刷 zip · Android 16 · 7.3 GB · 2026-09-25</div>
+        <div class="md5">MD5 baed5e36133b1faf4dd92b161f319025</div>
+      </div>
+      <div class="pk">
+        <div class="row1"><span class="cn">台湾版</span><span class="br">稳定 Beta</span><span class="dl">下载</span></div>
+        <div class="ver">OS3.0.305.0.WOYTWXM</div>
+        <div class="mm">卡刷 zip · Android 16 · 6.8 GB · 2026-10-08</div>
+        <div class="md5">MD5 9f451bd4af82b94ee4db424c57e4a6ff</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="how">
+    <div class="sec-head">
+      <h2>三步拿到包。</h2>
+    </div>
+    <div class="steps reveal">
       <div class="step">
-        <div class="num">01</div>
-        <h4>搜机型或代号</h4>
-        <p>「14 Ultra」「K40」「lmi」都能命中。也可以按手机、平板、品牌筛选。</p>
+        <div class="num">1</div>
+        <h3>搜机型或代号</h3>
+        <p>「14 Ultra」「K40」「lmi」都能命中，也可以按手机、平板、品牌筛选。</p>
       </div>
       <div class="step">
-        <div class="num">02</div>
-        <h4>确认地区与版本</h4>
-        <p>顶部是推荐包，下面按卡刷、线刷分组，可按地区筛选。核对版本号后缀与你机器的销售地区一致。</p>
+        <div class="num">2</div>
+        <h3>核对地区与版本</h3>
+        <p>顶部是推荐包，下面按卡刷、线刷分组。确认版本号后缀与你机器的销售地区一致。</p>
       </div>
       <div class="step">
-        <div class="num">03</div>
-        <h4>下载并核对 MD5</h4>
-        <p>点下载交给系统下载器，落到 <code>Downloads/FirmwareLibrary</code>。到齐后与卡片上的 MD5 对一遍再刷。</p>
+        <div class="num">3</div>
+        <h3>下载并核对 MD5</h3>
+        <p>交给系统下载器，落到 Downloads/FirmwareLibrary。到齐后与卡片上的 MD5 对一遍再刷。</p>
       </div>
     </div>
   </section>
 
-  <section class="sec" id="get">
-    <div class="get">
-      <div class="l">ANDROID · 直接安装</div>
-      <h2>MI 固件库 v1.0.6</h2>
-      <div class="meta">
-        127 KB · Android 7.0 及以上 · 无需 root<br>
-        SHA-256 55a414ca1e8412f44e2399ac0882225f7d19e56784d50134743509e7439110a1
+  <div class="download" id="download">
+    <div class="wrap">
+      <div>
+        <h2>下载 MI 固件库</h2>
+        <p>装上就能查全系固件。应用本身不加壳、不注入，包体也不改一个字——它就是把这个索引摆到你面前。</p>
+        <a class="dl-btn" href="https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.7.apk">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
+          下载 APK · 127 KB
+        </a>
       </div>
-      <a class="btn" href="https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.6.apk">下载 APK</a>
-      <p class="fine">安装时系统会提示未知来源，允许一次即可。不收钱、不要账号、不上传内容；第一次启动会逐条列出申请的权限。</p>
+      <div class="dl-side">
+        <b>版本信息</b>
+        v1.0.7 · Android 7.0 及以上 · 无需 root<br>
+        安装包 129726 字节
+        <div class="hash-row">
+          <span class="hash" id="hash">bbf5355cc021810bde50556e9a27e257596b074b056d25dc335952eb511efdc4</span>
+          <button class="copy-btn" id="copy">复制</button>
+        </div>
+        <div class="notice">
+          <b>安装与安全</b>
+          首次启动会逐条列出申请的权限，勾选同意后才进主界面。应用比对官网哈希判断是否正版，不是正版会拦住并给官网入口。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="wrap" id="faq">
+    <div class="sec-head">
+      <h2>常被问到的几件事。</h2>
+    </div>
+    <div class="faq reveal">
+      <details open>
+        <summary>为什么有的固件链接在浏览器里打开是 403？</summary>
+        <p>官方 CDN 的 bigota 域名对非授权来源整域返回 403，老包新包都一样。应用在下载前先探镜像域名，通了就换成镜像地址下载，不通再回原链，所以你不需要自己处理这个。</p>
+      </details>
+      <details>
+        <summary>包是官方原包吗？会不会被改过？</summary>
+        <p>是。应用只做索引与转交，链接指向小米官方 CDN，下载的是原始文件字节。每张包卡都给出 MD5，下载完可以自行核对。</p>
+      </details>
+      <details>
+        <summary>需要 root 或者解锁 BL 吗？</summary>
+        <p>查包、下载都不需要。卡刷包走系统更新里的「选择安装包」，线刷包要用 MiFlash 或 fastboot，这两条路是否需要解锁取决于你的机型和版本，应用不替你判断。</p>
+      </details>
+      <details>
+        <summary>跨地区版本能刷吗？</summary>
+        <p>技术上能，风险自负。国行机刷国际版通常需要解锁并可能丢失部分本地功能；跨大版本降级还可能失败。建议先选与你销售地区一致的那个包。</p>
+      </details>
+      <details>
+        <summary>数据多久更新一次？</summary>
+        <p>上游索引每天推送，应用启动时取一次最新，本地缓存一天。想立刻刷新，回到首页下拉即可重新读取。</p>
+      </details>
     </div>
   </section>
 
-  <footer class="foot">
-    <p><b>数据来源</b> XiaomiFirmwareUpdater / miui-updates-tracker（开源索引，README 要求署名）。固件包全部来自小米官方 CDN，应用与本站均不改动任何字节。</p>
-    <p><b>声明</b> 非小米官方产品。刷机有风险：跨区域、跨版本、绕过校验都可能导致设备无法开机，后果由操作者承担。刷前备份，电量留够。</p>
-    <p>本页与安装包由相识维护 · <a href="https://hz-xb.github.io/xiao/me/">更多应用</a></p>
+  <footer>
+    <div class="wrap foot">
+      <div class="brand-mini">
+        <img src="https://hz-xb.github.io/xiao/assets/ic-fwlib.png" alt="MI 固件库">
+        MI 固件库
+      </div>
+      <div>索引来自 XiaomiFirmwareUpdater / miui-updates-tracker · 非小米官方产品 · 刷机风险自负</div>
+      <div class="foot-links">
+        <a href="https://hz-xb.github.io/xiao/me/">更多应用</a>
+        <a href="https://github.com/XiaomiFirmwareUpdater/miui-updates-tracker" target="_blank" rel="noopener">数据来源</a>
+      </div>
+    </div>
   </footer>
-</div>
+</main>
+
+<div id="toast">已复制</div>
+<script>
+(function(){
+  var btn=document.getElementById("copy"), h=document.getElementById("hash"), t=document.getElementById("toast");
+  if(!btn) return;
+  btn.addEventListener("click",function(){
+    var s=h.textContent.trim();
+    var done=function(){ t.classList.add("show"); setTimeout(function(){t.classList.remove("show");},1600); };
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(s).then(done,function(){ fallback(s,done); });
+    } else { fallback(s,done); }
+  });
+  function fallback(s,cb){
+    var a=document.createElement("textarea"); a.value=s; a.style.position="fixed"; a.style.opacity="0";
+    document.body.appendChild(a); a.select();
+    try{ document.execCommand("copy"); cb(); }catch(e){}
+    document.body.removeChild(a);
+  }
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+  },{threshold:.12});
+  document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+})();
+</script>
 </body>
 </html>
