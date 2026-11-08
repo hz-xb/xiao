@@ -1,16 +1,16 @@
 {
-  "versionCode": 119,
-  "versionName": "1.1.8",
-  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.8.apk",
-  "notes": "我的页新增「备份与恢复」：勾选 KSU 模块和 LSP 模块 APK，一键打成加密包存到 Download；导入后逐个选恢复。",
-  "sha256": "1a473c5463d921ceca41ad7f3ef93a70d92490bd7d1cf23d3dd85004d3b71e3f",
-  "sizeBytes": 4707000,
+  "versionCode": 120,
+  "versionName": "1.1.9",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.9.apk",
+  "notes": "备份页不再卡在读取中：扫描分步刷新，LSP 扫描改读系统元数据，所有 root 命令加超时。",
+  "sha256": "54b38e304eb0c5894172fa6810e3902a80714bca1046703dced1100909789bcf",
+  "sizeBytes": 4709340,
   "forceUpdate": false,
   "notice": {
-    "id": "20261109-v119",
-    "title": "KSU 商店 1.1.8",
-    "body": "我的页里多了「备份与恢复」。进去能把已装的 KSU 模块和 LSP 模块 APK 勾上，一键打成加密包，存到 Download/KSUBackup。换机或恢复出厂后导入，整包解密，再逐个勾选装回去。模块走 ksud 安装，APK 静默装，装完问你要不要重启。",
+    "id": "20261109-v120",
+    "title": "KSU 商店 1.1.9",
+    "body": "修好了备份页一直显示「读取中」的问题。现在进入备份与恢复，模块列表会先出来，LSP 模块单独扫描；所有 root 命令都带超时，一条卡住不会再让整页僵住。",
     "level": "info"
   },
-  "publishedAt": "2026-11-09T00:20:00+08:00"
+  "publishedAt": "2026-11-09T00:35:00+08:00"
 }
