@@ -63,10 +63,10 @@ header{position:fixed;top:0;left:0;right:0;z-index:30;background:rgba(14,12,9,.7
 .hero-meta{font-size:12.5px;color:var(--on-soft);line-height:1.7;text-align:left}
 .hero-meta b{font-weight:500;color:rgba(255,255,255,.82)}
 
-.devices{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:660px;margin:46px auto 0;padding:0 20px;align-items:end}
+.devices{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:880px;margin:46px auto 0;padding:0 20px;align-items:end}
 .devices figure{margin:0}
 .devices img{display:block;width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.14)}
-.devices .mid{margin-top:-22px}
+.devices .mid{margin-top:-18px}
 .devices .mid img{border-color:rgba(255,255,255,.26)}
 .fade{height:130px;margin-top:-108px;position:relative;z-index:3;pointer-events:none;
   background:linear-gradient(180deg,rgba(23,19,16,0) 0%,rgba(246,244,240,.84) 62%,var(--paper) 96%)}
@@ -172,8 +172,8 @@ footer{border-top:1px solid var(--line);padding:32px 0 44px;background:var(--pap
   .nav{padding:0 32px;height:64px}
   .nav-links{display:flex}
   .hero{padding:108px 0 0}
-  .devices{gap:16px;margin-top:54px;max-width:720px}
-  .devices .mid{margin-top:-30px}
+  .devices{gap:14px;margin-top:54px;max-width:900px}
+  .devices .mid{margin-top:-28px}
   .facts{padding:14px 0 60px}
   .facts ul{grid-template-columns:repeat(4,1fr);gap:20px}
   section{padding:90px 0}
@@ -211,17 +211,18 @@ footer{border-top:1px solid var(--line);padding:32px 0 44px;background:var(--pap
       <h1>3685 个固件包，<br><span class="dim">按机型直接查。</span></h1>
       <p class="lede">小米、红米、POCO 与平板全系，卡刷与线刷都收在一处。索引取自公开仓库，包体直连官方 CDN——不改一个字节，也不转存。</p>
       <div class="hero-actions">
-        <a class="btn-main" href="https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.7.apk">
+        <a class="btn-main" href="https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.8.apk">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
           免费下载
         </a>
-        <div class="hero-meta"><b>Android 7.0 及以上</b> · 不需要账号 · 无广告<br>v1.0.7 · 127 KB</div>
+        <div class="hero-meta"><b>Android 7.0 及以上</b> · 不需要账号 · 无广告<br>v1.0.8 · 127 KB</div>
       </div>
     </div>
 
     <div class="devices">
-      <figure><img src="https://hz-xb.github.io/xiao/assets/shot-fw-list.png" alt="设备列表：347 台，按名称排序，右侧显示最新版本与日期"></figure>
-      <figure class="mid"><img src="https://hz-xb.github.io/xiao/assets/shot-fw-tab.png" alt="平板筛选：34 台，含 Xiaomi Pad 7 Pro、Pad 8 / 9 等"></figure>
+      <figure><img src="https://hz-xb.github.io/xiao/assets/shot-fw-list.png" alt="全部设备：347 台，按名称排序，右侧是版本号与发布日期"></figure>
+      <figure class="mid"><img src="https://hz-xb.github.io/xiao/assets/shot-fw-detail.png" alt="详情页：推荐卡写明理由，下面按卡刷、线刷分组，每张卡带 MD5"></figure>
+      <figure><img src="https://hz-xb.github.io/xiao/assets/shot-fw-brand.png" alt="品牌筛选：Xiaomi 60 台，每行标出包数与覆盖地区"></figure>
     </div>
     <div class="fade"></div>
   </div>
@@ -312,19 +313,19 @@ footer{border-top:1px solid var(--line);padding:32px 0 44px;background:var(--pap
   <div class="download" id="download">
     <div class="wrap">
       <div>
-        <h2>下载 MI 固件库</h2>
+        <h2>下载 MI 固件库 1.0.8</h2>
         <p>装上就能查全系固件。应用本身不加壳、不注入，包体也不改一个字——它就是把这个索引摆到你面前。</p>
-        <a class="dl-btn" href="https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.7.apk">
+        <a class="dl-btn" href="https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.0.8.apk">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
           下载 APK · 127 KB
         </a>
       </div>
       <div class="dl-side">
         <b>版本信息</b>
-        v1.0.7 · Android 7.0 及以上 · 无需 root<br>
+        v1.0.8 · Android 7.0 及以上 · 无需 root<br>
         安装包 129726 字节
         <div class="hash-row">
-          <span class="hash" id="hash">bbf5355cc021810bde50556e9a27e257596b074b056d25dc335952eb511efdc4</span>
+          <span class="hash" id="hash">0307de397039b8722d97a53fbfd97380ca02f597a940878e613ba67cdec58fa1</span>
           <button class="copy-btn" id="copy">复制</button>
         </div>
         <div class="notice">
