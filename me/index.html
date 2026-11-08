@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>相识 — 一个人，七个 App</title>
-<meta name="description" content="相识，独立开发者。七个 Android 应用：相识投屏、KSU 商店、Dopamine、GhostKey、Shizuku、刷写器、MI 固件库。都不收钱、不要账号、不往云上传东西。">
+<title>相识 — 一个人，八个 App</title>
+<meta name="description" content="相识，独立开发者。八个 Android 应用：相识投屏、KSU 商店、Dopamine、GhostKey、Shizuku、刷写器、MI 固件库、Gitee 仓库管理。都不收钱、不要账号、不往云上传东西。">
 <link rel="preconnect" href="https://miaoda.feishu.cn">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2312332A'/%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='30' font-weight='700' fill='white' text-anchor='middle'%3E相%3C/text%3E%3C/svg%3E">
@@ -330,7 +330,7 @@ a,button,summary{outline:none}
 .tl .it.now::before{animation:pulse 2.6s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(34,86,74,.1)}50%{box-shadow:0 0 0 7px rgba(34,86,74,.04)}}
 
-/* 名片底部：七个应用索引 */
+/* 名片底部：八个应用索引 */
 .idx{
   display:flex;gap:7px;margin-top:16px;position:relative;z-index:2;
   overflow-x:auto;padding-bottom:2px;scrollbar-width:none;
@@ -365,9 +365,9 @@ a,button,summary{outline:none}
         <div class="chips"><span>自己做</span><span>不收钱</span><span>不要账号</span></div>
       </div>
     </div>
-    <p class="bio">一个人写点 Android 上的工具，<b>装在自己手机上顺手</b>才做出来的那种。七个 App，从界面到打包到官网都是自己弄的，中间没有团队也没有甲方。</p>
+    <p class="bio">一个人写点 Android 上的工具，<b>装在自己手机上顺手</b>才做出来的那种。八个 App，从界面到打包到官网都是自己弄的，中间没有团队也没有甲方。</p>
     <div class="nums">
-      <div class="cell"><div class="v" data-count="7">0</div><div class="k">在做的应用</div></div>
+      <div class="cell"><div class="v" data-count="8">0</div><div class="k">在做的应用</div></div>
       <div class="cell"><div class="v" data-count="1561">0</div><div class="k">收录资源</div></div>
       <div class="cell"><div class="v" data-count="5">0</div><div class="k">个公开来源</div></div>
       <div class="cell"><div class="v" data-count="6">0</div><div class="k">年迭代</div></div>
@@ -380,10 +380,11 @@ a,button,summary{outline:none}
       <a href="#a5" title="Shizuku"><img src="../assets/ic-shizuku.png" alt="Shizuku"></a>
       <a href="#a6" title="刷写器"><img src="../assets/ic-flasher.png" alt="刷写器"></a>
       <a href="#a7" title="MI 固件库"><img src="../assets/ic-fwlib.png" alt="MI 固件库"></a>
+      <a href="#a8" title="Gitee 仓库管理"><img src="../assets/ic-gitee.png" alt="Gitee 仓库管理"></a>
     </div>
   </section>
 
-  <!-- ================== 手上这七个 ================== -->
+  <!-- ================== 手上这八个 ================== -->
   <div class="h"><h2>手上这些</h2><span class="n">点开就是官网</span></div>
 
   <div class="w rev" id="a1" style="--c:#2F6F5C" data-n="01">
@@ -558,10 +559,39 @@ a,button,summary{outline:none}
     </div>
   </div>
 
+  <div class="w rev" id="a8" style="--c:#5C4A8A" data-n="08">
+    <a class="w-top" href="https://hz-xb.github.io/xiao/gitee/">
+      <img class="logo" src="../assets/ic-gitee.png" alt="Gitee 仓库管理">
+      <div class="txt">
+        <div class="tt">Gitee 仓库管理<span class="ver">v1.1.0</span></div>
+        <div class="ss">手机上直接改仓库 · 新建上传删除编辑</div>
+      </div>
+      <span class="go"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a>
+    <div class="rail">
+      <img src="../assets/gm-rail-list.webp" alt="文件列表">
+      <img src="../assets/gm-rail-menu.webp" alt="新建与提交菜单">
+      <img src="../assets/gm-rail-setup.webp" alt="连接设置四个字段">
+    </div>
+    <div class="tags"><span>新建 / 上传 / 删除</span><span>在线编辑</span><span>令牌只存本机</span><span>直连 Gitee API</span></div>
+    <div class="acts">
+      <a class="act" href="https://hz-xb.github.io/xiao/gitee/">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+        去官网下载
+      </a>
+      <span class="cp-tip">6.2 MB · Android 7.0+</span>
+    </div>
+  </div>
+
   <!-- ================== 更新记录 ================== -->
   <div class="h"><h2>最近动过什么</h2><span class="n">都是这一周</span></div>
   <div class="tl rev">
     <div class="it now">
+      <div class="d">2026 · 11 · 08</div>
+      <div class="t">Gitee 仓库管理 v1.1.0 第一次公开</div>
+      <div class="p">列表、菜单、连接设置三屏定稿。新建文件、上传文件、删除文件、在线编辑四个动作都在手机上做完，填一次私人令牌和仓库信息以后直接进列表；程序没有后台托管，令牌只存在本机，请求直连 Gitee。</div>
+    </div>
+    <div class="it">
       <div class="d">2026 · 11 · 08</div>
       <div class="t">固件库更新到 v1.0.8</div>
       <div class="p">MI 1S 这类全大写老机型不再落到“其他”，详情页品牌改中文；本地缓存里存着旧品牌，升级后会按新规则重算；只有一个包的机型不再出推荐卡。</div>
