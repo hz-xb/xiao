@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>相识 — Android 工具站</title>
-<meta name="description" content="相识的 Android 工具站：投屏、模块商店、刷写器、固件库、Gitee 仓库管理在内的 8 个应用，点进去直接下载，有更新会同步到这个页面。">
+<meta name="description" content="相识的 Android 工具站：投屏、模块商店、刷写器、固件库、Gitee 仓库管理等，点进去直接下载，有更新会同步到这个页面。">
 <link rel="preconnect" href="https://miaoda.feishu.cn">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2312332A'/%3E%3Ctext x='32' y='43' font-family='sans-serif' font-size='30' font-weight='700' fill='white' text-anchor='middle'%3E相%3C/text%3E%3C/svg%3E">
@@ -330,7 +330,7 @@ a,button,summary{outline:none}
 .tl .it.now::before{animation:pulse 2.6s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(34,86,74,.1)}50%{box-shadow:0 0 0 7px rgba(34,86,74,.04)}}
 
-/* 名片底部：八个应用索引 */
+/* 名片底部：应用索引（横向无缝流动） */
 .idx{
   margin-top:16px;position:relative;z-index:2;overflow:hidden;padding-bottom:2px;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
@@ -371,9 +371,9 @@ a,button,summary{outline:none}
         <div class="rl">Android 工具站 · 河南 许昌</div>
       </div>
     </div>
-    <p class="bio">这里放的是 <b>Android 上用得着的小工具</b>：投屏、模块商店、刷写器、固件库、仓库管理，一共八个。点进去就能下载，更新会同步到这个页面。</p>
+    <p class="bio">这里放的是 <b>Android 上用得着的小工具</b>：投屏、模块商店、刷写器、固件库、仓库管理。点进去就能下载，后面新做的会陆续加进来，更新也同步到这一页。</p>
     <div class="nums">
-      <div class="cell"><div class="v" data-count="8">0</div><div class="k">在做的应用</div></div>
+      <div class="cell"><div class="v" data-count="8" data-auto="cards">0</div><div class="k">在站的应用</div></div>
       <div class="cell"><div class="v" data-count="1561">0</div><div class="k">收录资源</div></div>
       <div class="cell"><div class="v" data-count="5">0</div><div class="k">个公开来源</div></div>
       <div class="cell"><div class="v" data-count="6">0</div><div class="k">年迭代</div></div>
@@ -414,7 +414,7 @@ a,button,summary{outline:none}
     </div>
   </section>
 
-  <!-- ================== 手上这八个 ================== -->
+  <!-- ================== 应用列表 ================== -->
   <div class="h"><h2>应用</h2><span class="n">点开进官网</span></div>
 
   <div class="w rev" id="a1" style="--c:#2F6F5C" data-n="01">
@@ -819,8 +819,12 @@ a,button,summary{outline:none}
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var cells = Array.prototype.slice.call(document.querySelectorAll('[data-count]'));
+  function numOf(el){
+    if (el.getAttribute('data-auto') === 'cards') return document.querySelectorAll('.w').length;
+    return parseInt(el.getAttribute('data-count'), 10) || 0;
+  }
   function runCount(el){
-    var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+    var target = numOf(el);
     if (reduce || target < 10){ el.textContent = target; return; }
     var start = null, dur = 1100;
     function step(ts){
@@ -840,7 +844,7 @@ a,button,summary{outline:none}
       });
     }, { threshold: .4 });
     cells.forEach(function(c){ co.observe(c); });
-  } else { cells.forEach(function(c){ c.textContent = c.getAttribute('data-count'); }); }
+  } else { cells.forEach(function(c){ c.textContent = numOf(c); }); }
 
   var revs = Array.prototype.slice.call(document.querySelectorAll('.rev'));
   function showAll(){ revs.forEach(function(el){ el.classList.add('in'); }); }
