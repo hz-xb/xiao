@@ -332,10 +332,14 @@ a,button,summary{outline:none}
 
 /* 名片底部：八个应用索引 */
 .idx{
-  display:flex;gap:7px;margin-top:16px;position:relative;z-index:2;
-  overflow-x:auto;padding-bottom:2px;scrollbar-width:none;
+  margin-top:16px;position:relative;z-index:2;overflow:hidden;padding-bottom:2px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
 }
-.idx::-webkit-scrollbar{display:none}
+.idx-track{display:flex;width:max-content;animation:idxflow 22s linear infinite}
+.idx-grp{display:flex;gap:7px;padding-right:7px}
+.idx:hover .idx-track,.idx:active .idx-track{animation-play-state:paused}
+@keyframes idxflow{from{transform:translateX(0)}to{transform:translateX(-33.3333%)}}
 .idx a{
   flex:none;width:33px;height:33px;border-radius:9px;display:grid;place-items:center;
   background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);
@@ -345,6 +349,9 @@ a,button,summary{outline:none}
 .idx a:hover{transform:translateY(-3px);background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.34)}
 @media (prefers-reduced-motion:reduce){
   .w::before,.w::after,.tl .it.now::before{animation:none!important;transition:none!important}
+  .idx-track{animation:none!important}
+  .idx{overflow-x:auto;scrollbar-width:none}
+  .idx::-webkit-scrollbar{display:none}
 }
 </style>
 </head>
@@ -372,15 +379,39 @@ a,button,summary{outline:none}
       <div class="cell"><div class="v" data-count="5">0</div><div class="k">个公开来源</div></div>
       <div class="cell"><div class="v" data-count="6">0</div><div class="k">年迭代</div></div>
     </div>
-    <div class="idx" aria-label="跳到某个应用">
-      <a href="#a1" title="相识投屏"><img src="../assets/ic-mirror.png" alt="相识投屏"></a>
-      <a href="#a2" title="KSU 商店"><img src="../assets/ic-ksu.png" alt="KSU 商店"></a>
-      <a href="#a3" title="Dopamine"><img src="../assets/ic-dopamine.png" alt="Dopamine"></a>
-      <a href="#a4" title="GhostKey"><img src="../assets/ic-ghostkey.png" alt="GhostKey"></a>
-      <a href="#a5" title="Shizuku"><img src="../assets/ic-shizuku.png" alt="Shizuku"></a>
-      <a href="#a6" title="刷写器"><img src="../assets/ic-flasher.png" alt="刷写器"></a>
-      <a href="#a7" title="MI 固件库"><img src="../assets/ic-fwlib.png" alt="MI 固件库"></a>
-      <a href="#a8" title="Gitee 仓库管理"><img src="../assets/ic-gitee.png" alt="Gitee 仓库管理"></a>
+    <div class="idx" aria-label="应用索引，自动滚动">
+      <div class="idx-track">
+      <div class="idx-grp">
+        <a href="#a1" title="相识投屏"><img src="../assets/ic-mirror.png" alt="相识投屏"></a>
+        <a href="#a2" title="KSU 商店"><img src="../assets/ic-ksu.png" alt="KSU 商店"></a>
+        <a href="#a3" title="Dopamine"><img src="../assets/ic-dopamine.png" alt="Dopamine"></a>
+        <a href="#a4" title="GhostKey"><img src="../assets/ic-ghostkey.png" alt="GhostKey"></a>
+        <a href="#a5" title="Shizuku"><img src="../assets/ic-shizuku.png" alt="Shizuku"></a>
+        <a href="#a6" title="刷写器"><img src="../assets/ic-flasher.png" alt="刷写器"></a>
+        <a href="#a7" title="MI 固件库"><img src="../assets/ic-fwlib.png" alt="MI 固件库"></a>
+        <a href="#a8" title="Gitee 仓库管理"><img src="../assets/ic-gitee.png" alt="Gitee 仓库管理"></a>
+      </div>
+      <div class="idx-grp" aria-hidden="true">
+        <a href="#a1" title="相识投屏" tabindex="-1" aria-hidden="true"><img src="../assets/ic-mirror.png" alt="相识投屏"></a>
+        <a href="#a2" title="KSU 商店" tabindex="-1" aria-hidden="true"><img src="../assets/ic-ksu.png" alt="KSU 商店"></a>
+        <a href="#a3" title="Dopamine" tabindex="-1" aria-hidden="true"><img src="../assets/ic-dopamine.png" alt="Dopamine"></a>
+        <a href="#a4" title="GhostKey" tabindex="-1" aria-hidden="true"><img src="../assets/ic-ghostkey.png" alt="GhostKey"></a>
+        <a href="#a5" title="Shizuku" tabindex="-1" aria-hidden="true"><img src="../assets/ic-shizuku.png" alt="Shizuku"></a>
+        <a href="#a6" title="刷写器" tabindex="-1" aria-hidden="true"><img src="../assets/ic-flasher.png" alt="刷写器"></a>
+        <a href="#a7" title="MI 固件库" tabindex="-1" aria-hidden="true"><img src="../assets/ic-fwlib.png" alt="MI 固件库"></a>
+        <a href="#a8" title="Gitee 仓库管理" tabindex="-1" aria-hidden="true"><img src="../assets/ic-gitee.png" alt="Gitee 仓库管理"></a>
+      </div>
+      <div class="idx-grp" aria-hidden="true">
+        <a href="#a1" title="相识投屏" tabindex="-1" aria-hidden="true"><img src="../assets/ic-mirror.png" alt="相识投屏"></a>
+        <a href="#a2" title="KSU 商店" tabindex="-1" aria-hidden="true"><img src="../assets/ic-ksu.png" alt="KSU 商店"></a>
+        <a href="#a3" title="Dopamine" tabindex="-1" aria-hidden="true"><img src="../assets/ic-dopamine.png" alt="Dopamine"></a>
+        <a href="#a4" title="GhostKey" tabindex="-1" aria-hidden="true"><img src="../assets/ic-ghostkey.png" alt="GhostKey"></a>
+        <a href="#a5" title="Shizuku" tabindex="-1" aria-hidden="true"><img src="../assets/ic-shizuku.png" alt="Shizuku"></a>
+        <a href="#a6" title="刷写器" tabindex="-1" aria-hidden="true"><img src="../assets/ic-flasher.png" alt="刷写器"></a>
+        <a href="#a7" title="MI 固件库" tabindex="-1" aria-hidden="true"><img src="../assets/ic-fwlib.png" alt="MI 固件库"></a>
+        <a href="#a8" title="Gitee 仓库管理" tabindex="-1" aria-hidden="true"><img src="../assets/ic-gitee.png" alt="Gitee 仓库管理"></a>
+      </div>
+      </div>
     </div>
   </section>
 
