@@ -1,10 +1,10 @@
 {
-  "versionCode": 52,
-  "versionName": "1.5.7",
-  "apkUrl": "https://hz-xb.github.io/xiao/ghostkey/ghostkey-1.5.7.apk",
-  "sha256": "31e8c3713f56ded9fc98d691f9bef706d923e8ffe3022dd8104178c2521bcf58",
-  "sizeBytes": 7507400,
-  "publishedAt": "2026-11-09T06:30:00+08:00",
-  "notes": "首启风险告知、云公告、云更新、安装包完整性校验；提权成功后自动打开你指定的 Root 管理器。",
+  "versionCode": 55,
+  "versionName": "1.5.10",
+  "apkUrl": "https://hz-xb.github.io/xiao/ghostkey/ghostkey-1.5.10.apk",
+  "sha256": "132e8e8f14ef79008b27b161b03c00c71b4cf6c29d7e88be4edc97fe92d99cde",
+  "sizeBytes": 7475672,
+  "publishedAt": "2026-11-09T07:05:00+08:00",
+  "notes": "启动即查更新、公告每次进都弹、安全防护改为检测项单据（签名/完整性/运行状态），首启页补三枚权限图标，协议在应用内阅读。",
   "forceUpdate": false
 }
