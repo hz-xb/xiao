@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gitee 仓库管理 — 手机上直接改仓库</title>
+<meta name="description" content="新建文件、上传文件、删除文件、在线编辑，四个动作在手机上完成。没有后台中转，私人令牌只存本机，请求直连 Gitee API。">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap">
+<link rel="icon" href="https://hz-xb.github.io/xiao/assets/ic-gitee.png">
+<style>
+:root{
+  --deep:#241C35;
+  --deep2:#1A1428;
+  --paper:#F7F5FA;
+  --card:#FFFFFF;
+  --text:#191622;
+  --soft:rgba(25,22,34,.62);
+  --faint:rgba(25,22,34,.42);
+  --line:rgba(25,22,34,.085);
+  --accent:#5B4A94;
+  --accent2:#6E5CA8;
+  --wash:#EAE4F5;
+  --on:rgba(255,255,255,.95);
+  --on-soft:rgba(255,255,255,.56);
+  --line-d:rgba(255,255,255,.11);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--text);
+  font-family:"Noto Sans SC","PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.02em;line-height:1.18}
+a{color:inherit}
+img{max-width:100%}
+::selection{background:var(--accent);color:#fff}
+a,button,summary{outline:none;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+header{position:fixed;top:0;left:0;right:0;z-index:30;background:rgba(26,20,40,.78);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line-d)}
+.nav{display:flex;align-items:center;gap:12px;height:58px;max-width:1120px;margin:0 auto;padding:0 20px}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;flex:1;min-width:0;color:var(--on)}
+.brand img{width:26px;height:26px;border-radius:7px;display:block;flex:none}
+.brand span{font-size:14.5px;font-weight:500;white-space:nowrap}
+.nav-links{display:none;gap:22px;font-size:13.5px;color:var(--on-soft)}
+.nav-links a{text-decoration:none}
+.nav-links a:hover{color:var(--on)}
+.nav-cta{display:inline-flex;align-items:center;height:34px;padding:0 14px;border-radius:8px;
+  background:var(--wash);color:var(--deep);text-decoration:none;font-size:13px;font-weight:500;white-space:nowrap;transition:background .16s}
+.nav-cta:hover{background:#fff}
+
+.hero{background:var(--deep);color:var(--on);padding:92px 0 0;position:relative;overflow:hidden}
+.hero-head{text-align:center;max-width:820px;margin:0 auto;padding:0 20px}
+.hero h1{font-size:clamp(31px,8.2vw,62px);letter-spacing:-.03em;line-height:1.12}
+.hero h1 .dim{color:var(--on-soft)}
+.hero .lede{margin:20px auto 0;max-width:39em;font-size:15px;line-height:1.85;color:var(--on-soft)}
+.hero-actions{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px 18px;margin-top:30px}
+.btn-main{display:inline-flex;align-items:center;gap:9px;height:52px;padding:0 28px;border-radius:11px;
+  background:var(--wash);color:var(--deep);text-decoration:none;font-size:15.5px;font-weight:500;transition:background .16s,transform .16s}
+.btn-main:hover{background:#fff;transform:translateY(-1px)}
+.btn-main svg{width:17px;height:17px;stroke:var(--deep);fill:none;stroke-width:1.7;stroke-linecap:round}
+.hero-meta{font-size:12.5px;color:var(--on-soft);line-height:1.7;text-align:left}
+.hero-meta b{font-weight:500;color:rgba(255,255,255,.82)}
+
+.devices{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:880px;margin:46px auto 0;padding:0 20px;align-items:end}
+.devices figure{margin:0}
+.devices img{display:block;width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.14)}
+.devices .mid{margin-top:-18px}
+.devices .mid img{border-color:rgba(255,255,255,.26)}
+.fade{height:130px;margin-top:-108px;position:relative;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg,rgba(36,28,53,0) 0%,rgba(247,245,250,.84) 62%,var(--paper) 96%)}
+
+.facts{background:var(--paper);padding:8px 0 44px}
+.facts ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:30px 16px}
+.facts li{min-width:0}
+.facts b{display:block;font-size:clamp(30px,7.6vw,50px);font-weight:700;line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.facts b small{font-size:.4em;font-weight:500;color:var(--soft);margin-left:5px;letter-spacing:0}
+.facts .desc{display:block;margin-top:9px;font-size:12.5px;line-height:1.62;color:var(--faint)}
+
+section{padding:62px 0;scroll-margin-top:70px}
+.sec-head{max-width:36em}
+.sec-head h2{font-size:clamp(25px,5.4vw,38px)}
+.sec-head p{margin:14px 0 0;font-size:14.5px;line-height:1.82;color:var(--soft)}
+
+.cards{margin-top:32px;display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 20px;transition:border-color .18s,transform .18s}
+.card:hover{border-color:rgba(91,74,148,.28);transform:translateY(-2px)}
+.ic{width:42px;height:42px;border-radius:12px;background:var(--wash);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.ic svg{width:21px;height:21px;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-size:16.5px;font-weight:500;letter-spacing:-.01em;line-height:1.45}
+.card p{margin:8px 0 0;font-size:13.5px;line-height:1.78;color:var(--soft)}
+
+.pkg{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:32px}
+.pk{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:20px}
+.pk .row1{display:flex;align-items:center;gap:8px}
+.pk .cn{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.02em}
+.pk .br{font-size:11px;color:var(--faint)}
+.pk .dl{margin-left:auto;font-size:11.5px;padding:7px 14px;border-radius:8px;background:var(--deep);color:#fff;text-decoration:none}
+.pk .ver{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:15px;margin-top:14px;letter-spacing:-.01em}
+.pk .mm{font-size:12.5px;color:var(--soft);margin-top:8px}
+.pk .md5{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:10.5px;color:var(--faint);margin-top:12px;word-break:break-all}
+.pk .why{font-size:12px;color:var(--accent);margin-top:12px}
+.pk.rec{background:#F8F5FD;border-color:rgba(91,74,148,.22)}
+.pk.rec .why{margin-top:0;margin-bottom:10px;font-size:12px}
+
+.steps{margin-top:30px;display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+.step{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;padding:20px 0;border-top:1px solid var(--line);align-items:start}
+.step p{grid-column:1/-1}
+.step .num{width:28px;height:28px;border-radius:50%;background:var(--deep);color:#fff;font-size:12px;font-weight:500;
+  display:flex;align-items:center;justify-content:center;flex:none;margin-top:2px}
+.step h3{font-size:15.5px;font-weight:500;letter-spacing:0}
+.step p{margin:5px 0 0;font-size:13.5px;line-height:1.8;color:var(--soft)}
+
+.download{background:var(--deep);color:var(--on);padding:64px 0}
+.download .wrap{display:grid;grid-template-columns:minmax(0,1fr);gap:34px}
+.download h2{font-size:clamp(27px,5.8vw,42px);color:#fff}
+.download p{margin:12px 0 0;font-size:14.5px;line-height:1.8;color:var(--on-soft);max-width:32em}
+.dl-btn{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 30px;margin-top:26px;border-radius:12px;
+  background:var(--wash);color:var(--deep);text-decoration:none;font-size:16px;font-weight:500;transition:background .16s,transform .16s}
+.dl-btn:hover{background:#fff;transform:translateY(-1px)}
+.dl-btn svg{width:18px;height:18px;stroke:var(--deep);fill:none;stroke-width:1.7;stroke-linecap:round}
+.dl-side{font-size:12.5px;line-height:2;color:var(--on-soft)}
+.dl-side b{display:block;color:#fff;font-weight:500;font-size:13.5px;margin-bottom:2px}
+.hash-row{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.hash{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:11px;line-height:1.6;
+  word-break:break-all;color:var(--on-soft);max-width:26em}
+.copy-btn{appearance:none;border:1px solid rgba(255,255,255,.24);background:transparent;color:rgba(255,255,255,.8);
+  font-size:12px;height:30px;padding:0 12px;border-radius:6px;cursor:pointer;font-family:inherit}
+.copy-btn:hover{background:rgba(255,255,255,.09)}
+.notice{margin-top:22px;border-left:2px solid rgba(234,228,245,.35);padding-left:14px;font-size:13px;line-height:1.8;color:var(--on-soft)}
+.notice b{display:block;color:#fff;font-weight:500;font-size:13.5px;margin-bottom:3px}
+
+.faq{margin-top:28px;border-top:1px solid var(--line)}
+details{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;padding:19px 0;display:flex;align-items:flex-start;gap:14px;font-size:15px;line-height:1.6}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";width:9px;height:9px;margin-left:auto;margin-top:7px;flex:none;
+  border-right:1.5px solid var(--faint);border-bottom:1.5px solid var(--faint);transform:rotate(45deg)}
+details[open] summary::after{transform:rotate(-135deg);margin-top:11px}
+details p{margin:0 0 20px;font-size:13.5px;line-height:1.85;color:var(--soft);max-width:42em}
+
+footer{border-top:1px solid var(--line);padding:32px 0 44px;background:var(--paper)}
+.foot{display:flex;flex-wrap:wrap;gap:16px 26px;align-items:center;font-size:12.5px;color:var(--faint)}
+.brand-mini{display:flex;align-items:center;gap:8px;color:var(--soft);font-size:13px}
+.brand-mini img{width:20px;height:20px;border-radius:5px}
+.foot a{text-decoration:none;color:var(--faint)}
+.foot a:hover{color:var(--text)}
+.foot-links{display:flex;gap:20px;flex-wrap:wrap;margin-left:auto}
+
+#toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,14px);background:#2A2340;color:#fff;
+  font-size:13px;padding:10px 16px;border-radius:8px;opacity:0;pointer-events:none;
+  transition:opacity .18s,transform .18s;z-index:60}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.hero h1,.hero .lede,.hero-actions,.devices figure{animation:fadeUp .8s cubic-bezier(.22,.7,.2,1) both}
+.hero h1{animation-delay:.06s}
+.hero .lede{animation-delay:.16s}
+.hero-actions{animation-delay:.26s}
+.devices figure:nth-child(1){animation-delay:.28s}
+.devices figure:nth-child(2){animation-delay:.38s}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.22,.7,.2,1),transform .7s cubic-bezier(.22,.7,.2,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  .hero h1,.hero .lede,.hero-actions,.devices figure{animation:none}
+  *{transition:none!important}
+}
+@media (min-width:768px){
+  .wrap{padding:0 32px}
+  .nav{padding:0 32px;height:64px}
+  .nav-links{display:flex}
+  .hero{padding:108px 0 0}
+  .devices{gap:14px;margin-top:54px;max-width:900px}
+  .devices .mid{margin-top:-28px}
+  .facts{padding:14px 0 60px}
+  .facts ul{grid-template-columns:repeat(4,1fr);gap:20px}
+  section{padding:90px 0}
+  .cards{grid-template-columns:1fr 1fr;gap:16px}
+  .card{padding:26px 24px}
+  .pkg{grid-template-columns:1fr 1fr;gap:18px}
+  .steps{grid-template-columns:repeat(3,1fr);gap:0 28px}
+  .step{grid-template-columns:1fr;padding:22px 0 0;border-right:1px solid var(--line)}
+  .step:last-child{border-right:none}
+  .download .wrap{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:44px;align-items:end}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="#top">
+      <img src="https://hz-xb.github.io/xiao/assets/ic-gitee.png" alt="Gitee 仓库管理">
+      <span>Gitee 仓库管理</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#features">它能干什么</a>
+      <a href="#setup">四个字段</a>
+      <a href="#how">怎么开始</a>
+      <a href="#faq">问答</a>
+    </nav>
+    <a class="nav-cta" href="#download">下载安卓版</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="hero-head">
+      <h1>仓库就在手机上，<br><span class="dim">改完直接提交。</span></h1>
+      <p class="lede">新建、上传、删除、在线编辑，四个动作不用开电脑。程序本身没有后台中转，私人令牌只存在本机，请求直连 Gitee 官方 API，你的文件一个字节都不经过第三方。</p>
+      <div class="hero-actions">
+        <a class="btn-main" href="https://hz-xb.github.io/xiao/gitee/gitee-repo-1.1.0.apk">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
+          免费下载
+        </a>
+        <div class="hero-meta"><b>Android 7.0 及以上</b> · 不需要账号注册 · 无广告<br>v1.1.0 · 6.2 MB</div>
+      </div>
+    </div>
+
+    <div class="devices">
+      <figure><img src="https://hz-xb.github.io/xiao/assets/gm-shot-list.webp" alt="文件列表：每个文件一行，右下角是上传文件按钮"></figure>
+      <figure class="mid"><img src="https://hz-xb.github.io/xiao/assets/gm-shot-menu.webp" alt="右上角菜单：新建文件、新建文件夹、提交历史、收藏夹、最近访问、设置"></figure>
+      <figure><img src="https://hz-xb.github.io/xiao/assets/gm-shot-setup.webp" alt="连接设置：私人令牌、仓库所有者、仓库名、分支四个字段"></figure>
+    </div>
+    <div class="fade"></div>
+  </div>
+
+  <div class="facts wrap">
+    <ul>
+      <li><b>4<small>个动作</small></b><span class="desc">新建、上传、删除、在线编辑，都在同一个列表里完成</span></li>
+      <li><b>0<small>后台</small></b><span class="desc">程序没有自己的托管服务，请求直连 Gitee，数据不中转</span></li>
+      <li><b>4<small>个字段</small></b><span class="desc">令牌、所有者、仓库名、分支，填一次就记住</span></li>
+      <li><b>在线<small>服务器</small></b><span class="desc">Gitee OpenAPI 实时读写，读到的是仓库当前状态</span></li>
+    </ul>
+  </div>
+
+  <section class="wrap" id="features">
+    <div class="sec-head">
+      <h2>临时改一行，不必再开电脑。</h2>
+      <p>手上只有手机，仓库里一个 README 写错了、一个 json 少了个括号、随手要传个文件上去——这几种事以前都得等回到电脑前，现在在列表里就能做完。</p>
+    </div>
+    <div class="cards reveal">
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v5h5"/><path d="M6 3h8l5 5v13H6z"/><path d="M9 13h6"/><path d="M9 17h4"/></svg></div>
+        <h3>新建文件</h3>
+        <p>在列表里直接建文本文件，写完一次提交。文件名、内容、提交说明都在同一个页面填完，不用先去网页端绕一圈。</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17V9"/><circle cx="9" cy="7" r="2.6"/><path d="M4 17l5-4 4 3 3-2 4 3"/><rect x="3" y="4" width="18" height="16" rx="3"/></svg></div>
+        <h3>上传文件</h3>
+        <p>从手机里挑文件推到当前分支，图片、文本、压缩包都行。传完当场看到这一条出现在列表顶部，提交记录同步过去。</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 5.5 18.5 8.5"/><path d="M4 20l1-4 10-10 3 3-10 10-4 1z"/></svg></div>
+        <h3>在线编辑</h3>
+        <p>点开文件就是编辑器，改完保存即提交，原来的内容不会被覆盖成乱码。多次提交可以在提交历史里回看。</p>
+      </div>
+      <div class="card">
+        <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><path d="M7 7V5h6v2"/><path d="M6 7l1 13h10l1-13"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></div>
+        <h3>删除文件</h3>
+        <p>误传的东西当场删掉，删除同样是一次提交。要找回的话，去 Gitee 的提交历史里翻上一个版本，程序不会私下留存副本。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="setup">
+    <div class="sec-head">
+      <h2>连接设置只有四个字段。</h2>
+      <p>填完点保存就结束，此后每次打开直接进列表。令牌可以在 Gitee 网站「设置 → 私人令牌」里创建，权限按你需要勾。</p>
+    </div>
+    <div class="pkg reveal">
+      <div class="pk rec">
+        <div class="why">第一次打开会先落到这一页</div>
+        <div class="row1"><span class="cn">令牌</span><span class="br">私人令牌 · repo 权限</span><a class="dl" href="#faq">怎么建</a></div>
+        <div class="ver">访问令牌 (Access Token)</div>
+        <div class="mm">只保存在本机，用于 Gitee API 鉴权；输入后可以点眼睛核对，不会上传到任何服务器</div>
+      </div>
+      <div class="pk">
+        <div class="row1"><span class="cn">三项</span><span class="br">所有者 · 仓库 · 分支</span></div>
+        <div class="ver">ebinjfjfjg / config / master</div>
+        <div class="mm">所有者填 Gitee 用户名或组织名，仓库名就是你 URL 里那一段，分支多数是 master 或 main</div>
+        <div class="md5">填错会读不到文件，顺序无关，字段名对就行</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="how">
+    <div class="sec-head">
+      <h2>三步就能改第一个文件。</h2>
+    </div>
+    <div class="steps reveal">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>建一个私人令牌</h3>
+        <p>在 Gitee 网站的「设置 → 私人令牌」新建，勾上仓库读写权限，复制那一串到应用里。</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>填仓库信息</h3>
+        <p>仓库所有者、仓库名、分支三项照着仓库地址填，保存后立刻回到文件列表。</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>直接动手改</h3>
+        <p>点文件进编辑器改完提交，或者右上角菜单里新建、上传、删除。每一步都会在 Gitee 上留下提交记录。</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="download" id="download">
+    <div class="wrap">
+      <div>
+        <h2>下载 Gitee 仓库管理 1.1.0</h2>
+        <p>装上填一次令牌就能用。程序不做后台托管，也不收集任何数据，所有读写都发生在你和 Gitee 之间。</p>
+        <a class="dl-btn" href="https://hz-xb.github.io/xiao/gitee/gitee-repo-1.1.0.apk">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></svg>
+          下载 APK · 6.2 MB
+        </a>
+      </div>
+      <div class="dl-side">
+        <b>版本信息</b>
+        v1.1.0 · Android 7.0 及以上 · 无需 root<br>
+        安装包 6476887 字节
+        <div class="hash-row">
+          <span class="hash" id="hash">19423e8e5cf301346e8cc1c9d4941011dceef6796f1b939c41a4c4e0a0474ad5</span>
+          <button class="copy-btn" id="copy">复制</button>
+        </div>
+        <div class="notice">
+          <b>令牌怎么保管</b>
+          令牌等同你的仓库钥匙。只填给自己用的仓库，别把它贴进聊天记录或截图；不用了就在 Gitee 网站上撤销，撤销后应用里也要重新填一次。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="wrap" id="faq">
+    <div class="sec-head">
+      <h2>常被问到的几件事。</h2>
+    </div>
+    <div class="faq reveal">
+      <details open>
+        <summary>令牌会不会被传到什么地方？</summary>
+        <p>不会。令牌只保存在应用自己的本地设置里，每次请求直接发给 api.gitee.com 做鉴权。这个程序没有自己的服务器，也没有任何统计、上报或云同步。</p>
+      </details>
+      <details>
+        <summary>私有仓库能用吗？</summary>
+        <p>能。能不能读、能不能写，取决于你建令牌时勾的权限和这个账号在仓库里的角色。只读令牌就只能看，不能提交。如果列表一直是空的，先确认令牌权限里包含仓库读写，再确认所有者、仓库名、分支三项都对。</p>
+      </details>
+      <details>
+        <summary>为什么不直接用 Gitee 的手机网页？</summary>
+        <p>网页端能改，但每次都要登录、找仓库、找文件、点编辑、再确认一遍。这个程序把这几步收成一次点击，适合临时补一行、传个包、删个误传文件这种小事。大改还是建议在电脑上做。</p>
+      </details>
+      <details>
+        <summary>删除之后还能找回吗？</summary>
+        <p>能，删除本身是一次提交，上一个版本还在历史里。去 Gitee 的提交记录里找到删除前那次提交，把文件内容复制回来即可。</p>
+      </details>
+      <details>
+        <summary>它会不会自己偷偷改我的仓库？</summary>
+        <p>不会。所有写操作都由你在界面上点出来，每一次都对应一条你在 Gitee 上能看到的提交记录，没有后台任务、没有定时同步。</p>
+      </details>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap foot">
+      <div class="brand-mini">
+        <img src="https://hz-xb.github.io/xiao/assets/ic-gitee.png" alt="Gitee 仓库管理">
+        Gitee 仓库管理
+      </div>
+      <div>第三方客户端 · 与 Gitee 官方无关 · 令牌请自行保管</div>
+      <div class="foot-links">
+        <a href="https://hz-xb.github.io/xiao/me/">更多应用</a>
+        <a href="https://gitee.com/api/v5/swagger" target="_blank" rel="noopener">Gitee OpenAPI</a>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<div id="toast">已复制</div>
+<script>
+(function(){
+  var btn=document.getElementById("copy"), h=document.getElementById("hash"), t=document.getElementById("toast");
+  if(!btn) return;
+  btn.addEventListener("click",function(){
+    var s=h.textContent.trim();
+    var done=function(){ t.classList.add("show"); setTimeout(function(){t.classList.remove("show");},1600); };
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(s).then(done,function(){ fallback(s,done); });
+    } else { fallback(s,done); }
+  });
+  function fallback(s,cb){
+    var a=document.createElement("textarea"); a.value=s; a.style.position="fixed"; a.style.opacity="0";
+    document.body.appendChild(a); a.select();
+    try{ document.execCommand("copy"); cb(); }catch(e){}
+    document.body.removeChild(a);
+  }
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+  },{threshold:.12});
+  document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+})();
+</script>
+</body>
+</html>
