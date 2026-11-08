@@ -1,16 +1,16 @@
 {
-  "versionCode": 118,
-  "versionName": "1.1.7",
-  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.7.apk",
-  "notes": "切页时列表回到顶部，不再沿用上一页的滚动位置。",
-  "sha256": "ece9b2b74f834ed9d65e43b712f0f1215b7cf7bbe271d3f0a0c5ea03223cd8ff",
-  "sizeBytes": 4685852,
+  "versionCode": 119,
+  "versionName": "1.1.8",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.8.apk",
+  "notes": "我的页新增「备份与恢复」：勾选 KSU 模块和 LSP 模块 APK，一键打成加密包存到 Download；导入后逐个选恢复。",
+  "sha256": "1a473c5463d921ceca41ad7f3ef93a70d92490bd7d1cf23d3dd85004d3b71e3f",
+  "sizeBytes": 4707000,
   "forceUpdate": false,
   "notice": {
-    "id": "20261108-v118",
-    "title": "KSU 商店 1.1.7",
-    "body": "修了切页后滚动位置串页的问题：以前在模块页翻到最下面，切到面具或应用，列表还停在原来那一段，看起来像几列一起滚。现在切页、换筛选、进出「我的」都会回到顶部。",
+    "id": "20261109-v119",
+    "title": "KSU 商店 1.1.8",
+    "body": "我的页里多了「备份与恢复」。进去能把已装的 KSU 模块和 LSP 模块 APK 勾上，一键打成加密包，存到 Download/KSUBackup。换机或恢复出厂后导入，整包解密，再逐个勾选装回去。模块走 ksud 安装，APK 静默装，装完问你要不要重启。",
     "level": "info"
   },
-  "publishedAt": "2026-11-08T23:30:00+08:00"
+  "publishedAt": "2026-11-09T00:20:00+08:00"
 }
