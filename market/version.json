@@ -1,16 +1,16 @@
 {
-  "versionCode": 117,
-  "versionName": "1.1.6",
-  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.6.apk",
-  "notes": "换了新图标：六边形加一颗球，桌面、首启页、我的页统一。",
-  "sha256": "b6ae5c57ce79afc67a53b96606edb0a1bf2ea967f576d440423b2f290f0fadd0",
-  "sizeBytes": 4685964,
+  "versionCode": 118,
+  "versionName": "1.1.7",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.7.apk",
+  "notes": "切页时列表回到顶部，不再沿用上一页的滚动位置。",
+  "sha256": "ece9b2b74f834ed9d65e43b712f0f1215b7cf7bbe271d3f0a0c5ea03223cd8ff",
+  "sizeBytes": 4685852,
   "forceUpdate": false,
   "notice": {
-    "id": "20261107-v117",
-    "title": "KSU 商店 1.1.6",
-    "body": "换了新图标，就是那个灰蓝底、白色六边形裹着一颗浅蓝球的样子。桌面、首启页、我的页头像位置都换成它了。\n原来那个深绿六边形退休。",
+    "id": "20261108-v118",
+    "title": "KSU 商店 1.1.7",
+    "body": "修了切页后滚动位置串页的问题：以前在模块页翻到最下面，切到面具或应用，列表还停在原来那一段，看起来像几列一起滚。现在切页、换筛选、进出「我的」都会回到顶部。",
     "level": "info"
   },
-  "publishedAt": "2026-11-07T19:13:00+08:00"
+  "publishedAt": "2026-11-08T23:30:00+08:00"
 }
