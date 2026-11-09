@@ -8,9 +8,10 @@
   "notes": "第一次公开。升级降级同一个入口，写入非当前分区。",
   "forceUpdate": false,
   "notice": {
-    "id": "flasher-1.0.5",
+    "id": "flasher-1.0.5-qq",
     "title": "刷机有风险",
-    "body": "需要 Root，且必须是 V-AB 分区架构。\n刷之前自己核一遍包的 MD5，重要数据先备份。",
-    "level": "warning"
+    "body": "官方交流群：1134486039\n\n需要 Root，且必须是 V-AB 分区架构。\n刷之前自己核一遍包的 MD5，重要数据先备份。",
+    "level": "warning",
+    "text": "官方交流群：1134486039\n\n需要 Root，且必须是 V-AB 分区架构。\n刷之前自己核一遍包的 MD5，重要数据先备份。"
   }
 }
