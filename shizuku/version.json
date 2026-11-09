@@ -6,5 +6,12 @@
   "sizeBytes": 2571773,
   "publishedAt": "2026-11-08T03:08:00+08:00",
   "notes": "GhostKey 的授权入口。装好后用 root 或无线调试把服务开起来。",
-  "forceUpdate": false
+  "forceUpdate": false,
+  "notice": {
+    "id": "Shizuku-qq",
+    "title": "Shizuku",
+    "body": "官方交流群：1134486039\n\n有问题直接进群。",
+    "text": "官方交流群：1134486039\n\n有问题直接进群。",
+    "level": "info"
+  }
 }
