@@ -3,7 +3,7 @@
   "versionCode": 12,
   "versionName": "1.1.1",
   "size": 133822,
-  "sha256": "2ed87562a2ee761e7fd6108233683917b81cb8c525fb652980e7d1b7605f780c",
+  "sha256": "15669152a6e2b3c2891cf86f875aec15729b241321401262ba3f685d5fe35db4",
   "sha256_history": [
     "2ed87562a2ee761e7fd6108233683917b81cb8c525fb652980e7d1b7605f780c",
     "49a101d4f4a65cbdb8af52ede325b33a0db88fde48490513e75d7248269641bb",
@@ -15,5 +15,6 @@
   "notice": {
     "level": "info",
     "text": "1.1.1：补上断网时的兜底校验。签名不对的包，即使拦住版本清单也进不了主界面。"
-  }
+  },
+  "sizeBytes": 133822
 }
