@@ -14,8 +14,10 @@
   "cert": "1a61fd9c3dc4f029e53e5cf9c34534532b847e448be06ed563748ec6354ed53b",
   "url": "https://hz-xb.github.io/xiao/fwapp/firmware-lib-1.1.2.apk",
   "notice": {
+    "id": "13-2026-11-09",
+    "title": "1.1.2：更新改成国内优先",
     "level": "info",
-    "text": "1.1.1：补上断网时的兜底校验。签名不对的包，即使拦住版本清单也进不了主界面。"
+    "body": "版本清单优先从国内 Gitee 读取，读不到再走原地址与镜像。断网兜底校验保留不变；签名没换，可直接覆盖安装。"
   },
   "sizeBytes": 133822
 }
