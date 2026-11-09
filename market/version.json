@@ -1,10 +1,10 @@
 {
-  "versionCode": 120,
-  "versionName": "1.1.9",
-  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.1.9.apk",
-  "notes": "备份页不再卡在读取中：扫描分步刷新，LSP 扫描改读系统元数据，所有 root 命令加超时。",
-  "sha256": "54b38e304eb0c5894172fa6810e3902a80714bca1046703dced1100909789bcf",
-  "sizeBytes": 4709340,
+  "versionCode": 121,
+  "versionName": "1.2.0",
+  "apkUrl": "https://hz-xb.github.io/xiao/market/xiangshi-market-1.2.0.apk",
+  "notes": "修列表点选错位：点第 N 个会打开第 N+1 个模块。",
+  "sha256": "b9035c899b68240a721276a883dfdb866cfb7b9e44e6037ddea979d4455d0d95",
+  "sizeBytes": 4709392,
   "forceUpdate": false,
   "notice": {
     "id": "20261109-v120",
