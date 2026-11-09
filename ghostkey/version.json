@@ -1,10 +1,16 @@
 {
-  "versionCode": 55,
-  "versionName": "1.5.10",
-  "apkUrl": "https://hz-xb.github.io/xiao/ghostkey/ghostkey-1.5.10.apk",
-  "sha256": "132e8e8f14ef79008b27b161b03c00c71b4cf6c29d7e88be4edc97fe92d99cde",
-  "sizeBytes": 7475672,
-  "publishedAt": "2026-11-09T07:05:00+08:00",
-  "notes": "启动即查更新、公告每次进都弹、安全防护改为检测项单据（签名/完整性/运行状态），首启页补三枚权限图标，协议在应用内阅读。",
-  "forceUpdate": false
+  "versionCode": 19,
+  "versionName": "1.2.0",
+  "apkUrl": "https://hz-xb.github.io/xiao/ghostkey/ghostkey-1.2.0.apk",
+  "sha256": "8377a204d9b60f53d314d9d774a37780dde352516c79cfe887c758c89c2fba7b",
+  "sizeBytes": 6911181,
+  "publishedAt": "2026-11-08T02:56:00+08:00",
+  "notes": "第一次公开。临时 root，重启就恢复原样。",
+  "forceUpdate": false,
+  "notice": {
+    "id": "ghostkey-1.2.0",
+    "title": "第一次公开",
+    "body": "需要 Android 12 及以上，仅支持 arm64。\n执行前要先把 Shizuku 的服务开起来。",
+    "level": "info"
+  }
 }
